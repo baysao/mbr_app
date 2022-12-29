@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Venn Diagram</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+		<script src="data/venn.js"></script>
+		<style>
+			.webix_de_shapes .mytext .webix_de_item_text {
+				color: #aaa !important;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				const diagram = {
+					view: "diagram",
+					id: "diagram",
+					paddingX: 100,
+					autoplace: false,
+					shapes: [
+						{
+							id: "mycircle",
+							template: "circle",
+							lineColor: "transparent",
+							fillOpacity: 0.6,
+							fontWeight: 500,
+							fontSize: 21,
+							fontColor: "#ffffff",
+							backgroundColor: "#20C98B",
+							width: 250,
+							height: 250,
+							group: "Venn",
+						},
+						{
+							id: "whitetext",
+							name: "White Text",
+							template: "text",
+							fillOpacity: 0,
+							fontColor: "#ffffff",
+							$css: "mytext",
+							group: "Venn",
+						},
+					],
+					select: false,
+					data: data,
+				};
+
+				const toolbar = {
+					view: "toolbar",
+					padding: webix.skin.$active.layoutPadding.space,
+					elements: [
+						{},
+						{
+							view: "button",
+							value: "Edit",
+							autowidth: true,
+							css: "webix_primary",
+							click: function() {
+								const diagram = $$("diagram");
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = diagram.serialize(true);
+
+								$$("editor").show();
+								$$("editor").setValues(full_data);
+							},
+						},
+					],
+				};
+
+				const editor = {
+					view: "diagram-editor",
+					id: "editor",
+					save: () => {
+						const diagram = $$("diagram");
+
+						// clear data
+						diagram.clearAll();
+						diagram.getLinks().clearAll();
+
+						// blocks, links, shapes, defaults for blocks and links
+						const full_data = $$("editor").getValues();
+						diagram.parse(full_data);
+
+						$$("view").show();
+					},
+				};
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [toolbar, diagram],
+						},
+						editor,
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

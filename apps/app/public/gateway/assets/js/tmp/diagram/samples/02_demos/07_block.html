@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Block Diagram</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="data/block.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				const diagram = {
+					view: "diagram",
+					id: "diagram",
+					autoplace: false,
+					item: {
+						width: 170,
+						height: 70,
+					},
+					shapes: [
+						{
+							id: "myblock",
+							template: "process",
+							backgroundColor: "#87ca8a",
+							lineColor: "#87ca8a",
+							fontWeight: 500,
+							fontColor: "#ffffff",
+						},
+					],
+					data: data,
+					links: links,
+				};
+
+				const toolbar = {
+					view: "toolbar",
+					padding: webix.skin.$active.layoutPadding.space,
+					elements: [
+						{},
+						{
+							view: "button",
+							value: "Edit",
+							autowidth: true,
+							css: "webix_primary",
+							click: function() {
+								const diagram = $$("diagram");
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = diagram.serialize(true);
+
+								$$("editor").show();
+								$$("editor").setValues(full_data);
+							},
+						},
+					],
+				};
+
+				const editor = {
+					view: "diagram-editor",
+					id: "editor",
+					save: () => {
+						const diagram = $$("diagram");
+
+						// clear data
+						diagram.clearAll();
+						diagram.getLinks().clearAll();
+
+						// blocks, links, shapes, defaults for blocks and links
+						const full_data = $$("editor").getValues();
+						diagram.parse(full_data);
+
+						$$("view").show();
+					},
+				};
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [toolbar, diagram],
+						},
+						editor,
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

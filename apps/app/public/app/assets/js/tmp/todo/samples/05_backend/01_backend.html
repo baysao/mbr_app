@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ToDo: Backend example</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/todo.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/todo.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script>
+			const backendURL = "https://docs.webix.com/todo-backend/";
+
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				var app = new todo.App({
+					url: backendURL,
+					hashtags: true,
+				});
+				app.render(document.body);
+			});
+		</script>
+	</body>
+</html>

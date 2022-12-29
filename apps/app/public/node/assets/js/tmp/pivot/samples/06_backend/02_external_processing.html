@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Pivot: External Processing</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- pivot -->
+		<script type="text/javascript" src="../../codebase/pivot.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/pivot.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "pivot",
+					externalProcessing: true,
+					structure: {
+						rows: ["form", "name"],
+						columns: ["year"],
+						values: [{ name: "oil", operation: ["min", "sum"] }],
+					},
+					fields: [
+						{ id: "name", value: "name", type: "text" },
+						{ id: "year", value: "year", type: "number" },
+						{ id: "continent", value: "continent", type: "text" },
+						{ id: "form", value: "form", type: "text" },
+						{ id: "gdp", value: "gdp", type: "number" },
+						{ id: "oil", value: "oil", type: "number" },
+						{ id: "balance", value: "balance", type: "number" },
+					],
+					url: "https://docs.webix.com/pivot-backend/",
+				});
+			});
+		</script>
+	</body>
+</html>

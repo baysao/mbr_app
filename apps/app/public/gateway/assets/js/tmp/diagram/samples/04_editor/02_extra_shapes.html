@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Extra Shapes</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+		<script src="svg/svgs.js"></script>
+
+		<style>
+			.custom-image {
+				max-width: 100%;
+				max-height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			const extra_shapes = [
+				// add new shape to the existing group ("block")
+				{
+					id: "tag_yellow",
+					name: "Tag: yellow",
+					template: svgs["tag"],
+					backgroundColor: "#F5F7E3",
+					lineColor: "#F7E62C",
+				},
+				// new group "device"
+				{
+					id: "router_neutral",
+					name: "Router (neutral)",
+					square: true,
+					template: svgs["router"],
+					group: "device",
+				},
+				{
+					id: "router_online",
+					name: "Router (online)",
+					template: svgs["router"],
+					group: "device",
+					square: true,
+					backgroundColor: "#E6F5E8",
+					lineColor: "#39B579",
+				},
+				{
+					id: "laptop",
+					name: "Laptop",
+					square: true,
+					template: `<img class="custom-image" src="svg/laptop.svg"></img>`,
+					group: "device",
+				},
+				// no group => "unknown"
+				{
+					id: "internet",
+					name: "Internet",
+					square: true,
+					template: svgs["internet"],
+				},
+			];
+
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.extend(diagram.locales.en, {
+					Device: "Device",
+				});
+
+				webix.ui({
+					view: "diagram-editor",
+					data: base_data,
+					links: base_links,
+					shapes: extra_shapes,
+				});
+			});
+		</script>
+	</body>
+</html>

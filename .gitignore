@@ -1,0 +1,6 @@
+/.env_raw
+/.module_paths
+/db/
+/logs/
+/src/
+/tmp/

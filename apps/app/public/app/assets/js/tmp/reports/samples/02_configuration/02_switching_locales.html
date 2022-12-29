@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Reports: Switching Locale</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/reports.js"></script>
+		<script type="text/javascript" src="./locales/ru.js"></script>
+		<script type="text/javascript" src="./locales/ruQuery.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/reports.css" />
+	</head>
+	<body>
+		<script>
+			var server = "https://docs.webix.com/reports-backend/";
+
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					type: "clean",
+					rows: [
+						{
+							type: "space",
+							rows: [
+								{
+									view: "richselect",
+									options: [
+										{ id: "en", value: "en - US" },
+										{ id: "ru", value: "ru - RU" },
+									],
+									width: 95,
+									value: "en",
+									on: {
+										onChange: function() {
+											const locale = $$("reports1").getService("locale");
+											locale.setLang(this.getValue());
+										},
+									},
+								},
+							],
+						},
+						{
+							view: "reports",
+							id: "reports1",
+							locale: {
+								lang: "en",
+								webix: {
+									// switch all webix widgets to the selected locale
+									en: "en-US",
+									ru: "ru-RU",
+								},
+							},
+							url: server,
+						},
+					],
+				});
+			});
+
+			// set custom translations for Report Manager
+			reports.locales.ru = ruLocale;
+			// set custom translations for Query inside Report Manager
+			query.locales.ru = ruQueryLocale;
+		</script>
+	</body>
+</html>

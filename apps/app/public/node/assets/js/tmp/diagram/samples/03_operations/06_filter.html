@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Filter</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					rows: [
+						{
+							padding: 20,
+							cols: [
+								{
+									view: "search",
+									placeholder: "Type to search",
+									width: 700,
+									on: {
+										onTimedKeyPress: function() {
+											const value = this.getValue().toLowerCase();
+											$$("diagram1").filter("value", value);
+										},
+									},
+								},
+							],
+						},
+						{
+							view: "diagram",
+							id: "diagram1",
+							root: "root",
+							item: {
+								width: 120,
+								height: 50,
+								marginY: -10,
+							},
+							select: true,
+							data: tree_data,
+							links: tree_links,
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

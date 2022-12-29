@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+	<title>Horizontal Stacked Bar Chart</title>
+	<script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+	<script src="../../common/chartdata.js?v=10.0.1"></script>
+<body>
+    <div id="chartDiv" style="width:500px;height:350px;margin:20px"></div>
+	<script>
+        webix.ui({
+            container:"chartDiv",
+            view:"chart",
+            type:"stackedBarH",
+			barWidth:60,
+			alpha:0.8,
+			xAxis:{
+			},
+			yAxis:{
+			    lines:true,
+			    template:"'#year#"
+			},
+			legend:{
+				values:[{text:"Type A",color:"#2e81dd"},{text:"Type B",color:"#87cedf"},{text:"Type C",color:"#5ca6e6"}],
+				valign:"top",
+				align:"center",
+				width:90,
+				layout:"x"
+            },
+			series:[
+                {
+                    value:"#sales#",
+			        color: "#2e81dd",
+			        tooltip:{
+                        template:"#sales#"
+                    }
+			    },
+                {
+                    value:"#sales2#",
+                    color:"#87cedf",
+                    tooltip:{
+                        template:"#sales2#"
+                    }
+                },
+                {
+                    value:"#sales3#",
+                    color:"#5ca6e6",
+                    tooltip:{
+                        template:"#sales3#"
+                    }
+                }
+			],
+			data:multiple_dataset
+        });
+	</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Max working time customization</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				// Custom Backend service to show custom resources data.
+				class MyBackend extends gantt.services.Backend {
+					categories() {
+						return Promise.resolve([
+							{ id: "1", name: "QA" },
+							{ id: "2", name: "Development" },
+							{ id: "3", name: "Design" },
+						]);
+					}
+					// custom resources structure: "customMaxTime" included
+					resources() {
+						return Promise.resolve([
+							{ id: "1", name: "John", category_id: "1" },
+							{ id: "2", name: "Robert", category_id: "1" },
+							{ id: "3", name: "Anna", category_id: "1", customMaxTime: 6 },
+							{ id: "4", name: "Alexander", category_id: "2" },
+							{ id: "5", name: "Kate", category_id: "2" },
+							{ id: "6", name: "Tomas", category_id: "3", customMaxTime: 4 },
+							{ id: "7", name: "Mark", category_id: "3" },
+						]);
+					}
+
+					// Other demos use different resources.
+					// Therefore, assignment() collection does not load any data and data saving disabled
+					assignments() {
+						return Promise.resolve([]);
+					}
+
+					// redefine methods to avoid data saving
+					addAssignment(obj) {
+						return Promise.resolve({ id: obj.id });
+					}
+					updateAssignment(id, obj) {
+						return Promise.resolve({});
+					}
+					removeAssignment(id) {
+						return Promise.resolve({});
+					}
+				}
+
+				// customize Helpers service
+				// and set value range for editor
+				class MyHelpers extends gantt.services.Helpers {
+					// set "customMaxTime" as a default value
+					getDefaultResourceValue(obj) {
+						return obj.customMaxTime || super.getDefaultResourceValue(obj);
+					}
+					// set "customMaxTime" as a max value
+					getResourceValueRange(obj) {
+						if (obj.customMaxTime) return [0.5, obj.customMaxTime];
+						return super.getResourceValueRange(obj);
+					}
+				}
+
+				webix.ui({
+					rows: [
+						{
+							template:
+								"<p>Try to add assignees to tasks ( Anna and Tomas are working part-time )</p>",
+							height: 50,
+						},
+						{
+							view: "gantt",
+							url: "https://docs.webix.com/gantt-backend/",
+							// enable resources
+							resources: true,
+							// override Helpers and Backend services
+							override: new Map([
+								[gantt.services.Backend, MyBackend],
+								[gantt.services.Helpers, MyHelpers],
+							]),
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

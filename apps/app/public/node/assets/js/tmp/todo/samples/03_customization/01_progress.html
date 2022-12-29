@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ToDo: Percent progress</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/todo.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/todo.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script>
+			class CustomWorkSpace extends todo.views["workspace"] {
+				GetProgressTemplate(obj, common) {
+					var percent = Math.round((obj.$checked / obj.$count_all) * 100);
+					return `<span class="webix_todo_count">${percent}%</span>`;
+				}
+			}
+
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				var app = new todo.App({
+					data: base_data,
+					users: users,
+					projects: projects,
+					override: new Map([[todo.views["workspace"], CustomWorkSpace]]),
+				});
+				app.render(document.body);
+			});
+		</script>
+	</body>
+</html>

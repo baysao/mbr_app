@@ -1,0 +1,41 @@
+#!/bin/bash
+TYPE=mbr
+SITE_ROOT=$(realpath $(dirname $0)/..)
+cd $SITE_ROOT
+_init() {
+	ln -sf /massbit/massbitroute/app/gbc /massbit/massbitroute/app/src/gbc
+	ln -sf /massbit/massbitroute/app/gbc/bin/openresty /usr/local/openresty
+	mkdir -p /etc/supervisor/conf.d
+	cp supervisor.conf /etc/supervisor/conf.d/${TYPE}.conf
+	sed "s/_TYPE_/$TYPE/g" -i /etc/supervisor/conf.d/${TYPE}.conf
+	_site_root=$(echo $SITE_ROOT | sed 's/\//\\\//g')
+	sed "s/_SITE_ROOT_/$_site_root/g" -i /etc/supervisor/conf.d/${TYPE}.conf
+	supervisorctl update
+}
+_install_test() {
+	apt update
+	apt install -y make
+	export PERL_MM_USE_DEFAULT=1
+	yes | cpan -i Test::Nginx
+	cd $SITE_ROOT
+	ls -d $SITE_ROOT/.cpan/build/* /root/.cpan/build/* | while read d; do
+		cd $d
+		make install
+		cd -
+	done
+}
+_ssl_install() {
+	apt update
+	#apt-add-repository ppa:certbot/certbot
+	apt install -y certbot
+	# wget https://github.com/joohoi/acme-dns-certbot-joohoi/raw/master/acme-dns-auth.py
+	##!/usr/bin/env python3
+	chmod +x $dir/acme-dns-auth.py
+	cp $dir/acme-dns-auth.py /etc/letsencrypt/
+}
+_ssl_get() {
+	domain=$1
+	email=baysao@gmail.com
+	certbot certonly --non-interactive --agree-tos -m $email --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --manual-public-ip-logging-ok --preferred-challenges dns --debug-challenges -d \*.$domain -d $domain 
+}
+$@

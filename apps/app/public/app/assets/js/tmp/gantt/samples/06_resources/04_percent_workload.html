@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Workload in percent</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				// customize Helpers to set "percent" as a default resource unit
+				// and add a default value and range for "percent"
+				class MyHelpers extends gantt.services.Helpers {
+					constructor(app, config) {
+						super(app, config);
+						// set "percent" as default resource unit
+						this.defaultResourceUnit = "percent";
+						// add default value for "percent" work load
+						this.defaultResourceValues.percent = 100;
+						// add "percent" range
+						this.resourceValueRanges.percent = [1, 100];
+					}
+				}
+
+				class MyGrouping extends gantt.services.Grouping {
+					/**
+					 * Returns resource load per unit
+					 * @param {Object} data - data object from Resource Diagram collection
+					 * @returns {number} load per unit (by default hours, but can be anything)
+					 */
+					getUnitLoad(data) {
+						let num = data.value;
+						const runit = this.helpers.defaultResourceUnit;
+						if ((data.unit || runit) === "percent") {
+							// hour is the base unit for percentage, change it if you have another
+							const dayLen = this.helpers.defaultResourceValues.hour;
+							num = Math.round((dayLen * num) / 100);
+						}
+						return num;
+					}
+				}
+
+				// For this demo we need to redefine some Backend methods
+				// as other samples use workload in hours
+				class MyBackend extends gantt.services.Backend {
+					categories() {
+						return Promise.resolve([
+							{ id: "1", name: "QA" },
+							{ id: "2", name: "Development" },
+							{ id: "3", name: "Design" },
+						]);
+					}
+
+					// load empty assignments list
+					assignments() {
+						return Promise.resolve([]);
+					}
+
+					// redefine methods to avoid data saving
+					addAssignment(obj) {
+						return Promise.resolve({ id: obj.id });
+					}
+					updateAssignment(id, obj) {
+						return Promise.resolve({});
+					}
+					removeAssignment(id) {
+						return Promise.resolve({});
+					}
+				}
+
+				// add "percent" to "en" locale
+				gantt.locales.en.percent = "%";
+
+				webix.ui({
+					rows: [
+						{
+							view: "toolbar",
+							elements: [
+								{
+									view: "checkbox",
+									labelWidth: 0,
+									labelRight: "Show resources diagram",
+									on: {
+										onChange: v => {
+											$$("gantt").getState().resourcesDiagram = v;
+										},
+									},
+								},
+							],
+						},
+						{
+							view: "gantt",
+							id: "gantt",
+							url: "https://docs.webix.com/gantt-backend/",
+							// enable resources
+							resources: true,
+							// override Helpers service (Backend service customized for this demo only)
+							override: new Map([
+								[gantt.services.Helpers, MyHelpers],
+								[gantt.services.Backend, MyBackend],
+								[gantt.services.Grouping, MyGrouping],
+							]),
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

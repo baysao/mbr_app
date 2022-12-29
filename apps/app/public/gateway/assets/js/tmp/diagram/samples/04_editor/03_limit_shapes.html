@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Limited Shapes</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				class LimitedShapes extends diagram.views["shapes"] {
+					init() {
+						super.init();
+
+						// exclude basic shapes from Block group: pentagon, triangle, etc.
+						this.$$("blockView").filter(obj => {
+							return (
+								obj.id.indexOf("gon") === -1 && obj.id.indexOf("angle") === -1
+							);
+						});
+					}
+				}
+
+				webix.ui({
+					view: "diagram-editor",
+					data: base_data,
+					links: base_links,
+					override: new Map([[diagram.views["shapes"], LimitedShapes]]),
+				});
+			});
+		</script>
+	</body>
+</html>

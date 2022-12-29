@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Scheduler: Timeline with highlighted overlaps</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Scheduler -->
+		<script type="text/javascript" src="../../codebase/scheduler.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/scheduler.css"
+		/>
+	</head>
+	<body>
+		<style>
+			.webix_scheduler_timeline_bars .intersection,
+			.webix_scheduler_timeline_touch_bars .intersection {
+				background: #f4433669;
+				pointer-events: none;
+			}
+		</style>
+		<script>
+			/**
+			 * Case-insensitive indexOf
+			 * @param {Array<any>} arr - the array to be checked
+			 * @param {any} el - something that you need to find in the array
+			 * @returns {number} the index of the first found element or -1
+			 */
+			function indexOf(arr, el) {
+				for (let i = 0; i < arr.length; ++i) {
+					if (arr[i] == el) return i;
+				}
+				return -1;
+			}
+
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				class TChart extends scheduler.views["modes/timeline/chart"] {
+					RefreshTask(updID) {
+						super.RefreshTask(updID);
+
+						const t = this.GetEvent(updID);
+						this._intersections.push(...this.getIntersectionDates(t));
+					}
+
+					getIntersectionDates(task) {
+						const intersections = [];
+
+						this._processed.forEach(obj => {
+							if (obj.section == task.section) {
+								if (this.CheckDatesIntersection(obj, task)) {
+									const intersection = {
+										start: Math.max(obj.$x, task.$x),
+										end: Math.min(obj.$x + obj.$w, task.$x + task.$w),
+										section: task.section,
+									};
+									// here repeated overlaps are pushed to create 'opacity effect'
+									// you can add a check and not push duplicates
+									intersections.push(intersection);
+								}
+							}
+						});
+
+						return intersections;
+					}
+
+					/*
+					 * Check if two tasks intersect
+					 * @param {Object} a - first event
+					 * @param {Object} b - second event
+					 * @returns {boolean} true if events intersect
+					 */
+					CheckDatesIntersection(a, b) {
+						return a.id !== b.id && b.$x < a.$x + a.$w && b.$x + b.$w > a.$x;
+					}
+
+					RenderEvents() {
+						super.RenderEvents();
+
+						let html = "";
+						const sheight = this.GetSectionHeight();
+						this._intersections.forEach(intersection => {
+							const x = intersection.start;
+							const x1 = intersection.end;
+							const y = this.Bars.getItemNode(intersection.section).offsetTop;
+							html += `<div class="intersection" style="top:${y}px; left:${x}px; width:${x1 -
+								x}px; height:${sheight}px; position:absolute;"></div>`;
+						});
+
+						this._DataObj.insertAdjacentHTML("afterbegin", html);
+					}
+
+					ClearCollections() {
+						super.ClearCollections();
+						this._intersections = [];
+					}
+				}
+
+				webix.ui({
+					view: "scheduler",
+					date: new Date(2020, 9, 7, 0, 0, 0),
+					url: "https://docs.webix.com/calendar-backend/",
+					timeline: true,
+					mode: "timeline",
+					override: new Map([
+						[scheduler.views["modes/timeline/chart"], TChart],
+					]),
+				});
+			});
+		</script>
+	</body>
+</html>

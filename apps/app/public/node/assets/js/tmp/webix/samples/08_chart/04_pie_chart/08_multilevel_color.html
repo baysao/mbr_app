@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pie Chart: Custom color for multi-level pie</title>
+    <script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+    <script src="../../common/chartdata.js?v=10.0.1"></script>
+    <style>
+        .group{
+            text-align: center;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chartBox" style="width:500px;height:380px;margin:20px"></div>
+<script>
+
+    const palette = ["#c2ea91", "#8ddae7","#82c8f8"];
+
+    webix.ui({
+        container: "chartBox",
+        view: "chart",
+        type:"donut",
+        value:"#sales#",
+        multilevel: true,
+        innerRadius: 40,
+        scheme:{
+            $group:{by: "country", map:{sales:["sales","sum"]}}
+        },
+        pieInnerText: (item, totalValue, levelIndex)=>{
+            const percent = Math.round(item.sales/totalValue*100) + "%";
+            if(!levelIndex)
+                return `<span class="group">${item.country}<br/>${percent}<span>`;
+            return percent;
+        },
+        label: "#month#",
+        tooltip:{
+            template: "#sales#"
+        },
+        labelOffset: 20,
+        // 0-level items get colors from the "palette" array
+        // child items get color of their parent items
+        color: (item, index, levelIndex, parentColor) => levelIndex ? parentColor : palette[index],
+        data: group_data
+    });
+</script>
+</body>
+</html>

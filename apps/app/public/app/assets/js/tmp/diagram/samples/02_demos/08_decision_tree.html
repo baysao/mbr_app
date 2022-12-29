@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Decision Tree</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="data/tree/treeData.js"></script>
+		<script src="data/tree/treeShapes.js"></script>
+		<style>
+			.block {
+				line-height: 19px;
+			}
+			.bold {
+				font-size: 14px;
+				font-weight: 500;
+			}
+			.webix_diagram_item_expected .webix_diagram_text {
+				padding-left: 8px;
+				border-color: #ccd7e6;
+				border-style: solid;
+				border-width: 0 0 0 1px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.extend(diagram.locales.en, {
+					Tree: "Tree",
+					Expected: "Expected",
+					"Expected value": "Expected value",
+					Percent: "Percent",
+					Profit: "Profit",
+					"Result type": "Result type",
+				});
+
+				const resultTestOptions = ["Positive", "Negative"];
+
+				const resultTypeOptions = [
+					"Successful launch",
+					"Modest success",
+					"Fail",
+				];
+
+				class Styles extends diagram.services.Styles {
+					getBlockValues(item) {
+						const result = super.getBlockValues(item);
+						if (item) {
+							// add custom values to the form
+							const hasCustomFields =
+								item.type === "result" || item.type === "subgroup";
+							if (hasCustomFields) {
+								const extra = { resultType: item.resultType };
+								webix.extend(result, extra);
+							}
+						}
+						return result;
+					}
+				}
+
+				class CustomForm extends diagram.views.form {
+					GetBlockConfig() {
+						const elements = super.GetBlockConfig();
+						const content = this.GetCustomContentSection();
+						// add custom elements to the form
+						elements.splice(1, 0, content);
+
+						return elements;
+					}
+
+					SetBlockValues(item) {
+						super.SetBlockValues(item);
+
+						// show additional elements for certain items
+						if (item.type == "result" || item.type == "subgroup") {
+							this.Form.showBatch("customResult", true);
+							this.ReloadCustomOptions(item);
+						}
+						this.CustomValueLabel(item);
+					}
+
+					ReloadCustomOptions(item) {
+						// input for a custom value (Result type)
+						const rInput = this.Form.elements["resultType"];
+						const rList = rInput.getList();
+
+						// reload options for different types of items
+						if (item.type == "result" || item.type == "subgroup") {
+							const data =
+								item.type == "result" ? resultTypeOptions : resultTestOptions;
+							rInput.getList().clearAll();
+							rInput.getList().parse(data);
+						}
+					}
+
+					CustomValueLabel(item) {
+						const _ = this._;
+
+						// change label of the main `value` field ("Content" by default)
+						const vInput = this.Form.elements["value"];
+						const vLabel = vInput.getParentView().getChildViews()[0];
+						let label = _("Content");
+
+						switch (item.type) {
+							case "result":
+							case "subgroup":
+								label = _("Percent");
+								break;
+							case "profit":
+								label = _("Profit");
+								break;
+							case "expected":
+								label = _("Expected value");
+								break;
+							default:
+								break;
+						}
+						vLabel.config.label = label;
+						vLabel.refresh();
+					}
+
+					GetCustomContentSection() {
+						const _ = this._;
+
+						return {
+							batch: "customResult",
+							hidden: true,
+							rows: [
+								this.GetSectionLabel("Result type"),
+								{
+									view: "richselect",
+									name: "resultType",
+									options: [],
+								},
+							],
+						};
+					}
+
+					GetSectionLabel(text) {
+						const _ = this._;
+						return {
+							label: _(text),
+							view: "label",
+							css: "webix_de_sublabel",
+						};
+					}
+				}
+
+				const editor = {
+					view: "diagram-editor",
+					id: "editor",
+					save: () => {
+						const diagramView = $$("diagram");
+
+						// clear data
+						diagramView.clearAll();
+						diagramView.getLinks().clearAll();
+
+						// blocks, links, shapes, defaults for blocks and links
+						const full_data = $$("editor").getValues();
+						diagramView.parse(full_data);
+
+						$$("view").show();
+					},
+					override: new Map([
+						[diagram.views.form, CustomForm],
+						[diagram.services.Styles, Styles],
+					]),
+				};
+
+				const diagramView = {
+					view: "diagram",
+					id: "diagram",
+					autoplace: false,
+					item: {
+						width: 120,
+						height: 50,
+						template: obj => customShapeTemplate(obj),
+					},
+
+					data: data,
+					links: links,
+					shapes: customShapes,
+				};
+
+				const toolbar = {
+					view: "toolbar",
+					padding: webix.skin.$active.layoutPadding.space,
+					elements: [
+						{},
+						{
+							view: "button",
+							value: "Edit",
+							autowidth: true,
+							css: "webix_primary",
+							click: function() {
+								const diagramView = $$("diagram");
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = diagramView.serialize(true);
+
+								$$("editor").show();
+								$$("editor").setValues(full_data);
+							},
+						},
+					],
+				};
+
+				function customShapeTemplate(obj) {
+					if (obj.type == "profit") return "$" + (obj.value || "");
+
+					if (obj.type == "expected")
+						return (
+							"Expected value <br><span class='bold'>$" +
+							(obj.value || "") +
+							"</span>"
+						);
+
+					if (obj.type == "result" || obj.type == "subgroup")
+						return (
+							(obj.resultType || "") +
+							(obj.value ? " <span class='bold'>" + obj.value + "%</span>" : "")
+						);
+
+					return obj.value || "";
+				}
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [toolbar, diagramView],
+						},
+						editor,
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

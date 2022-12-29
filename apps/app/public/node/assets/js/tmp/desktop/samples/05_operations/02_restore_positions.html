@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Desktop: Restore positions</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/desktop.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/desktop.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+		<script type="text/javascript" src="../common/apps.js"></script>
+		<style>
+			/*Desktop*/
+			.webix_dsk_main {
+				background-image: url("../common/imgs/bg.jpg");
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function start(user) {
+				webix.ready(function() {
+					if (webix.env.touch) webix.ui.fullScreen();
+					else if (webix.env.scrollSize) webix.CustomScroll.init();
+
+					webix.ui({
+						rows: [
+							{
+								padding: 8,
+								margin: 5,
+								cols: [
+									{
+										view: "label",
+										label: "Save / Restore tile positions",
+										autowidth: true,
+									},
+									{
+										view: "button",
+										value: "Save",
+										autowidth: true,
+										click: () => put(),
+									},
+									{
+										view: "button",
+										value: "Restore",
+										autowidth: true,
+										click: () => load(),
+									},
+								],
+							},
+							{
+								view: "desktop",
+								id: "dsk",
+								systemParams: user,
+								apps: myApps,
+							},
+						],
+					});
+
+					function put() {
+						const apps = $$("dsk").getStateData();
+						webix.storage.local.put("wbx-desktop-apps", apps);
+					}
+
+					function load() {
+						const apps = webix.storage.local.get("wbx-desktop-apps");
+						$$("dsk").setStateData(apps);
+					}
+				});
+			}
+
+			login("someurl").then(start);
+		</script>
+	</body>
+</html>

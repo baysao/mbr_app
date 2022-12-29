@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Reports: Local Data</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/reports.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/reports.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+	</head>
+	<body>
+		<script>
+			class MyBackend extends reports.services.Backend {
+				// get list of all modules (reports)
+				getModules() {
+					return Promise.resolve([
+						{
+							id: 32,
+							text:
+								'{"desc":"Created on 12/02/2020","data":"persons","joins":[{"sid":"persons","tid":"sales","tf":"customer_id","id":"sales/customer_id//persons"}],"query":"","columns":[{"id":"year.sales.saledate","name":"Sale Date","type":"text","ref":"","mid":"sales","model":"Sales","meta":{}},{"id":"sum.sales.count","name":"Sum Count","type":"number","meta":{"name":"Items sold","header":"none"},"model":""},{"id":"sum.sales.total","name":"Sum Total","type":"number","meta":{"name":"Total Sales","header":"none"},"model":""},{"id":"avg.persons.age","name":"Average Age","type":"number","meta":{"name":"average Age of Customer","header":"none"},"model":""}],"group":{"by":[{"id":"sales.saledate","mod":"year"}],"columns":[{"op":"sum","id":"sales.count","name":"Sum Count","type":"number"},{"op":"avg","id":"persons.age","name":"Average Age","type":"number"},{"op":"sum","id":"sales.total","name":"Sum Total","type":"number"}]},"meta":{"freeze":0},"sort":null,"type":"table"}',
+							name: "Sales by year",
+							updated: "2020-12-02T14:13:42Z",
+						},
+						{
+							id: 35,
+							text:
+								'{"desc":"Created on 12/02/2020","data":"products","joins":[{"sid":"products","tid":"sales","tf":"product_id","id":"sales/product_id//products"}],"query":{"glue":"and","rules":[{"field":"sales.saledate","type":"date","condition":{"filter":"2019-12-31T21:00:00.000Z","type":"greaterOrEqual"},"includes":[]},{"field":"sales.saledate","type":"date","condition":{"filter":"2020-12-30T21:00:00.000Z","type":"lessOrEqual"},"includes":[]}]},"columns":[{"id":"sum.sales.total","name":"Sum Total","type":"number","meta":{},"model":""},{"id":"products.name","name":"Name","type":"text","ref":"","mid":"products","model":"Products","meta":{}}],"group":{"by":[{"id":"products.id"},{"id":"products.name"}],"columns":[{"op":"sum","id":"sales.total","name":"Sum Total","type":"number"}]},"meta":{"value":"sum.sales.total","label":"products.name","color":"sum.sales.total"},"sort":null,"type":"heatmap"}',
+							name: "Sales by product 2020",
+							updated: "2020-11-17T11:22:30Z",
+						},
+					]);
+				}
+				// get data per module (report)
+				// simplified, based only on data source name
+				getData(config) {
+					let data;
+					if (config.data == "persons")
+						data = [
+							{
+								"avg.persons.age": "32.1337",
+								"sum.sales.count": "2799",
+								"sum.sales.total": "16901.40",
+								"year.sales.saledate": "2019",
+							},
+							{
+								"avg.persons.age": "32.1752",
+								"sum.sales.count": "9832",
+								"sum.sales.total": "59595.65",
+								"year.sales.saledate": "2020",
+							},
+						];
+					else if (config.data == "products")
+						data = [
+							{ "products.name": "Espresso", "sum.sales.total": "5101.36" },
+							{ "products.name": "Cappuccino", "sum.sales.total": "12466.44" },
+							{ "products.name": "Mocha", "sum.sales.total": "6009.66" },
+							{ "products.name": "Latte", "sum.sales.total": "3348.40" },
+							{ "products.name": "Green Tea", "sum.sales.total": "4237.65" },
+							{ "products.name": "Black Tea", "sum.sales.total": "5700.00" },
+							{ "products.name": "Cheescake", "sum.sales.total": "5814.06" },
+							{ "products.name": "Cherry Pie", "sum.sales.total": "7760.64" },
+							{ "products.name": "Cookie", "sum.sales.total": "5382.48" },
+							{ "products.name": "Pancakes", "sum.sales.total": "3774.96" },
+						];
+					return webix.promise.resolve(data);
+				}
+				// you can modify other methods to get suggest options and queries from local data
+			}
+
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "reports",
+					moduleId: 32,
+					// data models, suggest options are still retrieved from server
+					url: "https://docs.webix.com/reports-backend/",
+					override: new Map([[reports.services.Backend, MyBackend]]),
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Autoplacement with Several Graphs</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				//remove common root
+				complex_tree_data.shift();
+				complex_tree_links.shift();
+
+				webix.ui({
+					view: "diagram",
+					root: "root",
+					item: {
+						width: 140,
+						height: 50,
+						marginY: -50,
+					},
+					select: true,
+					data: complex_tree_data,
+					links: complex_tree_links,
+				});
+			});
+		</script>
+	</body>
+</html>

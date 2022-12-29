@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Own calendar</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				// Redefining backend for example purposes
+				class MyBackend extends gantt.services.Backend {
+					calendars() {
+						return Promise.resolve([
+							{ id: "1", weekDays: "6,0" },
+							{ id: "2", weekDays: "1,2,3,4", holidays: "2018-06-07" },
+						]);
+					}
+					resources() {
+						return Promise.resolve([
+							{ id: "1", name: "John", category_id: "1", calendar_id: "1" },
+							{ id: "2", name: "Mike", category_id: "2", calendar_id: "2" },
+							{ id: "3", name: "Anna", category_id: "2", calendar_id: "1" },
+							{ id: "4", name: "Alexander", category_id: "2" },
+							{ id: "5", name: "Mark", category_id: "1" },
+							{ id: "6", name: "Leonard", category_id: "1" },
+							{ id: "7", name: "Alina", category_id: "3" },
+							{ id: "8", name: "Stephan", category_id: "3" },
+						]);
+					}
+				}
+
+				webix.ui({
+					rows: [
+						{
+							view: "form",
+							cols: [
+								{
+									borderless: true,
+									template:
+										"Try to add assignees to tasks ( John, Anna and Mike have own working calendars )",
+								},
+								{
+									view: "segmented",
+									label: "",
+									width: 350,
+									value: "tasks",
+									options: [
+										{ value: "Resource view", id: "resources" },
+										{ value: "Task view", id: "tasks" },
+									],
+									on: {
+										onChange: v => {
+											$$("gantt").getState().display = v;
+										},
+									},
+								},
+							],
+						},
+						{
+							view: "gantt",
+							id: "gantt",
+							url: "https://docs.webix.com/gantt-backend/",
+							//url: "https://docs.webix.com/gantt-backend/:3000/",
+							// enable resources
+							resources: true,
+							resourceCalendars: true,
+							excludeHolidays: true,
+							resourcesDiagram: true,
+							display: "tasks",
+							// override Helpers and Backend services ( for example purposes)
+							override: new Map([[gantt.services.Backend, MyBackend]]),
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

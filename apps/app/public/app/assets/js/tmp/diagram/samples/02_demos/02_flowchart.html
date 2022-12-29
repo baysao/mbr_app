@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Flowchart</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="data/flow.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				const diagram = {
+					view: "diagram",
+					id: "diagram",
+					paddingX: 100,
+					autoplace: false,
+					item: {
+						width: 110,
+						height: 50,
+					},
+					shapes: [
+						{
+							id: "mystart",
+							template: "start",
+							backgroundColor: "#9AD57F",
+							lineColor: "#9AD57F",
+							fontSize: 13,
+							group: "My shapes",
+						},
+						{
+							id: "myprocess",
+							template: "process",
+							backgroundColor: "#A6CBF3",
+							lineColor: "#A6CBF3",
+							fontSize: 13,
+							group: "My shapes",
+						},
+						{
+							id: "mydecision",
+							template: "decision",
+							height: 70,
+							backgroundColor: "#FFF17C",
+							lineColor: "#FFF17C",
+							fontSize: 13,
+							group: "My shapes",
+						},
+						{
+							id: "yes",
+							name: "YES",
+							template: "text",
+							fontColor: "#27ae60",
+							fontWeight: 500,
+							fontSize: 13,
+							group: "My shapes",
+						},
+						{
+							id: "no",
+							name: "NO",
+							template: "text",
+							fontColor: "#ff7777",
+							fontWeight: 500,
+							fontSize: 13,
+							group: "My shapes",
+						},
+					],
+					data: data,
+					links: links,
+				};
+
+				const toolbar = {
+					view: "toolbar",
+					padding: webix.skin.$active.layoutPadding.space,
+					elements: [
+						{},
+						{
+							view: "button",
+							value: "Edit",
+							autowidth: true,
+							css: "webix_primary",
+							click: function() {
+								const diagram = $$("diagram");
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = diagram.serialize(true);
+
+								$$("editor").show();
+								$$("editor").setValues(full_data);
+							},
+						},
+					],
+				};
+
+				const editor = {
+					view: "diagram-editor",
+					id: "editor",
+					save: () => {
+						const diagram = $$("diagram");
+
+						// clear data
+						diagram.clearAll();
+						diagram.getLinks().clearAll();
+
+						// blocks, links, shapes, defaults for blocks and links
+						const full_data = $$("editor").getValues();
+						diagram.parse(full_data);
+
+						$$("view").show();
+					},
+				};
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [toolbar, diagram],
+						},
+						editor,
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

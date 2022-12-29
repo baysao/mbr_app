@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../codebase/webix.css?v=10.0.1" type="text/css"   charset="utf-8">
+		<script src="../../codebase/webix.js?v=10.0.1" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../common/testdata.js?v=10.0.1"></script>
+		<title>Tabbar: Customizing More-Tabs Popup</title>
+	</head>
+	<body>
+        <br>
+        <style>
+            .more_popup .webix_list_item:hover{
+                background-color: #F4F5F9;
+            }
+            .more_popup .webix_list_item .content{
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                display: inline-block;
+                width: 100%;
+            }
+        </style>
+        <script type="text/javascript" charset="utf-8">
+            const tabbar = {
+                view:"tabbar",
+                tabMinWidth:200,
+                options: [
+                    "First Tab",
+                    "Second Tab",
+                    "Third Tab",
+                    "Fourth Tab with long header",
+                    "Fifth Tab",
+                    "Sixth Tab",
+                    "Seventh Tab",
+                    "Eighth Tab",
+                    "Ninth Tab",
+                    "Tenth Tab",
+                    "Eleventh Tab with long header"
+                ],
+                tabbarPopup:{
+                    css:"more_popup",
+                    body:{
+                        yCount:10,
+                        template: obj => `<span webix_tooltip="${obj.value}" class="content">Hidden: ${obj.value}</span>`,
+                        tooltip:{
+                            template:"",
+                            overflow: true
+                        }
+                    }
+                }
+            };
+			webix.ui({
+                cols:[
+                    { rows:[tabbar, {}] },
+                    { view:"resizer"},
+                    {}
+                ]
+            });
+		</script>
+	</body>
+</html>

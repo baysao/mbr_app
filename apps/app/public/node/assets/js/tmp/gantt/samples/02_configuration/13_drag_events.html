@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Deny drag-n-drop with events</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "gantt",
+					url: "https://docs.webix.com/gantt-backend/",
+					on: {
+						onBeforeDrag: function(item, context) {
+							const name = item.text || "(no title)";
+							const mode = context.mode;
+							if (mode == "move")
+								webix.message("'" + name + "' is being moved");
+							else if (mode == "start" || mode == "end")
+								webix.message(
+									mode + " date of '" + name + "' is being changed"
+								);
+							else if (mode == "progress")
+								webix.message("'" + name + "' progress is being changed");
+							else if (mode == "links") {
+								const from = context.fromStart ? "start" : "end";
+								webix.message(
+									"The new link is being added from " +
+										from +
+										" of '" +
+										name +
+										"'"
+								);
+							}
+							return true;
+						},
+						onBeforeDrop: function(item, context) {
+							const name = item.text || "(no title)";
+							const mode = context.mode;
+							if (context.mode == "move")
+								webix.message("'" + name + "' has been moved");
+							else if (mode == "start" || mode == "end")
+								webix.message(
+									mode + " date has been changed by " + context.timeShift
+								);
+							else if (mode == "progress")
+								webix.message(
+									"'" + name + "' progress is now " + context.progress + "%"
+								);
+							else if (mode == "links") {
+								const tasks = this.getService("local").tasks();
+								const targetName =
+									tasks.getItem(context.targetId).text || "(no title)";
+								const t = context.linkType;
+								let type = "";
+								if (t == 0) type = "end-to-start";
+								else if (t === 1) type = "start-to-start";
+								else if (t == 2) type = "end-to-end";
+								else if (t == 3) type = "start-to-end";
+								webix.message(
+									"The new '" +
+										type +
+										"' link has been added added for " +
+										name +
+										" and " +
+										targetName
+								);
+							}
+							return true;
+						},
+					},
+				});
+			});
+		</script>
+	</body>
+</html>

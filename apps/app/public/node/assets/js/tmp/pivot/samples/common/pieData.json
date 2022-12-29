@@ -1,0 +1,8 @@
+[
+	{ "date": "01/01/2022", "model_x": 7, "model_y": 3, "model_z": 9 },
+	{ "date": "02/01/2022", "model_x": 9, "model_y": 5, "model_z": 6 },
+	{ "date": "03/01/2022", "model_x": 14, "model_y": 5, "model_z": 11 },
+	{ "date": "04/01/2022", "model_x": 18, "model_y": 15, "model_z": 3 },
+	{ "date": "05/01/2022", "model_x": 7, "model_y": 6, "model_z": 8 },
+	{ "date": "06/01/2022", "model_x": 3, "model_y": 16, "model_z": 1 }
+]

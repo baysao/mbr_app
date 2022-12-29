@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Styled Shapes</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				const shapes = [
+					// style presets for existing shapes
+					{
+						id: "circle",
+						fontColor: "#ffffff",
+						lineColor: "#65C0B7",
+						backgroundColor: "#65C0B7",
+						group: "My shapes",
+					},
+					{
+						id: "action",
+						template: "rrect",
+						backgroundColor: "#b5d461",
+						lineColor: "#b5d461",
+						group: "My shapes",
+					},
+					{
+						id: "decision",
+						backgroundColor: "#fff17c",
+						lineColor: "#ffb955",
+						lineStyle: "dotted",
+						group: "My shapes",
+					},
+					{
+						id: "join",
+						template: "rrect",
+						height: 80,
+						width: 10,
+						backgroundColor: "#ffb955",
+						lineColor: "#ffb955",
+						group: "My shapes",
+					},
+					{
+						id: "dot",
+						fontColor: "white",
+						lineColor: "#65C0B7",
+						backgroundColor: "#ffffff",
+						altBackgroundColor: "#65C0B7",
+						group: "My shapes",
+					},
+				];
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [
+								{
+									view: "toolbar",
+									padding: webix.skin.$active.layoutPadding.space,
+									elements: [
+										{},
+										{
+											view: "button",
+											value: "Edit",
+											autowidth: true,
+											css: "webix_primary",
+											click: function() {
+												const diagram = $$("diagram");
+												// blocks, links, shapes, defaults for blocks and links
+												const full_data = diagram.serialize(true);
+
+												$$("editor").show();
+												$$("editor").setValues(full_data);
+											},
+										},
+									],
+								},
+								{
+									view: "diagram",
+									id: "diagram",
+									autoplace: false,
+									item: {
+										width: 100,
+										height: 50,
+										template: function(obj) {
+											return obj.value || "";
+										},
+									},
+									select: false,
+									shapes: shapes,
+									data: data_shapes,
+									links: links_shapes,
+								},
+							],
+						},
+						{
+							view: "diagram-editor",
+							id: "editor",
+							shapes: shapes,
+							save: () => {
+								const diagram = $$("diagram");
+
+								// clear data
+								diagram.clearAll();
+								diagram.getLinks().clearAll();
+
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = $$("editor").getValues();
+								diagram.parse(full_data);
+
+								$$("view").show();
+							},
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

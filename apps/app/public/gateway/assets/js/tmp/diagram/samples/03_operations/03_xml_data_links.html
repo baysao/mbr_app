@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: XML Data with Custom Links</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "diagram",
+					item: {
+						width: 100,
+						height: 50,
+						template: function(obj) {
+							return obj.value || "";
+						},
+					},
+					shapes: [
+						{ id: "join", template: "rrect", height: 80, width: 10 },
+						{ id: "action", template: "rrect" },
+						{
+							id: "action2",
+							template: "rrect",
+							backgroundColor: "#FFF5A7",
+							lineColor: "#FFD08D",
+						},
+					],
+					select: true,
+					autoplace: false,
+					url: "../common/xml/data.xml",
+					links: new webix.DataCollection({
+						url: "../common/xml/links.xml",
+						datatype: "xml",
+						scheme: {
+							$init: function(obj) {
+								if (obj.line) obj.line = obj.line.split(" ");
+							},
+						},
+					}),
+					datatype: "xml",
+				});
+			});
+		</script>
+	</body>
+</html>

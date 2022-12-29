@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: XML Data</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "diagram",
+					item: {
+						width: 100,
+						height: 50,
+						template: function(obj) {
+							return obj.value || "";
+						},
+					},
+					select: true,
+					autoplace: false,
+					shapes: [
+						{ id: "action", template: "rrect" },
+						{ id: "join", template: "rrect", height: 80, width: 10 },
+
+						{
+							id: "action2",
+							template: "rrect",
+							backgroundColor: "#FFF5A7",
+							lineColor: "#FFD08D",
+						},
+					],
+					url: "../common/xml/data.xml",
+					links: "../common/xml/links.xml",
+					datatype: "xml",
+				});
+			});
+		</script>
+	</body>
+</html>

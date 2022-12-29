@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Stylized Links</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+		<style>
+			.red_line {
+				stroke: #f17b7b;
+			}
+			.blue_line {
+				stroke: #7baef1;
+				stroke-dasharray: 2, 2;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "diagram",
+					paddingX: 40,
+					root: "1",
+					linkItem: {
+						arrow: true,
+					},
+					item: {
+						width: 140,
+						height: 50,
+						margin: 40,
+						marginY: -50,
+					},
+					select: true,
+					data: complex_tree_data,
+					links: stylized_tree_links,
+				});
+			});
+		</script>
+	</body>
+</html>

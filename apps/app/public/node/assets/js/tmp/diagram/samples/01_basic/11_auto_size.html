@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Block Auto Sizing</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				tree_data.map(i => (i.height = 0));
+
+				webix.ui({
+					rows: [
+						{
+							view: "segmented",
+							multiview: true,
+							width: 200,
+							options: [
+								{ id: "width", value: "Auto width" },
+								{ id: "height", value: "Auto height" },
+							],
+						},
+						{
+							animate: false,
+							cells: [
+								{
+									id: "width",
+									view: "diagram",
+									root: "root",
+									item: {
+										width: "auto",
+										height: 40,
+										marginY: -120,
+									},
+									data: webix.copy(tree_data),
+									links: webix.copy(tree_links),
+								},
+								{
+									id: "height",
+									view: "diagram",
+									root: "root",
+									item: {
+										height: "auto",
+										width: 110,
+										marginY: -10,
+									},
+									data: webix.copy(tree_data),
+									links: webix.copy(tree_links),
+								},
+							],
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

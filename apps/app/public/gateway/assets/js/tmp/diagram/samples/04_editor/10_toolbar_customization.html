@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Remove "Apply" Button in the Toolbar</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				class CustomToolbar extends diagram.views["toolbar"] {
+					RightGroupConfig() {
+						// [ { spacer }, { apply_button } ]
+						const elements = super.RightGroupConfig();
+						elements.pop();
+						return elements;
+					}
+				}
+
+				webix.ui({
+					view: "diagram-editor",
+
+					override: new Map([[diagram.views["toolbar"], CustomToolbar]]),
+					data: base_data,
+					links: base_links,
+				});
+			});
+		</script>
+	</body>
+</html>

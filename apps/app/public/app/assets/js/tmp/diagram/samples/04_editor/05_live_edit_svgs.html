@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Custom Shapes</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/svgs.js"></script>
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				const shapes = [
+					// new shapes include string "svg" and style presets
+					{
+						id: "laptop",
+						square: true,
+						template: svgs["laptop"],
+						backgroundColor: "#ffffff",
+						height: 75,
+						width: 75,
+					},
+					{
+						id: "phone",
+						square: true,
+						template: svgs["phone"],
+						backgroundColor: "#fdfef8",
+						height: 75,
+						width: 75,
+					},
+					{
+						id: "pc",
+						template: svgs["pc"],
+						backgroundColor: "#ffffff",
+						height: 75,
+						width: 75,
+						square: true,
+					},
+					{
+						id: "printer",
+						square: true,
+						template: svgs["printer"],
+						backgroundColor: "#ffffff",
+						height: 75,
+						width: 75,
+					},
+					{
+						id: "internet",
+						square: true,
+						template: svgs["internet"],
+						lineColor: "#98E4ED",
+						backgroundColor: "#ffffff",
+						altBackgroundColor: "#98E4ED",
+						textVAlign: "bottom",
+						height: 75,
+						width: 75,
+					},
+					{
+						id: "router",
+						square: true,
+						template: svgs["router"],
+						lineColor: "#9475CC",
+						backgroundColor: "#ffffff",
+						altBackgroundColor: "#9475CC",
+						textVAlign: "bottom",
+						height: 75,
+						width: 75,
+					},
+				];
+
+				class CustomShapes extends diagram.views["shapes"] {
+					ready() {
+						super.ready();
+						// increase block height for the group with cusrom SVG shapes
+						this.$$("ExtraView").type.height = 75;
+						this.$$("ExtraView").refresh();
+					}
+				}
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [
+								{
+									view: "toolbar",
+									padding: webix.skin.$active.layoutPadding.space,
+									elements: [
+										{},
+										{
+											view: "button",
+											value: "Edit",
+											autowidth: true,
+											css: "webix_primary",
+											click: function() {
+												const diagram = $$("diagram");
+												// blocks, links, shapes, defaults for blocks and links
+												const full_data = diagram.serialize(true);
+
+												$$("editor").show();
+												$$("editor").setValues(full_data);
+											},
+										},
+									],
+								},
+								{
+									view: "diagram",
+									id: "diagram",
+									autoplace: false,
+									linkItem: {
+										mode: "direct",
+									},
+									item: {
+										template: function(obj) {
+											return obj.value || "";
+										},
+									},
+									select: false,
+									shapes: shapes,
+									data: [
+										{
+											id: "1",
+											type: "internet",
+											x: 200,
+											y: 0,
+										},
+										{
+											id: "2",
+											type: "router",
+											x: 200,
+											y: 200,
+										},
+										{ id: "3", type: "laptop", x: 50, y: 100 },
+										{
+											id: "4",
+											type: "phone",
+											x: 20,
+											y: 300,
+											backgroundColor: "#f8fdfe",
+										},
+										{ id: "5", type: "phone", x: 100, y: 350 },
+										{ id: "6", type: "pc", x: 350, y: 100 },
+										{ id: "7", type: "printer", x: 350, y: 300 },
+									],
+									links: [
+										{ source: "1", target: "2" },
+										{ source: "2", target: "3" },
+										{ source: "2", target: "4" },
+										{ source: "2", target: "5" },
+										{ source: "2", target: "6" },
+										{ source: "2", target: "7" },
+									],
+								},
+							],
+						},
+						{
+							view: "diagram-editor",
+							id: "editor",
+							shapes: shapes,
+							override: new Map([[diagram.views["shapes"], CustomShapes]]),
+							save: () => {
+								const diagram = $$("diagram");
+
+								// clear data
+								diagram.clearAll();
+								diagram.getLinks().clearAll();
+
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = $$("editor").getValues();
+								diagram.parse(full_data);
+
+								$$("view").show();
+							},
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

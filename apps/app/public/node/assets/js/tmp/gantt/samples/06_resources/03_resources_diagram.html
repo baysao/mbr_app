@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Resource diagram</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					rows: [
+						{
+							view: "toolbar",
+							elements: [
+								{
+									view: "checkbox",
+									labelWidth: 0,
+									labelRight: "Show resources diagram",
+									value: true,
+									on: {
+										onChange: v => {
+											$$("gantt").getState().resourcesDiagram = v;
+										},
+									},
+								},
+							],
+						},
+						{
+							view: "gantt",
+							id: "gantt",
+							url: "https://docs.webix.com/gantt-backend/",
+							resources: true,
+							resourcesDiagram: true,
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

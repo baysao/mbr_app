@@ -1,0 +1,1 @@
+'~^https?://(.*\.)?localhost(:\d+)?$' $http_origin;

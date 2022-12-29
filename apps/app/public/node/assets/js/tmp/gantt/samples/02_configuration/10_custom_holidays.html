@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Custom Holidays</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+
+		<script type="text/javascript" src="../common/data.js"></script>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				//client-side data for example purposes only
+				class MyBackend extends gantt.services.Backend {
+					tasks() {
+						return webix.promise.resolve(tasks);
+					}
+					links() {
+						return webix.promise.resolve(links);
+					}
+				}
+
+				const today = new Date();
+				const year = today.getFullYear();
+				const month = today.getMonth();
+				const scalePresets = {
+					day: {
+						scale: {
+							unit: "day",
+							format: "<b>%d</b>, %D" /*  , step:3 */,
+						},
+						scaleStart: new Date(year, month, 0, 19, 30, 0),
+						scaleEnd: new Date(year + 1, month, 27, 4, 20, 0),
+					},
+					hour: {
+						scale: {
+							unit: "hour",
+							format: "%H:00",
+						},
+						scaleStart: new Date(year, month, 0, 19, 30, 0),
+						scaleEnd: new Date(year, month, 27, 4, 20, 0),
+					},
+				};
+
+				function resetScales(v, o) {
+					const current = gantt1.getService("local").getScales();
+
+					gantt1
+						.getService("local")
+						.setScales(
+							scalePresets[v].scaleStart,
+							scalePresets[v].scaleEnd,
+							current.precise,
+							current.cellWidth,
+							current.cellHeight,
+							[scalePresets[v].scale]
+						);
+				}
+
+				const zoom = {
+					view: "radio",
+					label: "Zoom:",
+					value: "day",
+					gravity: 2,
+					options: ["hour", "day"],
+					on: {
+						onChange: resetScales,
+					},
+				};
+
+				webix.ui({
+					rows: [
+						{ view: "toolbar", css: "webix_dark", elements: [zoom] },
+						{
+							view: "gantt",
+							id: "gantt1",
+							url: "https://docs.webix.com/gantt-backend/",
+
+							scales: [scalePresets["day"].scale],
+							scaleCellWidth: 80,
+							scaleStart: scalePresets["day"].scaleStart,
+							scaleEnd: scalePresets["day"].scaleEnd,
+
+							isHoliday: date => {
+								// return false; // to switch off holiday highlighting
+								const d = date.getDay();
+								const md = date.getDate();
+								return (
+									d === 0 ||
+									d === 6 ||
+									(md === 4 ||
+										md == 15 ||
+										(md == 24 && date.getMonth() === new Date().getMonth()))
+								);
+							},
+
+							// excludeHolidays:true,
+
+							override: new Map([[gantt.services.Backend, MyBackend]]),
+						},
+					],
+				});
+				const gantt1 = $$("gantt1");
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Pivot: Custom Pie Palette</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- pivot -->
+		<script type="text/javascript" src="../../codebase/pivot.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/pivot.css" />
+
+		<style>
+			.palette_selector .webix_selected {
+				box-shadow: inset 0 0 0 2px #1ca1c1, inset 0 0 0 3px #fff;
+			}
+			.palette_selector button:nth-child(1),
+			.palette_selector button:nth-child(1):focus {
+				background: linear-gradient(
+					45deg,
+					#e33fc7 33%,
+					#a244ea 33% 66%,
+					#476cee 66% 100%
+				);
+			}
+			.palette_selector button:nth-child(2),
+			.palette_selector button:nth-child(2):focus {
+				background: linear-gradient(
+					45deg,
+					#f34336 33%,
+					#ff9700 33% 66%,
+					#ffea3b 66% 100%
+				);
+			}
+			.palette_selector button:nth-child(3),
+			.palette_selector button:nth-child(3):focus {
+				background: linear-gradient(
+					45deg,
+					#2a2541 33%,
+					#3b335b 33% 66%,
+					#5d5190 66% 100%
+				);
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				class MyGroup extends pivot.views["config/properties/group"] {
+					config() {
+						const config = super.config();
+
+						config.rows[0] = {
+							cols: [
+								config.rows[0],
+								{
+									view: "segmented",
+									value: 1,
+									width: 100,
+									css: "palette_selector",
+									localId: "piePalette",
+									options: [
+										{ id: 1, value: "" },
+										{ id: 2, value: "" },
+										{ id: 3, value: "" },
+									],
+									on: {
+										onChange: (value, oldValue, source) => {
+											if (source == "user") {
+												const chart = this.State.chart;
+												chart.piePalette = value;
+												this.State.chart = Object.assign({}, chart);
+											}
+										},
+									},
+								},
+							],
+						};
+
+						return config;
+					}
+					init() {
+						super.init();
+						this.on(this.State.$changes, "chart", () => {
+							this.HandlePieGroupVisibility();
+						});
+					}
+					SetValue(value) {
+						super.SetValue(value);
+						this.$$("piePalette").setValue(this.State.chart.piePalette || 1);
+					}
+					HandlePieGroupVisibility() {
+						const type = this.State.chart.type;
+						const pieBased = type == "pie" || type == "donut";
+
+						if (pieBased) this.$$("piePalette").show();
+						else this.$$("piePalette").hide();
+					}
+				}
+
+				class MyData extends pivot.services.LocalData {
+					constructor(app) {
+						super(app);
+						this.State = app.getState();
+					}
+					getPalette(piePalette) {
+						const palette = this.State.chart.piePalette;
+						if (piePalette && palette > 1) {
+							if (palette == 2)
+								return [
+									[
+										"#F34336",
+										"#FF9700",
+										"#FFEA3B",
+										"#4CB050",
+										"#009788",
+										"#00BCD4",
+									],
+								];
+							else
+								return [
+									[
+										"#2A2541",
+										"#3B335B",
+										"#5D5190",
+										"#877CB6",
+										"#B7B1D3",
+										"#E7E5F0",
+									],
+								];
+						} else return super.getPalette();
+					}
+				}
+
+				class MyChart extends pivot.views["chart"] {
+					ValueFormat(item) {
+						return item.text || item.value;
+					}
+				}
+
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "pivot",
+					mode: "chart",
+					chart: {
+						type: "donut",
+						pieInnerText: true,
+						piePalette: 3,
+						legend: { width: 200 },
+					},
+					structure: {
+						groupBy: "date",
+						values: [
+							{ name: "model_x", operation: "sum" },
+							{ name: "model_y", operation: "sum" },
+							{ name: "model_z", operation: "sum" },
+						],
+					},
+					predicates: {
+						date: webix.Date.dateToStr(webix.i18n.dateFormat),
+					},
+					url: "../common/pieData.json",
+					fields: [
+						{ id: "model_x", value: "Model X", type: "text" },
+						{ id: "model_y", value: "Model Y", type: "text" },
+						{ id: "model_z", value: "Model Z", type: "text" },
+						{ id: "date", value: "Date", type: "date", predicate: "date" },
+					],
+					override: new Map([
+						[pivot.views["config/properties/group"], MyGroup],
+						[pivot.views["chart"], MyChart],
+						[pivot.services.LocalData, MyData],
+					]),
+				});
+			});
+		</script>
+	</body>
+</html>

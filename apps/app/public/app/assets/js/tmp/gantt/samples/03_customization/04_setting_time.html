@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Setting Time of Tasks</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+	</head>
+	<body>
+		<style>
+			.webix_gantt_tree .webix_cell {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		</style>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				class CustomTree extends gantt.views.tree {
+					config() {
+						const tree = super.config();
+
+						tree.columns[1].format = webix.i18n.fullDateFormatStr;
+						tree.columns[1].minWidth = 170;
+
+						return tree;
+					}
+				}
+
+				class CustomInfo extends gantt.views["task/info"] {
+					DateFormat(date) {
+						return webix.i18n.fullDateFormatStr(date);
+					}
+				}
+
+				class CustomForm extends gantt.views["task/form"] {
+					config() {
+						const ui = super.config();
+
+						const form = ui.body.rows[1];
+						const startCal = form.elements[2];
+						startCal.timepicker = startCal.suggest.body.timepicker = true;
+						const endCal = form.elements[3];
+						endCal.timepicker = endCal.suggest.body.timepicker = true;
+
+						return ui;
+					}
+				}
+
+				class CustomBars extends gantt.views["chart/bars"] {
+					GetTooltip(obj, _) {
+						const parser = webix.i18n.fullDateFormatStr;
+						let tip = `${obj.text || _("(no title)")}<br>
+							<br>${_("Start date")}: ${parser(obj.start_date)}`;
+
+						if (obj.type != "milestone") {
+							const duration =
+								obj.duration < 1
+									? this.GetPreciseDuration(obj, _)
+									: this.GetDayDuration(obj, _);
+
+							tip += `<br>${_("End date")}: ${parser(obj.end_date)}
+							<br>${_("Lasts")} ${duration}`;
+						}
+						return tip;
+					}
+
+					GetPreciseDuration(obj, _) {
+						const { minUnit, precise } = this.Local.getScales();
+						const showHours = minUnit === "hour" || precise;
+						return showHours
+							? `${Math.round(obj.duration * 24)} ${_("hours")}`
+							: `1 ${_("day")}`;
+					}
+
+					GetDayDuration(obj, _) {
+						return `${obj.duration} ${obj.duration > 1 ? _("days") : _("day")}`;
+					}
+				}
+
+				webix.ui({
+					view: "gantt",
+					url: "https://docs.webix.com/gantt-backend/",
+					scales: [
+						{ unit: "day", format: "%M %d" },
+						{ unit: "hour", format: "%H:00" },
+					],
+					scaleCellWidth: 60,
+					override: new Map([
+						[gantt.views.tree, CustomTree],
+						[gantt.views["task/info"], CustomInfo],
+						[gantt.views["task/form"], CustomForm],
+						[gantt.views["chart/bars"], CustomBars],
+					]),
+				});
+			});
+
+			gantt.locales.en.hours = "hours";
+		</script>
+	</body>
+</html>

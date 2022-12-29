@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Data Export</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Scheduler -->
+		<script type="text/javascript" src="../../codebase/scheduler.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/scheduler.css"
+		/>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					rows: [
+						{
+							padding: 6,
+							cols: [
+								{ view: "label", width: 150, label: "Export events data to: " },
+								{
+									view: "button",
+									width: 100,
+									value: "Excel",
+									click: function() {
+										webix.toExcel("scheduler1");
+									},
+								},
+								{
+									view: "button",
+									width: 100,
+									value: "CSV",
+									click: function() {
+										webix.toCSV("scheduler1");
+									},
+								},
+								{
+									view: "button",
+									width: 100,
+									value: "PDF",
+									click: function() {
+										webix.toPDF("scheduler1", { autowidth: true });
+									},
+								},
+								{},
+							],
+						},
+						{
+							view: "scheduler",
+							id: "scheduler1",
+							date: new Date(2020, 9, 7, 0, 0, 0),
+							url: "https://docs.webix.com/calendar-backend/",
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

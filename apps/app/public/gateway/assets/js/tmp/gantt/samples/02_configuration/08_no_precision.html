@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: No precision</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+
+		<script type="text/javascript" src="../common/data.js"></script>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "gantt",
+					id: "gantt1",
+					url: "https://docs.webix.com/gantt-backend/",
+					scales: [quarterScale, monthScale, weekScale],
+					preciseTimeUnit: false,
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Reports: Filter icon</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/reports.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/reports.css" />
+	</head>
+	<body>
+		<script>
+			class CustomModules extends reports.views["modules"] {
+				config() {
+					let ui = super.config();
+					const newButton = {
+						view: "icon",
+						localId: "myFilterIcon",
+						icon: "wxi-filter",
+						click: e => this.showMyPopup(e),
+					};
+					/* add new icon button */
+					ui.rows[0].cols.splice(2, 0, newButton);
+					return ui;
+				}
+
+				// icon click handler shows popup
+				showMyPopup(e) {
+					if (!this.MyPopup) this.MyPopup = this.ui(this.getMyPopupConfig());
+					webix.delay(() => {
+						this.MyPopup.show(webix.$$(e).$view);
+					});
+				}
+				// custom popup config
+				getMyPopupConfig() {
+					return {
+						view: "popup",
+						body: {
+							view: "list",
+							borderless: true,
+							css: "webix_rpt_popup_menu",
+							width: 160,
+							autoheight: true,
+							template: "#value#",
+							data: [
+								{ id: "all", value: "Show all" },
+								{ id: "table", value: "Table reports" },
+								{ id: "chart", value: "Chart reports" },
+								{ id: "heatmap", value: "Heatmap reports" },
+							],
+							click: (id, e) => this.myFilter(id, e),
+						},
+					};
+				}
+
+				// list filtering by report type
+				myFilter(id) {
+					if (id == "all") this.$$("list").filter();
+					else
+						this.$$("list").filter(module => {
+							const config = module.parsed;
+							return config.type == id;
+						});
+					this.MyPopup.hide();
+				}
+			}
+
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "reports",
+					url: "https://docs.webix.com/reports-backend/",
+					override: new Map([[reports.views["modules"], CustomModules]]),
+				});
+			});
+		</script>
+	</body>
+</html>

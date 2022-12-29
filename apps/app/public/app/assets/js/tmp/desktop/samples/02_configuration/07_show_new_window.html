@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Desktop: Show new app window</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/desktop.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/desktop.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+		<script type="text/javascript" src="../common/apps.js"></script>
+		<style>
+			.webix_dsk_main {
+				background-image: url("../common/imgs/bg.jpg");
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function start(user) {
+				webix.ready(function() {
+					if (webix.env.touch) webix.ui.fullScreen();
+					else if (webix.env.scrollSize) webix.CustomScroll.init();
+					const form = {
+						template: "<p>Open a new window on each app title click</p>",
+						height: 50,
+					};
+
+					const desktop = {
+						view: "desktop",
+						systemParams: user,
+						apps: [
+							{
+								name: "My TextApp",
+								pin: "desktop",
+								showNew: true,
+								// text to display as bar icon title for the app window
+								tooltip: function(options) {
+									const view = options.$view;
+									let text = view.getValue();
+									text = text.trim().substr(0, 20);
+
+									return "App text: " + (text || "( no text )");
+								},
+								launch: () => {
+									return {
+										init: () => {
+											return {
+												view: "textarea",
+												placeholder: "Type text here",
+											};
+										},
+									};
+								},
+							},
+						],
+					};
+
+					webix.ui({
+						rows: [form, desktop],
+					});
+				});
+			}
+
+			login("someurl").then(start);
+		</script>
+	</body>
+</html>

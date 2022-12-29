@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Desktop: signout customization</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/desktop.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/desktop.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+		<script type="text/javascript" src="../common/apps.js"></script>
+		<style>
+			.webix_dsk_main {
+				background-image: url("../common/imgs/bg.jpg");
+			}
+
+			.signin_form {
+				background: rgba(0, 0, 0, 0.6);
+			}
+			.signin_form .webix_view {
+				background: transparent;
+				color: #fff;
+				text-align: center;
+			}
+			.signin_form .webix_list_item {
+				text-align: center;
+			}
+			.my_user_label .webix_el_box {
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.touch) webix.ui.fullScreen();
+				else if (webix.env.scrollSize) webix.CustomScroll.init();
+
+				const UserCollection = new webix.DataCollection({});
+
+				function loadUsers() {
+					return Promise.resolve([
+						{ name: "Alex Brown", id: 1 },
+						{ name: "Sinister Alpha", id: 2 },
+						{ name: "Alan Raichu", id: 3 },
+					]).then(data => {
+						return UserCollection.parse(data);
+					});
+				}
+				function setParams(token, user) {
+					sessionStorage.setItem("login-token", token);
+					localStorage.setItem("desktop-user", user);
+				}
+				function getParams() {
+					var token = sessionStorage.getItem("login-token");
+					if (token)
+						return { token, user: localStorage.getItem("desktop-user") };
+					return null;
+				}
+
+				// customization for siggout view to show user form
+				class MySignout extends desktop.views["signout"] {
+					config() {
+						return {
+							css: "sign-in",
+							rows: [
+								{},
+								{
+									cols: [
+										{},
+										{
+											type: "form",
+											css: "signin_form",
+											borderless: true,
+											maxWidth: 400,
+											minWidth: 250,
+											rows: [
+												{
+													view: "list",
+													localId: "users",
+													autoheight: true,
+													template: "#name#",
+												},
+											],
+										},
+										{},
+									],
+								},
+								{},
+							],
+						};
+					}
+					init() {
+						super.init();
+						this.List = this.$$("users");
+						this.List.parse(UserCollection);
+						this.on(this.List, "onItemClick", id => this.MyDoLogin(id));
+					}
+					MyDoLogin(user) {
+						this.MyGetToken("someurl").then(raw => {
+							var token = "mytoken";
+							setParams(token, user);
+							this.app.getState().systemParams = { user, token };
+						});
+					}
+					MyGetToken(url) {
+						//return webix.ajax(url + "login?id=" + this.config.user);
+						return Promise.resolve("");
+					}
+				}
+
+				// Customization for menu to add the logout icon and the user name
+				class MyMenu extends desktop.views["menu"] {
+					config() {
+						const ui = super.config();
+						const bottomToolbar = {
+							padding: { left: 10 },
+							margin: 5,
+							borderless: true,
+							cols: [
+								{
+									view: "icon",
+									localId: "logout",
+									icon: "dsi-logout-variant",
+									click: () => this.MyLogout(),
+								},
+								{
+									view: "label",
+									localId: "MyUserName",
+									label: "",
+									css: "my_user_label",
+								},
+								{},
+							],
+						};
+						ui.body.rows.push(bottomToolbar);
+						return ui;
+					}
+					init() {
+						super.init();
+						// on systemParams change handler
+						this.on(this.app.getState().$changes, "systemParams", () =>
+							this.MyUserUpdate()
+						);
+						// set user name after user data loading
+						UserCollection.waitData.then(() => this.MyUserUpdate());
+					}
+					MyUserUpdate() {
+						const params = this.app.getState().systemParams;
+						if (params) {
+							const userId = params.user;
+							const user = UserCollection.getItem(userId);
+							this.$$("MyUserName").config.label = user.name;
+							this.$$("MyUserName").refresh();
+						}
+					}
+					MyLogout() {
+						this.app.getState().systemParams = null;
+					}
+				}
+
+				loadUsers();
+
+				app = new desktop.App({
+					apps: myApps,
+					systemParams: getParams(),
+					override: new Map([
+						[desktop.views["signout"], MySignout],
+						[desktop.views["menu"], MyMenu],
+					]),
+				});
+
+				app.render(document.body);
+			});
+		</script>
+	</body>
+</html>
