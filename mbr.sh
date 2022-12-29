@@ -4,6 +4,7 @@ if [ $# -eq 0 ];then
    	git clone git@github.com:massbitprotocol/mbr_gbc.git
 	git clone git@github.com:massbitprotocol/mbr_app.git
 	cp mbr_app/mbr.sh .
+	exit 0
 fi
    
 case $1 in
