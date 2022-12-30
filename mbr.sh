@@ -16,12 +16,12 @@ install_docker)
 diff)
 	dirty=0
 	git -C mbr_app fetch
-	git -C mbr_app diff release origin/release
+	git -C mbr_app diff --quiet release origin/release
 	if [ $? -ne 0 ]; then
 		dirty=1
 	fi
 	git -C mbr_gbc fetch
-	git -C mbr_gbc diff release origin/release
+	git -C mbr_gbc diff --quiet release origin/release
 	if [ $? -ne 0 ]; then
 		dirty=1
 	fi
