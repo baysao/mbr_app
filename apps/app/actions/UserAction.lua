@@ -65,14 +65,14 @@ function UserAction:registerAction(args)
         cc.throw("user_validator:" .. inspect(args))
     end
     local _ret, _err = self._model:register(args)
-    if _ret then
-       local _ret1 = self:_map_email_id(_ret)
-       if not _ret1 then
-	  return {result = false}
-       end
+    -- if _ret then
+    --    local _ret1 = self:_map_email_id(_ret)
+    --    if not _ret1 then
+    -- 	  return {result = false}
+    --    end
        
-        return {result = true}
-    end
+    --     return {result = true}
+    -- end
 
     return {result = false}
 end

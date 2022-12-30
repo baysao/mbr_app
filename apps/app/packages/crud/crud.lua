@@ -16,6 +16,7 @@ function Crud:get(args)
         cc.throw("user_id or id missing")
     end
     local _redis = self._instance:getRedis()
+    local _ssdb = self._instance:getSsdb()
     local _key = args.user_id .. ":" .. self._model_type .. ":" .. args.id
     ngx.log(ngx.ERR, "model_type:"..inspect(self._model_type))
     ngx.log(ngx.ERR, "key:"..inspect(_key))
@@ -33,13 +34,18 @@ function Crud:create(args)
     args.updated_at = _now
 
     local _redis = self._instance:getRedis()
-    local _data = _redis:hashToArray(args)
+    local _ssdb = self._instance:getSsdb()
+    
+    local _data = _ssdb:hash_to_array(args)
+--    local _data = _redis:hashToArray(args)
 
     local _key = args.user_id .. ":" .. self._model_type .. ":" .. args.id
 
-    local _ret = _redis:hmset(_key, table.unpack(_data))
+    local _ret = _ssdb:multi_hset(_key, table.unpack(_data))
+--    local _ret = _redis:hmset(_key, table.unpack(_data))
 
-    return _ret == _redis.null and nil or args
+    return _ret == _ssdb.null and nil or args
+--    return _ret == _redis.null and nil or args
 end
 
 -- function Crud:update(args)
