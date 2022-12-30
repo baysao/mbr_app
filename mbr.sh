@@ -1,13 +1,32 @@
 #!/bin/sh
 DIR=$(realpath $(dirname $0))
 if [ $# -eq 0 ]; then
-	git clone git@github.com:massbitprotocol/mbr_gbc.git
-	git clone git@github.com:massbitprotocol/mbr_app.git
+	git clone https://github.com/massbitprotocol/mbr_gbc.git -b release
+	#	git clone git@github.com:massbitprotocol/mbr_gbc.git -b release
+	git clone https://github.com/massbitprotocol/mbr_app.git -b release
+	#	git clone git@github.com:massbitprotocol/mbr_app.git -b release
 	cp mbr_app/mbr.sh .
 	exit 0
 fi
 
 case $1 in
+install_docker)
+	curl -fsSL https://get.docker.com | bash
+	;;
+diff)
+	dirty=0
+	git -C mbr_app fetch
+	git -C mbr_app diff release origin/release
+	if [ $? -ne 0 ]; then
+		dirty=1
+	fi
+	git -C mbr_gbc fetch
+	git -C mbr_gbc diff release origin/release
+	if [ $? -ne 0 ]; then
+		dirty=1
+	fi
+	exit $dirty
+	;;
 update)
 	git -C mbr_gbc pull
 	git -C mbr_app pull
