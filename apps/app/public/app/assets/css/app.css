@@ -1,18 +1,75 @@
+/* auth wrapper */
+
+.webix_view.webix_layout_line {
+	width: fit-content !important;
+}
+.px-2 {
+	margin: 2vw;
+}
+
 /* register, login */
 #icon {
 	width: 1.5vw;
 	height: 1.5vw;
 }
-.webix_template,
+
 .webix_view.icon,
 .no-border > *,
 .webix_el_text {
 	border: none;
 	margin: 0;
 	height: fit-content !important;
+	width: fit-content !important;
 }
 #register-header {
+	width: 100%;
 	text-align: center;
+}
+.no-bg,
+.no-bg * {
+	background: none;
+}
+.login-bg {
+	padding: 2vw !important;
+}
+#login-bg {
+	background-image: url("../images/login/LoginCardBackground.svg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	mix-blend-mode: normal;
+	height: 90vh !important;
+	margin-right: 5vw;
+	border-radius: 12px;
+}
+.popup {
+	position: absolute;
+	bottom: 12%;
+	right: 5%;
+	width: 350px !important;
+	height: 250px !important;
+	border-radius: 8px;
+}
+.popup-area {
+	position: absolute;
+	right: 5%;
+	bottom: 4%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.popup-area button,
+.popup-area,
+.popup-area button image {
+	background: transparent;
+}
+.popup-area button img,
+.popup-button {
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
 }
 
 /* reset password */
