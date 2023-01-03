@@ -61,17 +61,17 @@ define([], function () {
           .then(function (_res) {
             var _data = _res.json();
             console.log(_data);
-            if (_data.result) {
-              webix
-                .ajax()
-                .post("/api/app/v1?action=user.login", {
-                  email: _email,
-                  password: _password,
-                })
-                .then(function (_res1) {
-                  console.log(_res1.json());
-                });
-            }
+            // if (_data.result) {
+            //   webix
+            //     .ajax()
+            //     .post("/api/app/v1?action=user.login", {
+            //       email: _email,
+            //       password: _password,
+            //     })
+            //     .then(function (_res1) {
+            //       console.log(_res1.json());
+            //     });
+            // }
           });
       });
     },

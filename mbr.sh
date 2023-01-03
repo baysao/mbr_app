@@ -18,15 +18,23 @@ diff)
 	git -C mbr_app fetch
 	git -C mbr_app diff --quiet release origin/release
 	if [ $? -ne 0 ]; then
-		dirty=1
+	    dirty=1
+	    git -C mbr_app pull
 	fi
 	git -C mbr_gbc fetch
 	git -C mbr_gbc diff --quiet release origin/release
 	if [ $? -ne 0 ]; then
-		dirty=1
+	    dirty=1
+	    git -C mbr_gbc pull
 	fi
 	exit $dirty
 	;;
+check_update)
+    $0 diff
+    if [ $? -ne 0 ];then
+       $0 reload
+    fi
+    ;;
 update)
 	git -C mbr_gbc pull
 	git -C mbr_app pull
@@ -38,6 +46,12 @@ run)
 
 reload)
 	docker exec -it mbr_app /tmp/app/cmd_server _update
+	docker exec -it mbr_app /tmp/app/cmd_server status
+	;;
+
+cmd)
+    shift
+	docker exec -it mbr_app /tmp/app/cmd_server $@
 	docker exec -it mbr_app /tmp/app/cmd_server status
 	;;
 esac
