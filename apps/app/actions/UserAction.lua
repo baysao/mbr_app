@@ -20,19 +20,6 @@ function UserAction:init()
     self._model = Model:new(self:getInstance())
 end
 
-function UserAction:_get_email_id(args)
-   local _redis = self._instance:getRedis()
-   local _ret = _redis:hget("map:user:email_id", args.email)
-   return _ret ~= _redis.null and _ret or nil
-end
-
-function UserAction:_map_email_id(args)
-   local _redis = self._instance:getRedis()
-   local _ret = _redis:hset("map:user:email_id", args.email, args.id)
-   return _ret ~= _redis.null and _ret or nil
-end
-
-
 function UserAction:loginAction(args)
    args.action = nil
    ngx.log(ngx.ERR, inspect(args))
@@ -41,8 +28,8 @@ function UserAction:loginAction(args)
     --     cc.throw("user_validator:" .. inspect(args))
     -- end
 
-    local _id = self:_get_email_id(args)
-    ngx.log(ngx.ERR, "id: " .. _id)
+    local _id = self._model:getIdByEmail(args.email)
+    cc.printerror("id: " .. _id)
     if not _id then
        return {result = false}
     end
@@ -53,17 +40,27 @@ function UserAction:loginAction(args)
 	  id = _id,
 	  password = args.password
     })
+
+    cc.printerror(inspect({_ret, _err}))
    
     return {result = _ret ~= nil}
 end
 
 
 function UserAction:registerAction(args)
+   cc.printerror(inspect(args))
     args.action = nil
-    local _is_valid = self._model:validate(args)
-    if not _is_valid then
-        cc.throw("user_validator:" .. inspect(args))
-    end
+    -- local _is_valid = self._model:validate(args)
+    -- if not _is_valid then
+    --     cc.throw("user_validator:" .. inspect(args))
+    -- end
+
+    -- local _id = self._model:getIdByEmail(args.email)
+    -- cc.printerror("id: " .. _id)
+    -- if not _id then
+    --    return {result = false}
+    -- end
+    
     local _ret, _err = self._model:register(args)
     -- if _ret then
     --    local _ret1 = self:_map_email_id(_ret)
@@ -74,7 +71,7 @@ function UserAction:registerAction(args)
     --     return {result = true}
     -- end
 
-    return {result = false}
+    return _ret and {result = true} or {result = false}
 end
 
 function UserAction:signinAction(args)

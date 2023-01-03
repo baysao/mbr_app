@@ -29,6 +29,7 @@ define([], function () {
 						gravity: 1,
 					},
 
+
 					{
 						view: "label",
 						label: "Docs",
@@ -135,4 +136,5 @@ define([], function () {
 			});
 		},
 	};
+
 });
