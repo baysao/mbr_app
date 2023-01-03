@@ -144,9 +144,7 @@ define([], function () {
 	             See guide to test
 	         </a>
 	         <div id="or">
-	             <hr />
 	             Or
-	             <hr />
 	         </div>
 	         <h6>
 	             Any feedback? Feel free to reach out to us
@@ -155,10 +153,12 @@ define([], function () {
 
 	webix.ui({
 		master: "panel",
-		view: "template",
-		css: "popup-area",
-		template:
-			"<button id='popup-button'><img src='assets/images/icons/LoginPopupIcon.png' alt='popup button'></img></button>",
+		view: "button",
+		css: "popup-button",
+		id: "popup-button",
+		value: "Popup",
+		// template:
+		// 	"<button id='popup-button'><img src='assets/images/icons/LoginPopupIcon.png' alt='popup button'></img></button>",
 		width: 80,
 		height: 80,
 	});
@@ -211,7 +211,9 @@ define([], function () {
 					});
 			});
 			$$("popup-button").attachEvent("onItemClick", function () {
-				console.log("popup");
+				console.log("clicked");
+				let item = document.getElementById("my-popup");
+				item.style.display = "none";
 			});
 		},
 	};
