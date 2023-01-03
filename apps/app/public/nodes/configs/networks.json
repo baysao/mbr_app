@@ -1,0 +1,14 @@
+[
+    {
+        "id": "mainnet",
+        "value": "Mainnet"
+    },
+    {
+        "id": "testnet",
+        "value": "Testnet"
+    },
+    {
+        "id": "devnet",
+        "value": "Devnet"
+    }
+]

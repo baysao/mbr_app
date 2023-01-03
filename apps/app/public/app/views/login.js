@@ -1,4 +1,5 @@
 define([], function () {
+
   var _form = {
     view: "form",
     responsive: true,
@@ -117,4 +118,5 @@ define([], function () {
       });
     },
   };
+
 });

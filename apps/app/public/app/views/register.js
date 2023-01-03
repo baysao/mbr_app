@@ -1,4 +1,5 @@
 define([], function () {
+
   var scope;
   var _form = {
     view: "form",
@@ -143,4 +144,5 @@ define([], function () {
       });
     },
   };
+
 });

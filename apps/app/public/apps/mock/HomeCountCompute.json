@@ -1,0 +1,22 @@
+[
+    {
+        "method": "eth_getBlockNumber",
+        "compute": 100,
+        "count": 100
+    },
+    {
+        "method": "eth_getBlockNumber",
+        "compute": 100,
+        "count": 100
+    },
+    {
+        "method": "eth_getBlockNumber",
+        "compute": 100,
+        "count": 100
+    },
+    {
+        "method": "eth_getBlockNumber",
+        "compute": 100,
+        "count": 100
+    }
+]
