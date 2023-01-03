@@ -21,55 +21,49 @@ function UserAction:init()
 end
 
 function UserAction:loginAction(args)
-   args.action = nil
-   ngx.log(ngx.ERR, inspect(args))
-    -- local _is_valid = self._model:validate(args)
-    -- if not _is_valid then
-    --     cc.throw("user_validator:" .. inspect(args))
-    -- end
-
-    local _id = self._model:getIdByEmail(args.email)
-    cc.printerror("id: " .. _id)
-    if not _id then
-       return {result = false}
+    args.action = nil
+    cc.printerror(inspect(args))
+    if not args.email or not args.password then
+        return {result = false}
     end
-    
-	 
-    local _ret, _err = self._model:login({
-	  user_id = "0",
-	  id = _id,
-	  password = args.password
-    })
+    local email = args.email
+
+    args.user_id = "0"
+    local _ret, _err = self._model:login(args)
 
     cc.printerror(inspect({_ret, _err}))
-   
-    return {result = _ret ~= nil}
+
+    if not _ret then
+        return {result = false}
+    end
+
+    local redis = self:getInstance():getRedis()
+    -- start session
+    local session = Session:new(redis)
+    session:start()
+    session:set("email", email)
+    session:save()
+
+    local _expires = session:getExpired()
+    local _token = session:getSid()
+    local cookie_tail = ";version=1;path=/;Max-Age=0" .. _expires
+x`    cookie_tail = cookie_tail .. ";secure"
+    cookie_tail = cookie_tail .. ";httponly"
+
+    ngx.header["Set-Cookie"] = {
+        "OauthMbrAccessToken=" .. ngx.escape_uri(_token) .. cookie_tail,
+    }
+
+    return {result = true, data = {sid = session:getSid(), expires = _expires}}
+
+    --    return {result = _ret ~= nil}
 end
 
-
 function UserAction:registerAction(args)
-   cc.printerror(inspect(args))
+    cc.printerror(inspect(args))
     args.action = nil
-    -- local _is_valid = self._model:validate(args)
-    -- if not _is_valid then
-    --     cc.throw("user_validator:" .. inspect(args))
-    -- end
 
-    -- local _id = self._model:getIdByEmail(args.email)
-    -- cc.printerror("id: " .. _id)
-    -- if not _id then
-    --    return {result = false}
-    -- end
-    
     local _ret, _err = self._model:register(args)
-    -- if _ret then
-    --    local _ret1 = self:_map_email_id(_ret)
-    --    if not _ret1 then
-    -- 	  return {result = false}
-    --    end
-       
-    --     return {result = true}
-    -- end
 
     return _ret and {result = true} or {result = false}
 end

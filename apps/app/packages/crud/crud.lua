@@ -10,14 +10,34 @@ function Crud:ctor(instance, model_type)
     self._model_type = model_type
 end
 
-function Crud:get(args, opt)
+function Crud:getall(args, opt)
     cc.printerror(inspect(args))
     if Check.notEmpty(args.user_id) and Check.notEmpty(args.id) then
         return nil
     end
     local _ssdb = self._instance:getSsdb()
     local _key = args.user_id .. ":" .. self._model_type .. ":" .. args.id
-    local _data = _ssdb:hget(_key)
+    local _data = _ssdb:hgetall(_key)
+    cc.printerror(inspect(_data))
+    local _ret = _ssdb:array_to_hash(_data)
+    cc.printerror(inspect(_ret))
+    return _ret
+end
+function Crud:get(args, opt)
+   cc.printerror(inspect({args, opt}))
+    if Check.notEmpty(args.user_id) and Check.notEmpty(args.id) then
+        return nil
+    end
+    
+    local _ssdb = self._instance:getSsdb()
+
+
+    local _opt = _ssdb:hash_to_array(opt)
+    
+    local _key = args.user_id .. ":" .. self._model_type .. ":" .. args.id
+
+    cc.printerror("_ssdb:multi_hget:".. inspect({_key, table.unpack(_opt)}))
+    local _data = _ssdb:multi_hget(_key, table.unpack(_opt))
     cc.printerror(inspect(_data))
     local _ret = _ssdb:array_to_hash(_data)
     cc.printerror(inspect(_ret))

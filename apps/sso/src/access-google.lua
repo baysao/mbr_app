@@ -1,6 +1,7 @@
 -- Copyright 2015-2020 Cloudflare
 -- Copyright 2014-2015 Aaron Westendorf
 
+
 local json = require("cjson")
 local http = require("resty.http")
 local inspect = require "inspect"
@@ -152,7 +153,7 @@ local function request_access_token(code)
 end
 
 local function request_profile(token)
-    ngx.log(ngx.ERR, inspect {"request_profile", token})
+   cc.printerror(inspect({"request_profile", token}))
     local request = http.new()
 
     request:set_timeout(7000)
@@ -199,6 +200,7 @@ local function is_authorized()
         token = headers["oauthaccesstoken"]
     end
 
+    ngx.log(ngx.ERR, inspect({token_secret, cb_server_name .. email .. expires}))
     local expected_token = ngx.encode_base64(ngx.hmac_sha1(token_secret, cb_server_name .. email .. expires))
 
     if token == expected_token and expires and expires > ngx.time() - extra_validity then
@@ -233,8 +235,7 @@ local function redirect_to_auth()
 end
 
 local function authorize()
-    ngx.log(ngx.ERR, "authorize")
-    ngx.log(ngx.ERR, inspect({uri, cb_uri}))
+    cc.printerror(inspect({uri, cb_uri}))
 
     if uri ~= cb_uri then
         return redirect_to_auth()
@@ -245,8 +246,8 @@ local function authorize()
         return ngx.exit(ngx.HTTP_FORBIDDEN)
     end
 
-    -- local uri_args = ngx.req.get_uri_args()
-    -- ngx.log(ngx.ERR, "uri_args:" .. inspect(uri_args))
+    local uri_args = ngx.req.get_uri_args()
+    ngx.log(ngx.ERR, "uri_args:" .. inspect(uri_args))
     local token, token_err = request_access_token(uri_args["code"])
     ngx.log(ngx.ERR, "token:" .. inspect(token))
     if not token then

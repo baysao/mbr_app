@@ -215,7 +215,7 @@ local function is_authorized()
     if token:len() == 0 and headers["oauthaccesstoken"] then
         token = headers["oauthaccesstoken"]
     end
-
+    ngx.log(ngx.ERR, inspect({token_secret, cb_server_name .. email .. expires}))
     local expected_token = ngx.encode_base64(ngx.hmac_sha1(token_secret, cb_server_name .. email .. expires))
 
     if token == expected_token and expires and expires > ngx.time() - extra_validity then
