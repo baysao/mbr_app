@@ -1,5 +1,4 @@
 define([], function () {
-	var scope;
 	var _form = {
 		view: "form",
 		responsive: true,
@@ -29,7 +28,6 @@ define([], function () {
 						gravity: 1,
 					},
 
-
 					{
 						view: "label",
 						label: "Docs",
@@ -41,12 +39,11 @@ define([], function () {
 			},
 			{
 				view: "template",
-				template: "<h1 id='register-header'>Register</h1>",
+				template: "<h1 id='register-header'>Login</h1>",
 				align: "center",
 				height: 80,
 				borderless: true,
 			},
-			{ view: "text", id: "username", label: "Username" },
 			{ view: "text", id: "email", label: "Email" },
 			{
 				view: "text",
@@ -107,13 +104,11 @@ define([], function () {
 				window.open("/sso/github/app?redirect_uri=/app");
 			});
 			$$("register").attachEvent("onItemClick", function () {
-				var _username = $$("username").getValue();
 				var _email = $$("email").getValue();
 				var _password = $$("password").getValue();
 				webix
 					.ajax()
 					.post("/api/app/v1?action=user.register", {
-						username: _username,
 						email: _email,
 						password: _password,
 					})
@@ -129,12 +124,10 @@ define([], function () {
 								})
 								.then(function (_res1) {
 									console.log(_res1.json());
-									scope.show("/app");
 								});
 						}
 					});
 			});
 		},
 	};
-
 });
