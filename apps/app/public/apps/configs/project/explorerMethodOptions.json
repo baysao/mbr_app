@@ -1,0 +1,1105 @@
+{
+    "bor_getAuthor": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "bor_getCurrentProposer": [],
+    "bor_getCurrentValidators": [],
+    "bor_getRootHash": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number (integer)",
+            "type": "InputNumber"
+        },
+        {
+            "key": "2",
+            "model": "blockNumber",
+            "label": "Block number (integer)",
+            "type": "InputNumber"
+        }
+    ],
+    "bor_getSignersAtHash": [
+        {
+            "key": "1",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_accounts": [],
+    "eth_blockNumber": [],
+    "eth_call": [
+        {
+            "key": "1",
+            "model": "from",
+            "label": "From",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "to",
+            "label": "To",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "3",
+            "model": "gas",
+            "label": "Gas",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "4",
+            "model": "gasPrice",
+            "label": "Gas price",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "5",
+            "model": "value",
+            "label": "Value",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "6",
+            "model": "data",
+            "label": "Data",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x0000000..."
+            }
+        },
+        {
+            "key": "7",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_chainID": [],
+    "eth_estimateGas": [
+        {
+            "key": "1",
+            "model": "from",
+            "label": "From",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "to",
+            "label": "To",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "3",
+            "model": "gas",
+            "label": "Gas",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "4",
+            "model": "gasPrice",
+            "label": "Gas price",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "5",
+            "model": "maxFeePerGas",
+            "label": "Max fee per gas",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "6",
+            "model": "maxPriorityFeePerGas",
+            "label": "Max priority fee per gas",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "7",
+            "model": "value",
+            "label": "Value",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "8",
+            "model": "data",
+            "label": "Data",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x0000000..."
+            }
+        }
+    ],
+    "eth_feeHistory": [
+        {
+            "key": "1",
+            "model": "blockCount",
+            "label": "Block count",
+            "type": "InputNumber",
+            "props": {
+                "placeholder": "Integer between 1 and 1024"
+            }
+        },
+        {
+            "key": "2",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        },
+        {
+            "key": "3",
+            "model": "percentiles",
+            "label": "Percentiles",
+            "type": "InputText",
+            "props": {
+                "placeholder": "[25, 50, 75]"
+            }
+        }
+    ],
+    "eth_gasPrice": [],
+    "eth_getBalance": [
+        {
+            "key": "1",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_getBlockByHash": [
+        {
+            "key": "1",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "returnFullTransactionObjects",
+            "label": "Return full transaction objects",
+            "type": "Checkbox",
+            "props": {
+                "binary": true
+            }
+        }
+    ],
+    "eth_getBlockByNumber": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        },
+        {
+            "key": "2",
+            "model": "returnFullTransactionObjects",
+            "label": "Return full transaction objects",
+            "type": "Checkbox",
+            "props": {
+                "binary": true
+            }
+        }
+    ],
+    "eth_getBlockReceipts": [
+        {
+            "key": "1",
+            "model": "blockNumerOrHash",
+            "label": "Block number or hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        }
+    ],
+    "eth_getBlockTransactionCountByHash": [
+        {
+            "key": "1",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getBlockTransactionCountByNumber": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_getCode": [
+        {
+            "key": "1",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_getFilterChanges": [
+        {
+            "key": "1",
+            "model": "filterID",
+            "label": "Filter ID",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getFilterLogs": [
+        {
+            "key": "1",
+            "model": "filterID",
+            "label": "Filter ID",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getLogs": [
+        {
+            "key": "1",
+            "model": "fromBlock",
+            "label": "From block",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        },
+        {
+            "key": "2",
+            "model": "toBlock",
+            "label": "To block",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        },
+        {
+            "key": "3",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "4",
+            "model": "topics",
+            "label": "Topics",
+            "type": "InputText",
+            "props": {
+                "placeholder": "[\"0x607...\", \"0x61...\"]"
+            }
+        },
+        {
+            "key": "5",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getProof": [
+        {
+            "key": "1",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "storageKey",
+            "label": "Storage key",
+            "type": "InputText",
+            "props": { "placeholder": "[\"0x607...\", \"0x61...\"]" }
+        },
+        {
+            "key": "5",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_getRootHash": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number (integer)",
+            "type": "InputNumber"
+        },
+        {
+            "key": "2",
+            "model": "blockNumber",
+            "label": "Block number (integer)",
+            "type": "InputNumber"
+        }
+    ],
+    "eth_getStorageAt": [
+        {
+            "key": "1",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "index",
+            "label": "Index",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "3",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_getTransactionByBlockHashAndIndex": [
+        {
+            "key": "1",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "index",
+            "label": "Index",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        }
+    ],
+    "eth_getTransactionByBlockNumberAndIndex": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        },
+        {
+            "key": "2",
+            "model": "index",
+            "label": "Index",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        }
+    ],
+    "eth_getTransactionByHash": [
+        {
+            "key": "1",
+            "model": "transactionHash",
+            "label": "Transaction hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getTransactionCount": [
+        {
+            "key": "1",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_getTransactionReceipt": [
+        {
+            "key": "1",
+            "model": "transactionHash",
+            "label": "Transaction hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getTransactionReceiptsByBlock": [
+        {
+            "key": "1",
+            "model": "blockNumerOrHash",
+            "label": "Block number or hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        }
+    ],
+    "eth_getUncleByBlockHashAndIndex": [
+        {
+            "key": "1",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "index",
+            "label": "Index",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        }
+    ],
+    "eth_getUncleByBlockNumberAndIndex": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        },
+        {
+            "key": "2",
+            "model": "index",
+            "label": "Index",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        }
+    ],
+    "eth_getUncleCountByBlockHash": [
+        {
+            "key": "1",
+            "model": "blockHash",
+            "label": "Block hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "eth_getUncleCountByBlockNumber": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "eth_maxPriorityFeePerGas": [],
+    "eth_newBlockFilter": [],
+    "eth_newFilter": [
+        {
+            "key": "1",
+            "model": "fromBlock",
+            "label": "From block",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        },
+        {
+            "key": "2",
+            "model": "toBlock",
+            "label": "To block",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        },
+        {
+            "key": "3",
+            "model": "address",
+            "label": "Address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "4",
+            "model": "topics",
+            "label": "Topics",
+            "type": "InputText",
+            "props": {
+                "placeholder": "[\"0x607...\", \"0x61...\"]]"
+            }
+        }
+    ],
+    "eth_newPendingTransactionFilter": [],
+    "eth_protocolVersion": [],
+    "eth_sendRawTransaction": [
+        {
+            "key": "1",
+            "model": "data",
+            "label": "Data",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x0"
+            }
+        }
+    ],
+    "eth_syncing": [],
+    "eth_uninstallFilter": [
+        {
+            "key": "1",
+            "model": "filterID",
+            "label": "Filter ID",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "getContractMetadata": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "refreshCache",
+            "label": "Refresh cache",
+            "type": "Checkbox",
+            "props": {
+                "binary": true
+            }
+        }
+    ],
+    "getFloorPrice": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        }
+    ],
+    "getLargestAccounts": [
+        {
+            "key": "1",
+            "model": "commitment",
+            "label": "Commitment",
+            "type": "InputText",
+            "props": {
+                "placeholder": "finalized, confirmed, processed"
+            }
+        },
+        {
+            "key": "2",
+            "model": "filter",
+            "label": "Filter",
+            "type": "InputText",
+            "props": {
+                "placeholder": "circulating, nonCirculating"
+            }
+        }
+    ],
+    "getNFTMetadata": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "tokenID",
+            "label": "Token ID",
+            "type": "InputNumber",
+            "props": {
+                "placeholder": "Integer between 1 and 1024"
+            }
+        },
+        {
+            "key": "3",
+            "model": "tokenType",
+            "label": "Token type",
+            "type": "InputText",
+            "props": {
+                "placeholder": "ERC721, ERC1155"
+            }
+        }
+    ],
+    "getNFTs": [
+        {
+            "key": "1",
+            "model": "owner",
+            "label": "Owner",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf… 0xshah.eth"
+            }
+        },
+        {
+            "key": "2",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "[\"0x607...\", \"0x61...\"]"
+            }
+        },
+        {
+            "key": "3",
+            "model": "withMetadata",
+            "label": "With metadata",
+            "type": "Checkbox",
+            "props": {
+                "binary": true
+            }
+        },
+        {
+            "key": "4",
+            "model": "filters",
+            "label": "Filters",
+            "type": "InputText",
+            "props": {
+                "placeholder": "[\"SPAM\", \"AIRDROPS\"]"
+            }
+        },
+        {
+            "key": "5",
+            "model": "pageKey",
+            "label": "Page key",
+            "type": "InputText",
+            "props": {
+                "placeholder": "AQABAAAAAAAAAAAAAAAAA"
+            }
+        }
+    ],
+    "getNFTsForCollection": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "withMetadata",
+            "label": "With metadata",
+            "type": "Checkbox",
+            "props": {
+                "binary": true
+            }
+        },
+        {
+            "key": "3",
+            "model": "startToken",
+            "label": "Start token",
+            "type": "InputText"
+        }
+    ],
+    "getOwnersForCollection": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "withTokenBalances",
+            "label": "With token balances",
+            "type": "Checkbox",
+            "props": {
+                "binary": true
+            }
+        }
+    ],
+    "getOwnersForToken": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "tokenID",
+            "label": "Token ID",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        }
+    ],
+    "getSpamContracts": [],
+    "isSpamContract": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        }
+    ],
+    "netListening": [],
+    "netVersion": [],
+    "parity_getBlockReceipts": [
+        {
+            "key": "1",
+            "model": "blockNumerOrHash",
+            "label": "Block number or hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255, 0xff, latest, {\"blockHash\": \"0xff\"}"
+            }
+        }
+    ],
+    "reingestContract": [
+        {
+            "key": "1",
+            "model": "contractAddress",
+            "label": "Contract address",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        }
+    ],
+    "trace_block": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "trace_call": [
+        {
+            "key": "1",
+            "model": "from",
+            "label": "From",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "to",
+            "label": "To*",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x2f4bdaf…"
+            }
+        },
+        {
+            "key": "3",
+            "model": "gas",
+            "label": "Gas",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "4",
+            "model": "gasPrice",
+            "label": "Gas price",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "5",
+            "model": "value",
+            "label": "Value",
+            "type": "InputText",
+            "props": {
+                "placeholder": "255 or 0xff"
+            }
+        },
+        {
+            "key": "6",
+            "model": "data",
+            "label": "Data",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x0000000"
+            }
+        },
+        {
+            "key": "7",
+            "model": "traceType",
+            "label": "Trace type",
+            "type": "Checkbox",
+            "multiple": true,
+            "props": {
+                "visible": true
+            },
+            "items": [
+                { "name": "VM Trace", "value": "vmTrace" },
+                { "name": "Trace", "value": "trace" },
+                { "name": "State diff", "value": "stateDiff" }
+            ]
+        },
+        {
+            "key": "8",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        }
+    ],
+    "trace_rawTransaction": [
+        {
+            "key": "1",
+            "model": "data",
+            "label": "Data",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x0"
+            }
+        },
+        {
+            "key": "2",
+            "model": "traceType",
+            "label": "Trace type",
+            "type": "Checkbox",
+            "multiple": true,
+            "props": {
+                "visible": true
+            },
+            "items": [
+                { "name": "VM Trace", "value": "vmTrace" },
+                { "name": "Trace", "value": "trace" },
+                { "name": "State diff", "value": "stateDiff" }
+            ]
+        }
+    ],
+    "trace_replayBlockTransactions": [
+        {
+            "key": "1",
+            "model": "blockNumber",
+            "label": "Block number",
+            "type": "InputText",
+            "props": {
+                "placeholder": "latest"
+            }
+        },
+        {
+            "key": "2",
+            "model": "traceType",
+            "label": "Trace type",
+            "type": "Checkbox",
+            "multiple": true,
+            "props": {
+                "visible": true
+            },
+            "items": [
+                { "name": "VM Trace", "value": "vmTrace" },
+                { "name": "Trace", "value": "trace" },
+                { "name": "State diff", "value": "stateDiff" }
+            ]
+        }
+    ],
+    "trace_replayTransaction": [
+        {
+            "key": "1",
+            "model": "transactionHash",
+            "label": "Transaction hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        },
+        {
+            "key": "2",
+            "model": "traceType",
+            "label": "Trace type",
+            "type": "Checkbox",
+            "multiple": true,
+            "props": {
+                "visible": true
+            },
+            "items": [
+                { "name": "VM Trace", "value": "vmTrace" },
+                { "name": "Trace", "value": "trace" },
+                { "name": "State diff", "value": "stateDiff" }
+            ]
+        }
+    ],
+    "trace_transaction": [
+        {
+            "key": "1",
+            "model": "transactionHash",
+            "label": "Transaction hash",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0xa4dc872…"
+            }
+        }
+    ],
+    "web3_clientVersion": [],
+    "web3_sha3": [
+        {
+            "key": "1",
+            "model": "data",
+            "label": "Data",
+            "type": "InputText",
+            "props": {
+                "placeholder": "0x0"
+            }
+        }
+    ]
+}
