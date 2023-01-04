@@ -1,34 +1,54 @@
 /* register, login */
 #icon {
-	width: 1.5vw;
-	height: 1.5vw;
+  width: 1.5vw;
+  height: 1.5vw;
 }
 .webix_template,
 .webix_view.icon,
 .no-border > *,
 .webix_el_text {
-	border: none;
-	margin: 0;
-	height: fit-content !important;
+  border: none;
+  margin: 0;
+  height: fit-content !important;
 }
 #register-header {
-	text-align: center;
+  text-align: center;
 }
 
 /* reset password */
 #reset-hint,
 .reset-hint div,
 .reset-hint input {
-	overflow: auto;
-	text-align: center;
-	margin: 0 !important;
-	padding: 0 !important;
-	width: 100% !important;
+  overflow: auto;
+  text-align: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
 }
 #lock-icon {
-	height: 10vh;
-	aspect-ratio: 1 /1;
+  height: 10vh;
+  aspect-ratio: 1 /1;
 }
 .webix_view.icon > div {
-	text-align: center;
+  text-align: center;
+}
+
+.title .webix_template {
+  padding: 10px 12px;
+  line-height: 29px;
+}
+.title .header {
+  float: left;
+  font-size: 18px;
+}
+.title .details {
+  float: left;
+  font-size: 13px;
+  font-style: italic;
+
+  padding-left: 10px;
+}
+
+.plan {
+  background-color: lightgray;
 }

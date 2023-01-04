@@ -1,4 +1,4 @@
-define([], function () {
+define(["model/menu_profile"], function (model_menu_profile) {
   var scope;
 
   var _layout = {
@@ -32,16 +32,16 @@ define([], function () {
         icon: "mdi mdi-account",
         popup: {
           view: "contextmenu",
-          data: [
-            { id: "settings.profile", value: "Profile" },
-            { id: "settings.team", value: "Team" },
-            { id: "settings.billing", value: "Billing" },
-            { id: "settings.cost", value: "Cost Estimator" },
-            { id: "settings.logout", value: "Sign Out" },
-          ],
+          data: model_menu_profile,
           on: {
             onMenuItemClick(id) {
-              if (id === "logout") webix.message("Loging out...");
+              if (id === "signout") {
+                webix
+                  .ajax()
+                  .get("/api/app/v1?action=user.signout", function (_res) {
+                    location.hash = "#!/auth/login";
+                  });
+              } else scope.show("./settings/settings." + id);
             },
           },
         },
