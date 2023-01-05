@@ -5,7 +5,7 @@ define([], function () {
       value: "Dashboard",
       icon: "mdi mdi-home",
     },
-    { id: "app", value: "App Detail", icon: "mdi mdi-code-json" },
+    // { id: "app", value: "App Detail", icon: "mdi mdi-code-json" },
     { id: "explorer", value: "Explorer", icon: "mdi mdi-math-log" },
     { id: "composer", value: "Composer", icon: "mdi mdi-pencil" },
     { id: "mempool", value: "Mempool", icon: "mdi mdi-lan-connect" },
