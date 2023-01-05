@@ -1,0 +1,27 @@
+[
+    {
+        "type": "MASSBIT",
+        "name": "MASSBIT",
+        "form_config": ["priority"]
+    },
+    {
+        "type": "INFURA",
+        "name": "INFURA",
+        "form_config": ["priority", "project_id", "project_secret"]
+    },
+    {
+        "type": "GETBLOCK",
+        "name": "GETBLOCK",
+        "form_config": ["priority", "api_key"]
+    },
+    {
+        "type": "QUICKNODE",
+        "name": "QUICKNODE",
+        "form_config": ["priority", "api_uri"]
+    },
+    {
+        "type": "CUSTOM",
+        "name": "CUSTOM",
+        "form_config": ["priority", "api_uri"]
+    }
+]

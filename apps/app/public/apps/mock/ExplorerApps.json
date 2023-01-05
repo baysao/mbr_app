@@ -1,0 +1,55 @@
+[
+    {
+        "name": "test1",
+        "method": "alchemy_getTokenBalances",
+        "appID": "95363e6a-52b8-44cb-9322-7decd0cfbbd8",
+        "id": "33969df2-ad92-449e-b3ac-3c26wq712d001",
+        "errorCode": -32603,
+        "app": "test-app1",
+        "http": 400,
+        "duration": 10,
+        "sent": "10KB",
+        "network": "mainnet",
+        "time": "10/10/2022",
+        "jsonRpcID": ""
+    },
+    {
+        "name": "test2",
+        "method": "eth_getTransactionReceiptsByBlock",
+        "id": "33969df2-ad92-449e-b3ac-3c2667123001",
+        "errorCode": -32015,
+        "app": "test-app2",
+        "http": 500,
+        "duration": 400,
+        "sent": "100KB",
+        "network": "mainnet",
+        "time": "10/10/2022",
+        "jsonRpcID": ""
+    },
+    {
+        "name": "test3",
+        "id": "33969df2-ad92-449e-b3ac-3c266712d00t",
+        "method": "eth_getUncleCountByBlockNumber",
+        "errorCode": -32000,
+        "app": "test-app3",
+        "http": 429,
+        "duration": 300,
+        "sent": "50KB",
+        "network": "mainnet",
+        "time": "10/10/2022",
+        "jsonRpcID": ""
+    },
+    {
+        "name": "test4",
+        "method": "eth_sendRawTransaction",
+        "id": "33969df2-ad92-449e-b3ac-3c266712d001",
+        "errorCode": -32602,
+        "app": "test-app4",
+        "http": 200,
+        "duration": 200,
+        "sent": "10KB",
+        "network": "mainnet",
+        "time": "10/10/2022",
+        "jsonRpcID": ""
+    }
+]

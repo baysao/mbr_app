@@ -1,4 +1,4 @@
-define(["assets/js/core", "text!/_app/config.json"], function ($core, $config) {
+define(["assets/js/core"], function ($core) {
   if (!webix.env.touch && webix.ui.scrollSize && webix.CustomScroll)
     webix.CustomScroll.init();
 
@@ -9,6 +9,5 @@ define(["assets/js/core", "text!/_app/config.json"], function ($core, $config) {
     version: app_version,
     viewdir: app_view,
     start: "/app",
-    myconfig: JSON.parse($config),
   });
 });
