@@ -19,7 +19,7 @@ define(["model/menu_profile"], function (model_menu_profile) {
           webix.ajax().get("/api/app/v1?action=user.signout", function (_res) {
             location.hash = "#!/auth/login";
           });
-        } else scope.show("/settings/settings." + id);
+        } else scope.show("/settings/$" + id);
       });
       scope = _scope;
     },

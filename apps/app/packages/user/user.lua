@@ -30,25 +30,25 @@ function Model:getIdByEmail(email)
     end
     local _ssdb = self._instance:getSsdb()
     local _ret, _err = _ssdb:hget("mapping:" .. mytype .. ":email", email)
-    cc.printerror(inspect({_ret, type(_ret), _err}))
+    -- cc.printerror(inspect({_ret, type(_ret), _err}))
     return _ret ~= _ssdb.null and type(_ret) and _ret[1] or nil
 end
 
 function Model:login(args)
-   cc.printerror(inspect(args))
+   -- cc.printerror(inspect(args))
    if not args.email or not args.password then
         return nil
     end
 
     local _id = self:getIdByEmail(args.email)
-    cc.printerror("id:" .. inspect(_id))
+    -- cc.printerror("id:" .. inspect(_id))
     if not _id or _id == "not_found" then
-        cc.printerror("Id " .. _id .. " not exists")
+        -- cc.printerror("Id " .. _id .. " not exists")
         return nil
     end
     args.id = _id
     local _user, _err = self._crud:get(args, {"password_salt", "password_hash"})
-    cc.printerror(inspect(_user))
+    -- cc.printerror(inspect(_user))
 
     if not _user.password_hash or not _user.password_salt then
        return nil
@@ -57,7 +57,7 @@ function Model:login(args)
     if _user.password_hash ~= crypto.passwordKey(args.password, _user.password_salt) then
         return nil, "wrong password"
     end
-    return true
+    return {id = _id, email = args.email}
 end
 
 function Model:validate(args)
@@ -66,13 +66,13 @@ function Model:validate(args)
 end
 
 function Model:register(args)
-   cc.printerror("email:" .. inspect(args.email))
+   -- cc.printerror("email:" .. inspect(args.email))
    if not args.email or not args.password then
       return nil
    end
    
     local _id = self:getIdByEmail(args.email)
-    cc.printerror("id:" .. inspect(_id))
+    -- cc.printerror("id:" .. inspect(_id))
     if _id and _id ~= "not_found" then
         cc.printerror("Id " .. _id .. " exists")
         return nil
