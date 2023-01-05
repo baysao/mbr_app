@@ -41,7 +41,8 @@ function UserAction:loginAction(args)
     -- start session
     local session = Session:new(redis)
     session:start()
-    session:set("email", email)
+    session:set("id", _ret.id)
+    session:set("email", _ret.email)
     session:save()
 
     local _expires = session:getExpired()
@@ -54,7 +55,9 @@ function UserAction:loginAction(args)
         "OauthMbrAccessToken=" .. ngx.escape_uri(_token) .. cookie_tail
     }
 
-    return {result = true, data = {sid = session:getSid(), expires = _expires}}
+    _ret.sid = session:getSid()
+    _ret.expires = _expires
+    return {result = true, data = _ret}
 
     --    return {result = _ret ~= nil}
 end

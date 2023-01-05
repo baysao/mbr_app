@@ -10,7 +10,7 @@ define(["model/side_menu"], function (model_side_menu) {
     data: model_side_menu,
     on: {
       onMenuItemClick: function (id) {
-       scope.show("./app." + id);
+       scope.show("./$" + id);
       },
     },
   };
@@ -22,7 +22,10 @@ define(["model/side_menu"], function (model_side_menu) {
         type: "icon",
         icon: "mdi mdi-plus-circle",
         label: "Create App",
-        css: "webix_primary",
+          css: "webix_primary",
+	  click: function(){
+	      scope.show("/app/api.create")
+	  }
       },
       _menu,
     ],

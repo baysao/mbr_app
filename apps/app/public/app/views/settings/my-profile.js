@@ -30,7 +30,7 @@ define([], function () {
         ],
       },
     },
-      {},
+    {},
     {
       cols: [
         {
@@ -46,7 +46,7 @@ define([], function () {
 
   var _form = {
     view: "form",
-   scroll: "y",
+    scroll: "y",
     elements: _elements,
     elementsConfig: {
       labelPosition: "top",
@@ -61,7 +61,7 @@ define([], function () {
         template:
           "<div class='header'>My Profile</div><div class='details'>( Manage your profile )</div>",
       },
-	_form,
+      _form,
     ],
   };
 
