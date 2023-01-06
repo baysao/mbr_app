@@ -73,6 +73,8 @@ define(["model/app", app_view + "/api/key"], function ($app, app_key_ui) {
 
 	    scope.ui(app_key_ui.$ui).show();
 	    $$("app_key_form").setValues(_detail);
+	    $$("http_url").setValue("https://" + _detail.blockchain + "-" + _detail.network + ".massbitroute.com/" + _detail.api_key);
+	    $$("ws_url").setValue("wss://" + _detail.blockchain + "-" + _detail.network + ".massbitroute.com/" + _detail.api_key);
       },
     },
   };
