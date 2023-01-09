@@ -1,4 +1,4 @@
-define(["model/app"], function ($app) {
+define(["model/app"], function ($model_app) {
     var scope;
   var _elements = [
     { view: "text", label: "Name", name: "name" },
@@ -61,7 +61,7 @@ define(["model/app"], function ($app) {
 	  $$("api_submit").attachEvent("onItemClick", function(){
 	      var _values = $$("api_form").getValues();
 	      console.log(_values);
-	      $app.create(_values, function(_res){
+	      $model_app.create(_values, function(_res){
 		  console.log(_res);
 		  if(_res && _res.result) {
 		      webix.message("Submit successful!")

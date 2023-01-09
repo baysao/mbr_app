@@ -1,4 +1,4 @@
-define([app_view + "/api/sdk"], function (sdk_ui) {
+define([app_view + "/api/key/sdk"], function (sdk_ui) {
   var _copy_handler = function (_id) {
     return function () {
       var _el = $$(_id);

@@ -67,14 +67,28 @@ define(["model/app", app_view + "/api/key"], function ($app, app_key_ui) {
       "mdi-page-next": function (e, id, node) {
         location.hash = "#!/app/api.detail:id=" + id;
       },
-	"mdi-key": function (e, id, node) {
-	    var _detail = this.getItem(id);
-	    console.log(_detail);
+      "mdi-key": function (e, id, node) {
+        var _detail = this.getItem(id);
+        console.log(_detail);
 
-	    scope.ui(app_key_ui.$ui).show();
-	    $$("app_key_form").setValues(_detail);
-	    $$("http_url").setValue("https://" + _detail.blockchain + "-" + _detail.network + ".massbitroute.com/" + _detail.api_key);
-	    $$("ws_url").setValue("wss://" + _detail.blockchain + "-" + _detail.network + ".massbitroute.com/" + _detail.api_key);
+        scope.ui(app_key_ui.$ui).show();
+        $$("app_key_form").setValues(_detail);
+        $$("http_url").setValue(
+          "https://" +
+            _detail.blockchain +
+            "-" +
+            _detail.network +
+            ".massbitroute.com/" +
+            _detail.api_key
+        );
+        $$("ws_url").setValue(
+          "wss://" +
+            _detail.blockchain +
+            "-" +
+            _detail.network +
+            ".massbitroute.com/" +
+            _detail.api_key
+        );
       },
     },
   };
