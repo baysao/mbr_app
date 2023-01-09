@@ -40,6 +40,42 @@ function Action:listAction(args)
     args.id = uuid()
     args.user_id = _user_id
     local _ret, _err = self._crud:list(args)
+    cc.printerror(inspect(_ret))
+    if _ret then
+        return {result = true, data = _ret}
+    end
+
+    return {result = false}
+end
+
+function Action:deleteAction(args)
+    args.action = nil
+
+    local session, _err = _opensession(self:getInstance(), args)
+    if not session then
+        return {result = false, error_code = _err}
+    end
+    local _user_id = session:get("id")
+    args.user_id = _user_id
+    cc.printerror(inspect(args))
+    local _ret, _err = self._crud:delete(args)
+    if _ret then
+        return {result = true}
+    end
+
+    return {result = false}
+end
+
+function Action:getAction(args)
+    args.action = nil
+
+    local session, _err = _opensession(self:getInstance(), args)
+    if not session then
+        return {result = false, error_code = _err}
+    end
+    local _user_id = session:get("id")
+    args.user_id = _user_id
+    local _ret, _err = self._crud:getall(args)
     if _ret then
         return {result = true, data = _ret}
     end
