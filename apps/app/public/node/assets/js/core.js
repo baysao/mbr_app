@@ -101,7 +101,7 @@ define([], function() {
 
     //	console.log(this.$layout);
     //run_plugins(ui_plugins, ui, name, stack, this);
-    //if (!ui.$onurlchange || ui.$onurlchange.call(ui, name.params, stack, this) !== false)
+    if (!ui.$onurlchange || ui.$onurlchange.call(ui, name.params, stack, this) !== false)
     return this.$layout;
   }
 
@@ -523,7 +523,17 @@ define([], function() {
       });
     app.show(app.config.start);
   }
+    function locationHashChanged() {
 
+	var _location_path = location.hash.replace(/^#!/,"")
+	console.log(_location_path);
+	app.show(_location_path);
+  // if (location.hash === '#cool-feature') {
+  //   console.log("You're visiting a cool feature!");
+  // }
+}
+
+window.onhashchange = locationHashChanged;
   //  requirejs.onError = invalid_url;
   return app;
 });
