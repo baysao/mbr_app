@@ -30,7 +30,7 @@ define([], function () {
   </div>
 
   <div class="select webix_primary">
-  <a href="/node/#!/app/node.create/$zone:id=` +
+  <a href="/node/#!/app/node.create/$zone:z=` +
             _data.id +
             `" view_id="zone_` +
             _data.id +
@@ -41,7 +41,55 @@ define([], function () {
         },
         {
           view: "slider",
-          label: "Slider 3",
+          label: "Inventory",
+          value: _cu_val,
+          name: "s3",
+          title: webix.template(
+            _data.cu_available + "/" + _data.cu_max + " CU Available"
+          ),
+          moveTitle: false,
+        },
+      ],
+    };
+    return Object.assign(_ui, _prop);
+  };
+    var _country = function (_zone_name, _prop, _data) {
+    var _cu_val = (_data.cu_available * 100) / _data.cu_max;
+    console.log(_cu_val);
+    var _ui = {
+      rows: [
+        {
+          template:
+            `
+  <div class="flex_tmp">
+  <div class="flex_tmp1">
+  <div class="flag">` +
+            _svg +
+            `
+  </div>
+  <div class="apr">
+  <span class="zone_name">` +
+            _data.name +
+            `</span>
+  <span class="zone_apr"><span class="zone_apr_val">` +
+            _data.apr +
+            `</span> % APR</span>
+  </div>
+  </div>
+
+  <div class="select webix_primary">
+  <a href="/node/#!/app/node.create/$new:z=` + _zone_name + ":c=" + 
+            _data.id +
+            `" view_id="zone_` +
+            _data.id +
+            `" role="button" class="webix_button webix_img_btn" style="line-height:32px;"></span>Select</a>
+  </div>
+  </div>
+  `,
+        },
+        {
+          view: "slider",
+          label: "Inventory",
           value: _cu_val,
           name: "s3",
           title: webix.template(
@@ -54,43 +102,93 @@ define([], function () {
     return Object.assign(_ui, _prop);
   };
   var _zone_data = [
-    { id: "asia", name: "Asia", cu_available: 20, cu_max: 100, apr: 14 },
+    { id: "AS", name: "Asia", cu_available: 20, cu_max: 100, apr: 14 },
     {
-      id: "australia",
-      name: "Australia",
+      id: "OC",
+      name: "Oceania",
       cu_available: 20,
       cu_max: 100,
       apr: 14,
     },
-    { id: "africa", name: "Africa", cu_available: 20, cu_max: 100, apr: 14 },
-    { id: "europe", name: "Europe", cu_available: 20, cu_max: 100, apr: 14 },
+    { id: "AF", name: "Africa", cu_available: 20, cu_max: 100, apr: 14 },
+    { id: "EU", name: "Europe", cu_available: 20, cu_max: 100, apr: 14 },
     {
-      id: "north_america",
+      id: "NA",
       name: "North America",
       cu_available: 20,
       cu_max: 100,
       apr: 14,
     },
     {
-      id: "south_america",
+      id: "SA",
       name: "South America",
       cu_available: 20,
       cu_max: 100,
       apr: 14,
     },
   ];
-  var _select_country = {
-    view: "gridlayout",
-    gridColumns: 3,
-    //    gridRows: 2,
-    cells: [
-      _zone({ x: 0, y: 0, dx: 1, dy: 1 }, _zone_data[0]),
-      _zone({ x: 1, y: 0, dx: 1, dy: 1 }, _zone_data[1]),
-      _zone({ x: 2, y: 0, dx: 1, dy: 1 }, _zone_data[2]),
-      _zone({ x: 0, y: 1, dx: 1, dy: 1 }, _zone_data[3]),
-      _zone({ x: 1, y: 1, dx: 1, dy: 1 }, _zone_data[4]),
-      _zone({ x: 2, y: 1, dx: 1, dy: 1 }, _zone_data[5]),
+  var _country_data = {
+    AS: [
+      {
+        id: "AF",
+        name: "Afghanistan",
+        cu_available: 20,
+        cu_max: 100,
+        apr: 14,
+      },
+      {
+        id: "AM",
+        name: "Armenia",
+        cu_available: 20,
+        cu_max: 100,
+        apr: 14,
+      },
+      {
+        id: "HK",
+        name: "Hong Kong",
+        cu_available: 20,
+        cu_max: 100,
+        apr: 14,
+      },
+      {
+        id: "IN",
+        name: "India",
+        cu_available: 20,
+        cu_max: 100,
+        apr: 14,
+      },
+
+      {
+        id: "ID",
+        name: "Indonesia",
+        cu_available: 20,
+        cu_max: 100,
+        apr: 14,
+      },
+      {
+        id: "IR",
+        name: "Iran",
+        cu_available: 20,
+        cu_max: 100,
+        apr: 14,
+      },
     ],
+  };
+  var _select_country = function (_zone_name) {
+      var _zone_data = _country_data[_zone_name];
+    return {
+      view: "gridlayout",
+      gridColumns: 3,
+      //    gridRows: 2,
+      cells: [
+          _country(_zone_name, { x: 0, y: 0, dx: 1, dy: 1 }, _zone_data[0]),
+        _country(_zone_name, { x: 1, y: 0, dx: 1, dy: 1 }, _zone_data[1]),
+        _country(_zone_name, { x: 2, y: 0, dx: 1, dy: 1 }, _zone_data[2]),
+        _country(_zone_name, { x: 0, y: 1, dx: 1, dy: 1 }, _zone_data[3]),
+        _country(_zone_name, { x: 1, y: 1, dx: 1, dy: 1 }, _zone_data[4]),
+        _country(_zone_name, { x: 2, y: 1, dx: 1, dy: 1 }, _zone_data[5]),
+      ],
+    };
   };
   var _select_zone = {
     view: "gridlayout",
@@ -140,12 +238,12 @@ define([], function () {
               id: "sub_title",
               css: "title",
               template:
-                "<div class='header'>2. Select Country</div><div class='details'>( Select zone to deploy your node )</div>",
+                "<div class='header'>2. Select Country for Zone </div><div class='details'>( Select zone to deploy your node )</div>",
             },
           ],
         },
 
-        _select_country,
+        _select_country(_name),
       ],
     };
   };
@@ -157,9 +255,9 @@ define([], function () {
     $ui: _layout,
     $onurlchange: function (_params) {
       console.log(_params);
-      if (_params && _params.id) {
+      if (_params && _params.z) {
         webix.ui(
-          _layout_country(_params.id),
+          _layout_country(_params.z),
           $$("node_create"),
           $$("layout_sub")
         );
