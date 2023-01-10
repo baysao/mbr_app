@@ -1,0 +1,72 @@
+[
+  {
+    "value": "Argentina",
+    "continent": "South America",
+    "id": "AR"
+  },
+  {
+    "value": "Bolivia",
+    "continent": "South America",
+    "id": "BO"
+  },
+  {
+    "value": "Brazil",
+    "continent": "South America",
+    "id": "BR"
+  },
+  {
+    "value": "Chile",
+    "continent": "South America",
+    "id": "CL"
+  },
+  {
+    "value": "Colombia",
+    "continent": "South America",
+    "id": "CO"
+  },
+  {
+    "value": "Ecuador",
+    "continent": "South America",
+    "id": "EC"
+  },
+  {
+    "value": "Falkland Islands",
+    "continent": "South America",
+    "id": "FK"
+  },
+  {
+    "value": "French Guiana",
+    "continent": "South America",
+    "id": "GF"
+  },
+  {
+    "value": "Guyana",
+    "continent": "South America",
+    "id": "GY"
+  },
+  {
+    "value": "Paraguay",
+    "continent": "South America",
+    "id": "PY"
+  },
+  {
+    "value": "Peru",
+    "continent": "South America",
+    "id": "PE"
+  },
+  {
+    "value": "Surivalue",
+    "continent": "South America",
+    "id": "SR"
+  },
+  {
+    "value": "Uruguay",
+    "continent": "South America",
+    "id": "UY"
+  },
+  {
+    "value": "Venezuela",
+    "continent": "South America",
+    "id": "VE"
+  }
+]
