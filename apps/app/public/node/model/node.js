@@ -7,6 +7,14 @@ define(["model/config"], function ($config) {
         _ret && _cb(_ret.json());
       });
   };
+  var _update = function (_payload, _cb) {
+    webix
+      .ajax()
+      .post($config.api_prefix + "?action=node.update", _payload)
+      .then(function (_ret) {
+        _ret && _cb(_ret.json());
+      });
+  };
   var _get = function (_payload, _cb) {
     webix
       .ajax()
@@ -33,6 +41,7 @@ define(["model/config"], function ($config) {
   };
   return {
     create: _create,
+    update: _update,
     list: _list,
     get: _get,
     delete: _delete,
