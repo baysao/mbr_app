@@ -1,47 +1,24 @@
-define([], function () {
+define([
+  "text!/api/node/v1?action=node.config",
+  app_view + "/app/toolbar",
+  app_view + "/app/sidemenu",
+], function ($_config, toolbar, sidemenu) {
+  var $config = $_config && JSON.parse($_config);
   var scope;
-  var menu_data = [
-    {
-      id: "group",
-      value: "Group",
-      data: [{ id: "group.new", value: "New" }],
-    },
-  ];
-  var _toolbar = {
-    view: "toolbar",
-    padding: 3,
-    elements: [
-      {
-        view: "icon",
-        icon: "mdi mdi-menu",
-        click: function () {
-          $$("main_sidebar").toggle();
-        },
-      },
-      { view: "label", label: "MBR Apps" },
-      {},
-      { view: "icon", icon: "mdi mdi-comment", badge: 4 },
-      { view: "icon", icon: "mdi mdi-bell", badge: 10 }
-    ],
+
+  var _toolbar = toolbar;
+  var _sidemenu = sidemenu;
+
+  var _body = {
+    view: "scrollview",
+    scroll: "native-y",
+    body: { cols: [{ $subview: true }] },
   };
   var _layout = {
     rows: [
       _toolbar,
       {
-        cols: [
-          {
-            view: "sidebar",
-            id: "main_sidebar",
-            scroll: "y",
-            data: menu_data,
-            on: {
-              onAfterSelect: function (id) {
-                scope.show("./" + id);
-              },
-            },
-          },
-          { $subview: true },
-        ],
+        cols: [_sidemenu, _body],
       },
     ],
   };
@@ -49,6 +26,10 @@ define([], function () {
   return {
     $ui: _layout,
     $oninit: function (_view, _scope) {
+      console.log($config);
+      // if (!$config || !$config.result) {
+      //   return _scope.show("/auth/login");
+      // }
       scope = _scope;
     },
   };

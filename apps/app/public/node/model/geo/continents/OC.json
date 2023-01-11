@@ -1,0 +1,142 @@
+[
+  {
+    "value": "American Samoa",
+    "continent": "Oceania",
+    "id": "AS"
+  },
+  {
+    "value": "Australia",
+    "continent": "Oceania",
+    "id": "AU"
+  },
+  {
+    "value": "Christmas Island",
+    "continent": "Oceania",
+    "id": "CX"
+  },
+  {
+    "value": "Cocos (Keeling) Islands",
+    "continent": "Oceania",
+    "id": "CC"
+  },
+  {
+    "value": "Cook Islands",
+    "continent": "Oceania",
+    "id": "CK"
+  },
+  {
+    "value": "Fiji Islands",
+    "continent": "Oceania",
+    "id": "FJ"
+  },
+  {
+    "value": "French Polynesia",
+    "continent": "Oceania",
+    "id": "PF"
+  },
+  {
+    "value": "Guam",
+    "continent": "Oceania",
+    "id": "GU"
+  },
+  {
+    "value": "Kiribati",
+    "continent": "Oceania",
+    "id": "KI"
+  },
+  {
+    "value": "Marshall Islands",
+    "continent": "Oceania",
+    "id": "MH"
+  },
+  {
+    "value": "Micronesia, Federated States of",
+    "continent": "Oceania",
+    "id": "FM"
+  },
+  {
+    "value": "Nauru",
+    "continent": "Oceania",
+    "id": "NR"
+  },
+  {
+    "value": "New Caledonia",
+    "continent": "Oceania",
+    "id": "NC"
+  },
+  {
+    "value": "New Zealand",
+    "continent": "Oceania",
+    "id": "NZ"
+  },
+  {
+    "value": "Niue",
+    "continent": "Oceania",
+    "id": "NU"
+  },
+  {
+    "value": "Norfolk Island",
+    "continent": "Oceania",
+    "id": "NF"
+  },
+  {
+    "value": "Northern Mariana Islands",
+    "continent": "Oceania",
+    "id": "MP"
+  },
+  {
+    "value": "Palau",
+    "continent": "Oceania",
+    "id": "PW"
+  },
+  {
+    "value": "Papua New Guinea",
+    "continent": "Oceania",
+    "id": "PG"
+  },
+  {
+    "value": "Pitcairn",
+    "continent": "Oceania",
+    "id": "PN"
+  },
+  {
+    "value": "Samoa",
+    "continent": "Oceania",
+    "id": "WS"
+  },
+  {
+    "value": "Solomon Islands",
+    "continent": "Oceania",
+    "id": "SB"
+  },
+  {
+    "value": "Tokelau",
+    "continent": "Oceania",
+    "id": "TK"
+  },
+  {
+    "value": "Tonga",
+    "continent": "Oceania",
+    "id": "TO"
+  },
+  {
+    "value": "Tuvalu",
+    "continent": "Oceania",
+    "id": "TV"
+  },
+  {
+    "value": "United States Minor Outlying Islands",
+    "continent": "Oceania",
+    "id": "UM"
+  },
+  {
+    "value": "Vanuatu",
+    "continent": "Oceania",
+    "id": "VU"
+  },
+  {
+    "value": "Wallis and Futuna",
+    "continent": "Oceania",
+    "id": "WF"
+  }
+]

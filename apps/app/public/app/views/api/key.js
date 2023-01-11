@@ -1,45 +1,72 @@
-define([], function () {
-  var _copy_handler = function () {
-    $$("api_key").getInputNode().select();
-    document.execCommand("copy");
+define([app_view + "/api/key/sdk"], function (sdk_ui) {
+  var _copy_handler = function (_id) {
+    return function () {
+      var _el = $$(_id);
+      if (_el) {
+        _el.getInputNode().select();
+        document.execCommand("copy");
+      }
+    };
   };
+  var _copy_button = function (_id) {
+    return {
+      view: "icon",
+      type: "icon",
+      icon: "mdi mdi-content-copy",
+      align: "right",
+      autowidth: true,
+      click: _copy_handler(_id),
+    };
+  };
+
+  var _sdk = sdk_ui;
+
   var _elements = [
     {
       cols: [
         {
           view: "text",
           id: "api_key",
+          css: "sdk_code",
           label: "API key",
           on: {
-            onFocus: _copy_handler,
+            onFocus: _copy_handler("api_key"),
           },
+          readonly: true,
           name: "api_key",
         },
-        {
-          view: "button",
-          label: "Copy",
-          type: "icon",
-          height: 10,
-          icon: "mdi mdi-content-copy",
-          align: "right",
-          autowidth: true,
-
-          click: _copy_handler,
-        },
+        _copy_button("api_key"),
       ],
     },
 
     {
       cols: [
-        {},
         {
-          view: "button",
-          css: "webix_danger",
-          label: "Close",
-          click: function () {
-            $$("app-key").close();
+          view: "text",
+          label: "HTTP",
+          css: "sdk_code",
+          on: {
+            onFocus: _copy_handler("http_url"),
           },
+          readonly: true,
+          id: "http_url",
         },
+        _copy_button("http_url"),
+      ],
+    },
+    {
+      cols: [
+        {
+          view: "text",
+          label: "Websocket",
+          css: "sdk_code",
+          on: {
+            onFocus: _copy_handler("ws_url"),
+          },
+          readonly: true,
+          id: "ws_url",
+        },
+        _copy_button("ws_url"),
       ],
     },
   ];
@@ -48,17 +75,20 @@ define([], function () {
     id: "app_key_form",
     paddingY: 20,
     paddingX: 30,
-    elementsConfig: { labelWidth: 140, labelPosition: "top" },
+    elementsConfig: { labelPosition: "top" },
     elements: _elements,
   };
   var _layout = {
     view: "window",
     modal: true,
-    width: 400,
+    minWidth: 650,
     id: "app-key",
     position: "center",
     head: "Connect to Massbit App",
-    body: _form,
+    close: true,
+    body: {
+      rows: [_form, _sdk],
+    },
   };
   return {
     $ui: _layout,

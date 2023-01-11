@@ -1,0 +1,254 @@
+[
+  {
+    "value": "Albania",
+    "continent": "Europe",
+    "id": "AL"
+  },
+  {
+    "value": "Andorra",
+    "continent": "Europe",
+    "id": "AD"
+  },
+  {
+    "value": "Austria",
+    "continent": "Europe",
+    "id": "AT"
+  },
+  {
+    "value": "Belarus",
+    "continent": "Europe",
+    "id": "BY"
+  },
+  {
+    "value": "Belgium",
+    "continent": "Europe",
+    "id": "BE"
+  },
+  {
+    "value": "Bosnia and Herzegovina",
+    "continent": "Europe",
+    "id": "BA"
+  },
+  {
+    "value": "Bulgaria",
+    "continent": "Europe",
+    "id": "BG"
+  },
+  {
+    "value": "Croatia",
+    "continent": "Europe",
+    "id": "HR"
+  },
+  {
+    "value": "Czech Republic",
+    "continent": "Europe",
+    "id": "CZ"
+  },
+  {
+    "value": "Denmark",
+    "continent": "Europe",
+    "id": "DK"
+  },
+  {
+    "value": "England",
+    "continent": "Europe"
+  },
+  {
+    "value": "Estonia",
+    "continent": "Europe",
+    "id": "EE"
+  },
+  {
+    "value": "Faroe Islands",
+    "continent": "Europe",
+    "id": "FO"
+  },
+  {
+    "value": "Finland",
+    "continent": "Europe",
+    "id": "FI"
+  },
+  {
+    "value": "France",
+    "continent": "Europe",
+    "id": "FR"
+  },
+  {
+    "value": "Germany",
+    "continent": "Europe",
+    "id": "DE"
+  },
+  {
+    "value": "Gibraltar",
+    "continent": "Europe",
+    "id": "GI"
+  },
+  {
+    "value": "Greece",
+    "continent": "Europe",
+    "id": "GR"
+  },
+  {
+    "value": "Holy See (Vatican City State)",
+    "continent": "Europe",
+    "id": "VA"
+  },
+  {
+    "value": "Hungary",
+    "continent": "Europe",
+    "id": "HU"
+  },
+  {
+    "value": "Iceland",
+    "continent": "Europe",
+    "id": "IS"
+  },
+  {
+    "value": "Ireland",
+    "continent": "Europe",
+    "id": "IE"
+  },
+  {
+    "value": "Italy",
+    "continent": "Europe",
+    "id": "IT"
+  },
+  {
+    "value": "Latvia",
+    "continent": "Europe",
+    "id": "LV"
+  },
+  {
+    "value": "Liechtenstein",
+    "continent": "Europe",
+    "id": "LI"
+  },
+  {
+    "value": "Lithuania",
+    "continent": "Europe",
+    "id": "LT"
+  },
+  {
+    "value": "Luxembourg",
+    "continent": "Europe",
+    "id": "LU"
+  },
+  {
+    "value": "North Macedonia",
+    "continent": "Europe",
+    "id": "MK"
+  },
+  {
+    "value": "Malta",
+    "continent": "Europe",
+    "id": "MT"
+  },
+  {
+    "value": "Moldova",
+    "continent": "Europe",
+    "id": "MD"
+  },
+  {
+    "value": "Monaco",
+    "continent": "Europe",
+    "id": "MC"
+  },
+  {
+    "value": "Montenegro",
+    "continent": "Europe",
+    "id": "ME"
+  },
+  {
+    "value": "Netherlands",
+    "continent": "Europe",
+    "id": "NL"
+  },
+  {
+    "value": "Northern Ireland",
+    "continent": "Europe",
+    "id": "GB"
+  },
+  {
+    "value": "Norway",
+    "continent": "Europe",
+    "id": "NO"
+  },
+  {
+    "value": "Poland",
+    "continent": "Europe",
+    "id": "PL"
+  },
+  {
+    "value": "Portugal",
+    "continent": "Europe",
+    "id": "PT"
+  },
+  {
+    "value": "Romania",
+    "continent": "Europe",
+    "id": "RO"
+  },
+  {
+    "value": "Russian Federation",
+    "continent": "Europe",
+    "id": "RU"
+  },
+  {
+    "value": "San Marino",
+    "continent": "Europe",
+    "id": "SM"
+  },
+  {
+    "value": "Scotland",
+    "continent": "Europe"
+  },
+  {
+    "value": "Serbia",
+    "continent": "Europe",
+    "id": "RS"
+  },
+  {
+    "value": "Slovakia",
+    "continent": "Europe",
+    "id": "SK"
+  },
+  {
+    "value": "Slovenia",
+    "continent": "Europe",
+    "id": "SI"
+  },
+  {
+    "value": "Spain",
+    "continent": "Europe",
+    "id": "ES"
+  },
+  {
+    "value": "Svalbard and Jan Mayen",
+    "continent": "Europe",
+    "id": "SJ"
+  },
+  {
+    "value": "Sweden",
+    "continent": "Europe",
+    "id": "SE"
+  },
+  {
+    "value": "Switzerland",
+    "continent": "Europe",
+    "id": "CH"
+  },
+  {
+    "value": "Ukraine",
+    "continent": "Europe",
+    "id": "UA"
+  },
+  {
+    "value": "United Kingdom",
+    "continent": "Europe",
+    "id": "UK"
+  },
+  {
+    "value": "Wales",
+    "continent": "Europe"
+  }
+]

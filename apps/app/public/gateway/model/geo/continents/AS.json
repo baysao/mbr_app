@@ -1,0 +1,252 @@
+[
+  {
+    "value": "Afghanistan",
+    "continent": "Asia",
+    "id": "AF"
+  },
+  {
+    "value": "Armenia",
+    "continent": "Asia",
+    "id": "AM"
+  },
+  {
+    "value": "Azerbaijan",
+    "continent": "Asia",
+    "id": "AZ"
+  },
+  {
+    "value": "Bahrain",
+    "continent": "Asia",
+    "id": "BH"
+  },
+  {
+    "value": "Bangladesh",
+    "continent": "Asia",
+    "id": "BD"
+  },
+  {
+    "value": "Bhutan",
+    "continent": "Asia",
+    "id": "BT"
+  },
+  {
+    "value": "Brunei",
+    "continent": "Asia",
+    "id": "BN"
+  },
+  {
+    "value": "Cambodia",
+    "continent": "Asia",
+    "id": "KH"
+  },
+  {
+    "value": "China",
+    "continent": "Asia",
+    "id": "CN"
+  },
+  {
+    "value": "Cyprus",
+    "continent": "Asia",
+    "id": "CY"
+  },
+  {
+    "value": "East Timor",
+    "continent": "Asia",
+    "id": "TP"
+  },
+  {
+    "value": "Georgia",
+    "continent": "Asia",
+    "id": "GE"
+  },
+  {
+    "value": "Hong Kong",
+    "continent": "Asia",
+    "id": "HK"
+  },
+  {
+    "value": "India",
+    "continent": "Asia",
+    "id": "IN"
+  },
+  {
+    "value": "Indonesia",
+    "continent": "Asia",
+    "id": "ID"
+  },
+  {
+    "value": "Iran",
+    "continent": "Asia",
+    "id": "IR"
+  },
+  {
+    "value": "Iraq",
+    "continent": "Asia",
+    "id": "IQ"
+  },
+  {
+    "value": "Israel",
+    "continent": "Asia",
+    "id": "IL"
+  },
+  {
+    "value": "Japan",
+    "continent": "Asia",
+    "id": "JP"
+  },
+  {
+    "value": "Jordan",
+    "continent": "Asia",
+    "id": "JO"
+  },
+  {
+    "value": "Kazakhstan",
+    "continent": "Asia",
+    "id": "KZ"
+  },
+  {
+    "value": "Kuwait",
+    "continent": "Asia",
+    "id": "KW"
+  },
+  {
+    "value": "Kyrgyzstan",
+    "continent": "Asia",
+    "id": "KG"
+  },
+  {
+    "value": "Laos",
+    "continent": "Asia",
+    "id": "LA"
+  },
+  {
+    "value": "Lebanon",
+    "continent": "Asia",
+    "id": "LB"
+  },
+  {
+    "value": "Macao",
+    "continent": "Asia",
+    "id": "MO"
+  },
+  {
+    "value": "Malaysia",
+    "continent": "Asia",
+    "id": "MY"
+  },
+  {
+    "value": "Maldives",
+    "continent": "Asia",
+    "id": "MV"
+  },
+  {
+    "value": "Mongolia",
+    "continent": "Asia",
+    "id": "MN"
+  },
+  {
+    "value": "Myanmar",
+    "continent": "Asia",
+    "id": "MM"
+  },
+  {
+    "value": "Nepal",
+    "continent": "Asia",
+    "id": "NP"
+  },
+  {
+    "value": "North Korea",
+    "continent": "Asia",
+    "id": "KP"
+  },
+  {
+    "value": "Oman",
+    "continent": "Asia",
+    "id": "OM"
+  },
+  {
+    "value": "Pakistan",
+    "continent": "Asia",
+    "id": "PK"
+  },
+  {
+    "value": "Palestine",
+    "continent": "Asia",
+    "id": "PS"
+  },
+  {
+    "value": "Philippines",
+    "continent": "Asia",
+    "id": "PH"
+  },
+  {
+    "value": "Qatar",
+    "continent": "Asia",
+    "id": "QA"
+  },
+  {
+    "value": "Saudi Arabia",
+    "continent": "Asia",
+    "id": "SA"
+  },
+  {
+    "value": "Singapore",
+    "continent": "Asia",
+    "id": "SG"
+  },
+  {
+    "value": "South Korea",
+    "continent": "Asia",
+    "id": "KR"
+  },
+  {
+    "value": "Sri Lanka",
+    "continent": "Asia",
+    "id": "LK"
+  },
+  {
+    "value": "Syria",
+    "continent": "Asia",
+    "id": "SY"
+  },
+  {
+    "value": "Tajikistan",
+    "continent": "Asia",
+    "id": "TJ"
+  },
+  {
+    "value": "Thailand",
+    "continent": "Asia",
+    "id": "TH"
+  },
+  {
+    "value": "Turkey",
+    "continent": "Asia",
+    "id": "TR"
+  },
+  {
+    "value": "Turkmenistan",
+    "continent": "Asia",
+    "id": "TM"
+  },
+  {
+    "value": "United Arab Emirates",
+    "continent": "Asia",
+    "id": "AE"
+  },
+  {
+    "value": "Uzbekistan",
+    "continent": "Asia",
+    "id": "UZ"
+  },
+  {
+    "value": "Vietnam",
+    "continent": "Asia",
+    "id": "VN"
+  },
+  {
+    "value": "Yemen",
+    "continent": "Asia",
+    "id": "YE"
+  }
+]
