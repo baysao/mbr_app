@@ -37,11 +37,11 @@ function Action:listAction(args)
         return {result = false, error_code = _err}
     end
     local _user_id = session:get("id")
-    uuid.seed(os.time())
-    args.id = uuid()
+    -- uuid.seed(os.time())
+    -- args.id = uuid()
     args.user_id = _user_id
     local _ret, _err = self._crud:list(args)
-    cc.printerror(inspect(_ret))
+    -- cc.printerror(inspect(_ret))
     if _ret then
         return {result = true, data = _ret}
     end
@@ -106,7 +106,26 @@ function Action:createAction(args)
 
     return {result = false}
 end
+function Action:updateAction(args)
+    args.action = nil
+    local session, _err = _opensession(self:getInstance(), args)
+    if not session then
+        return {result = false, error_code = _err}
+    end
+    local _user_id = session:get("id")
 
+    if args.user_id ~= _user_id then
+       return {result = false}
+    end
+    
+    -- cc.printerror(inspect(args))
+    local _ret, _err = self._crud:update(args)
+    if _ret then
+        return {result = true}
+    end
+
+    return {result = false}
+end
 --private
 
 _opensession = function(instance, args)

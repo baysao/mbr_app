@@ -37,11 +37,11 @@ function Action:listAction(args)
         return {result = false, error_code = _err}
     end
     local _user_id = session:get("id")
-    uuid.seed(os.time())
-    args.id = uuid()
+    -- uuid.seed(os.time())
+    -- args.id = uuid()
     args.user_id = _user_id
     local _ret, _err = self._crud:list(args)
-    cc.printerror(inspect(_ret))
+    -- cc.printerror(inspect(_ret))
     if _ret then
         return {result = true, data = _ret}
     end
@@ -58,7 +58,7 @@ function Action:deleteAction(args)
     end
     local _user_id = session:get("id")
     args.user_id = _user_id
-    cc.printerror(inspect(args))
+    -- cc.printerror(inspect(args))
     local _ret, _err = self._crud:delete(args)
     if _ret then
         return {result = true}
@@ -93,11 +93,32 @@ function Action:createAction(args)
     local _user_id = session:get("id")
     local _now = os.time()
     uuid.seed(_now)
-    args.created_at = _now
+    args.created_at = _now    
     args.id = uuid()
     math.randomseed(_now)
     args.api_key = uuid(math.random() + os.time())
     args.user_id = _user_id
+    local _ret, _err = self._crud:update(args)
+    if _ret then
+        return {result = true}
+    end
+
+    return {result = false}
+end
+
+function Action:updateAction(args)
+    args.action = nil
+    local session, _err = _opensession(self:getInstance(), args)
+    if not session then
+        return {result = false, error_code = _err}
+    end
+    local _user_id = session:get("id")
+
+    if args.user_id ~= _user_id then
+       return {result = false}
+    end
+    
+    -- cc.printerror(inspect(args))
     local _ret, _err = self._crud:update(args)
     if _ret then
         return {result = true}
