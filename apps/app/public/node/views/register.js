@@ -105,14 +105,14 @@ define([], function () {
           location.protocol +
           "//" +
           location.hostname +
-          "/sso/google/node?redirect_uri=/node";
+          "/sso/google/node?redirect_uri=/app";
       });
       $$("with_github").attachEvent("onItemClick", function () {
         location.href =
           location.protocol +
           "//" +
           location.hostname +
-          "/sso/github/node?redirect_uri=/node";
+          "/sso/github/node?redirect_uri=/app";
       });
       $$("register").attachEvent("onItemClick", function () {
         var _username = $$("username").getValue();

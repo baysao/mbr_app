@@ -4,15 +4,21 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
   _continents
 ) {
   var scope;
-    var continents = JSON.parse(_continents);
-     var _node_quota = {
+  var continents = JSON.parse(_continents);
+  var _node_quota = {
     view: "fieldset",
     label: "Node Connection",
     body: {
       rows: [
         {
           view: "text",
-          label: "Estimate CU per month",
+          label: "Demand CU ",
+          readonly: true,
+          value: "100.000.000",
+        },
+        {
+          view: "text",
+          label: "Estimate your CU per month",
           name: "quota",
         },
       ],
@@ -29,8 +35,16 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
           name: "source_address",
         },
         { view: "text", label: "Path", name: "source_path" },
-        { view: "checkbox", label: "SSL Secure Connection" },
-        { view: "checkbox", label: "Websocket support" },
+        {
+          view: "checkbox",
+          name: "source_ssl",
+          label: "SSL Secure Connection",
+        },
+        {
+          view: "checkbox",
+          name: "source_websocket",
+          label: "Websocket support",
+        },
       ],
     },
   };
@@ -80,6 +94,7 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
           options: [
             { value: "Mainnet", id: "mainnet" },
             { value: "Testnet", id: "testnet" },
+            { value: "Devnet", id: "devnet" },
           ],
         },
       ],
@@ -90,8 +105,8 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
     _host_info,
     _geo_location,
-      _node_source,
-      _node_quota
+    _node_source,
+    _node_quota,
   ];
 
   var _form = {

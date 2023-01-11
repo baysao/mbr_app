@@ -1,0 +1,297 @@
+[
+  {
+    "value": "Algeria",
+    "continent": "Africa",
+    "id": "DZ"
+  },
+  {
+    "value": "Angola",
+    "continent": "Africa",
+    "id": "AO"
+  },
+  {
+    "value": "Benin",
+    "continent": "Africa",
+    "id": "BJ"
+  },
+  {
+    "value": "Botswana",
+    "continent": "Africa",
+    "id": "BW"
+  },
+  {
+    "value": "British Indian Ocean Territory",
+    "continent": "Africa",
+    "id": "IO"
+  },
+  {
+    "value": "Burkina Faso",
+    "continent": "Africa",
+    "id": "BF"
+  },
+  {
+    "value": "Burundi",
+    "continent": "Africa",
+    "id": "BI"
+  },
+  {
+    "value": "Cameroon",
+    "continent": "Africa",
+    "id": "CM"
+  },
+  {
+    "value": "Cape Verde",
+    "continent": "Africa",
+    "id": "CV"
+  },
+  {
+    "value": "Central African Republic",
+    "continent": "Africa",
+    "id": "CF"
+  },
+  {
+    "value": "Chad",
+    "continent": "Africa",
+    "id": "TD"
+  },
+  {
+    "value": "Comoros",
+    "continent": "Africa",
+    "id": "KM"
+  },
+  {
+    "value": "Congo",
+    "continent": "Africa",
+    "id": "CG"
+  },
+  {
+    "value": "Djibouti",
+    "continent": "Africa",
+    "id": "DJ"
+  },
+  {
+    "value": "Egypt",
+    "continent": "Africa",
+    "id": "EG"
+  },
+  {
+    "value": "Equatorial Guinea",
+    "continent": "Africa",
+    "id": "GQ"
+  },
+  {
+    "value": "Eritrea",
+    "continent": "Africa",
+    "id": "ER"
+  },
+  {
+    "value": "Ethiopia",
+    "continent": "Africa",
+    "id": "ET"
+  },
+  {
+    "value": "Gabon",
+    "continent": "Africa",
+    "id": "GA"
+  },
+  {
+    "value": "Gambia",
+    "continent": "Africa",
+    "id": "GM"
+  },
+  {
+    "value": "Ghana",
+    "continent": "Africa",
+    "id": "GH"
+  },
+  {
+    "value": "Guinea",
+    "continent": "Africa",
+    "id": "GN"
+  },
+  {
+    "value": "Guinea-Bissau",
+    "continent": "Africa",
+    "id": "GW"
+  },
+  {
+    "value": "Ivory Coast",
+    "continent": "Africa",
+    "id": "CI"
+  },
+  {
+    "value": "Kenya",
+    "continent": "Africa",
+    "id": "KE"
+  },
+  {
+    "value": "Lesotho",
+    "continent": "Africa",
+    "id": "LS"
+  },
+  {
+    "value": "Liberia",
+    "continent": "Africa",
+    "id": "LR"
+  },
+  {
+    "value": "Libyan Arab Jamahiriya",
+    "continent": "Africa",
+    "id": "LY"
+  },
+  {
+    "value": "Madagascar",
+    "continent": "Africa",
+    "id": "MG"
+  },
+  {
+    "value": "Malawi",
+    "continent": "Africa",
+    "id": "MW"
+  },
+  {
+    "value": "Mali",
+    "continent": "Africa",
+    "id": "ML"
+  },
+  {
+    "value": "Mauritania",
+    "continent": "Africa",
+    "id": "MR"
+  },
+  {
+    "value": "Mauritius",
+    "continent": "Africa",
+    "id": "MU"
+  },
+  {
+    "value": "Mayotte",
+    "continent": "Africa",
+    "id": "YT"
+  },
+  {
+    "value": "Morocco",
+    "continent": "Africa",
+    "id": "MA"
+  },
+  {
+    "value": "Mozambique",
+    "continent": "Africa",
+    "id": "MZ"
+  },
+  {
+    "value": "Namibia",
+    "continent": "Africa",
+    "id": "NA"
+  },
+  {
+    "value": "Niger",
+    "continent": "Africa",
+    "id": "NE"
+  },
+  {
+    "value": "Nigeria",
+    "continent": "Africa",
+    "id": "NG"
+  },
+  {
+    "value": "Reunion",
+    "continent": "Africa",
+    "id": "RE"
+  },
+  {
+    "value": "Rwanda",
+    "continent": "Africa",
+    "id": "RW"
+  },
+  {
+    "value": "Saint Helena",
+    "continent": "Africa",
+    "id": "SH"
+  },
+  {
+    "value": "Sao Tome and Principe",
+    "continent": "Africa",
+    "id": "ST"
+  },
+  {
+    "value": "Senegal",
+    "continent": "Africa",
+    "id": "SN"
+  },
+  {
+    "value": "Seychelles",
+    "continent": "Africa",
+    "id": "SC"
+  },
+  {
+    "value": "Sierra Leone",
+    "continent": "Africa",
+    "id": "SL"
+  },
+  {
+    "value": "Somalia",
+    "continent": "Africa",
+    "id": "SO"
+  },
+  {
+    "value": "South Africa",
+    "continent": "Africa",
+    "id": "ZA"
+  },
+  {
+    "value": "South Sudan",
+    "continent": "Africa",
+    "id": "SS"
+  },
+  {
+    "value": "Sudan",
+    "continent": "Africa",
+    "id": "SD"
+  },
+  {
+    "value": "Swaziland",
+    "continent": "Africa",
+    "id": "SZ"
+  },
+  {
+    "value": "Tanzania",
+    "continent": "Africa",
+    "id": "TZ"
+  },
+  {
+    "value": "The Democratic Republic of Congo",
+    "continent": "Africa",
+    "id": "CD"
+  },
+  {
+    "value": "Togo",
+    "continent": "Africa",
+    "id": "TG"
+  },
+  {
+    "value": "Tunisia",
+    "continent": "Africa",
+    "id": "TN"
+  },
+  {
+    "value": "Uganda",
+    "continent": "Africa",
+    "id": "UG"
+  },
+  {
+    "value": "Western Sahara",
+    "continent": "Africa",
+    "id": "EH"
+  },
+  {
+    "value": "Zambia",
+    "continent": "Africa",
+    "id": "ZM"
+  },
+  {
+    "value": "Zimbabwe",
+    "continent": "Africa",
+    "id": "ZW"
+  }
+]

@@ -1,0 +1,187 @@
+[
+  {
+    "value": "Anguilla",
+    "continent": "North America",
+    "id": "AI"
+  },
+  {
+    "value": "Antigua and Barbuda",
+    "continent": "North America",
+    "id": "AG"
+  },
+  {
+    "value": "Aruba",
+    "continent": "North America",
+    "id": "AW"
+  },
+  {
+    "value": "Bahamas",
+    "continent": "North America",
+    "id": "BS"
+  },
+  {
+    "value": "Barbados",
+    "continent": "North America",
+    "id": "BB"
+  },
+  {
+    "value": "Belize",
+    "continent": "North America",
+    "id": "BZ"
+  },
+  {
+    "value": "Bermuda",
+    "continent": "North America",
+    "id": "BM"
+  },
+  {
+    "value": "Canada",
+    "continent": "North America",
+    "id": "CA"
+  },
+  {
+    "value": "Cayman Islands",
+    "continent": "North America",
+    "id": "KY"
+  },
+  {
+    "value": "Costa Rica",
+    "continent": "North America",
+    "id": "CR"
+  },
+  {
+    "value": "Cuba",
+    "continent": "North America",
+    "id": "CU"
+  },
+  {
+    "value": "Dominica",
+    "continent": "North America",
+    "id": "DM"
+  },
+  {
+    "value": "Dominican Republic",
+    "continent": "North America",
+    "id": "DO"
+  },
+  {
+    "value": "El Salvador",
+    "continent": "North America",
+    "id": "SV"
+  },
+  {
+    "value": "Greenland",
+    "continent": "North America",
+    "id": "GL"
+  },
+  {
+    "value": "Grenada",
+    "continent": "North America",
+    "id": "GD"
+  },
+  {
+    "value": "Guadeloupe",
+    "continent": "North America",
+    "id": "GP"
+  },
+  {
+    "value": "Guatemala",
+    "continent": "North America",
+    "id": "GT"
+  },
+  {
+    "value": "Haiti",
+    "continent": "North America",
+    "id": "HT"
+  },
+  {
+    "value": "Honduras",
+    "continent": "North America",
+    "id": "HN"
+  },
+  {
+    "value": "Jamaica",
+    "continent": "North America",
+    "id": "JM"
+  },
+  {
+    "value": "Martinique",
+    "continent": "North America",
+    "id": "MQ"
+  },
+  {
+    "value": "Mexico",
+    "continent": "North America",
+    "id": "MX"
+  },
+  {
+    "value": "Montserrat",
+    "continent": "North America",
+    "id": "MS"
+  },
+  {
+    "value": "Netherlands Antilles",
+    "continent": "North America",
+    "id": "AN"
+  },
+  {
+    "value": "Nicaragua",
+    "continent": "North America",
+    "id": "NI"
+  },
+  {
+    "value": "Panama",
+    "continent": "North America",
+    "id": "PA"
+  },
+  {
+    "value": "Puerto Rico",
+    "continent": "North America",
+    "id": "PR"
+  },
+  {
+    "value": "Saint Kitts and Nevis",
+    "continent": "North America",
+    "id": "KN"
+  },
+  {
+    "value": "Saint Lucia",
+    "continent": "North America",
+    "id": "LC"
+  },
+  {
+    "value": "Saint Pierre and Miquelon",
+    "continent": "North America",
+    "id": "PM"
+  },
+  {
+    "value": "Saint Vincent and the Grenadines",
+    "continent": "North America",
+    "id": "VC"
+  },
+  {
+    "value": "Trinidad and Tobago",
+    "continent": "North America",
+    "id": "TT"
+  },
+  {
+    "value": "Turks and Caicos Islands",
+    "continent": "North America",
+    "id": "TC"
+  },
+  {
+    "value": "United States",
+    "continent": "North America",
+    "id": "US"
+  },
+  {
+    "value": "Virgin Islands, British",
+    "continent": "North America",
+    "id": "VG"
+  },
+  {
+    "value": "Virgin Islands, U.S.",
+    "continent": "North America",
+    "id": "VI"
+  }
+]
