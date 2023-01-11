@@ -95,9 +95,10 @@ function Action:createAction(args)
     uuid.seed(_now)
     args.created_at = _now
     args.id = uuid()
-    math.randomseed(_now)
-    args.api_key = uuid(math.random() + os.time())
+    -- math.randomseed(_now)
+    -- args.api_key = uuid(math.random() + os.time())
     args.user_id = _user_id
+    cc.printerror(inspect(args))
     local _ret, _err = self._crud:update(args)
     if _ret then
         return {result = true}

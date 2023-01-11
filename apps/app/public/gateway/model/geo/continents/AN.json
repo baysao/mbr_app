@@ -1,0 +1,27 @@
+[
+  {
+    "value": "Antarctica",
+    "continent": "Antarctica",
+    "id": "AQ"
+  },
+  {
+    "value": "Bouvet Island",
+    "continent": "Antarctica",
+    "id": "BV"
+  },
+  {
+    "value": "French Southern territories",
+    "continent": "Antarctica",
+    "id": "TF"
+  },
+  {
+    "value": "Heard Island and McDonald Islands",
+    "continent": "Antarctica",
+    "id": "HM"
+  },
+  {
+    "value": "South Georgia and the South Sandwich Islands",
+    "continent": "Antarctica",
+    "id": "GS"
+  }
+]
