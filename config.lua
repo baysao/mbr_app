@@ -12,6 +12,23 @@ local _config = {
         sso = "apps/sso"
     },
     supervisors = {},
-    supervisor = [[]]
+    supervisor = [[
+[program:prometheus]
+command=/bin/bash _SITE_ROOT_/scripts/prometheus.sh
+autorestart=true
+redirect_stderr=true
+stopasgroup=true
+killasgroup=true
+stopsignal=INT
+stdout_logfile=_SITE_ROOT_/logs/prometheus.log
+[program:gdnsd]
+command=/bin/bash _SITE_ROOT_/scripts/gdnsd.sh
+autorestart=true
+redirect_stderr=true
+stopasgroup=true
+killasgroup=true
+stopsignal=INT
+stdout_logfile=_SITE_ROOT_/logs/gdnsd.log
+]]
 }
 return _config

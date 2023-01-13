@@ -1,0 +1,42 @@
+options => {
+    run_dir = _GBC_CORE_ROOT_/tmp
+    state_dir = _GBC_CORE_ROOT_/tmp
+    tcp_threads => 1
+    udp_threads => 1
+    edns_client_subnet => true
+    zones_default_ttl => 3600
+    listen => [0.0.0.0]
+    dns_port = 53
+}
+
+service_types => {
+    $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/monitors.d/*}
+}
+
+
+plugins => {
+    simplefo => {
+        $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/failover.d/*}
+    }
+    weighted => {
+            $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/weighted.d/*}
+    }
+    multifo => {
+            $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/multivalue.d/*}
+    }
+
+    metafo => {
+        resources => {
+            $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/datacenter.d/*}
+        }
+    }
+    geoip =>  {
+            maps => {
+                $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/geolocation.d/maps.d/*}
+            }
+            resources => {
+                $include{_GBC_CORE_ROOT_/db/gdnsd/conf.d/geolocation.d/resources.d/*}
+            }
+    }
+}
+
