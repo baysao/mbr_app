@@ -46,6 +46,7 @@ run)
 
 reload)
 	docker exec -it mbr_app /tmp/app/cmd_server _update
+#	docker exec -it mbr_app /tmp/app/cmd_server update
 	docker exec -it mbr_app /tmp/app/cmd_server status
 	;;
 
