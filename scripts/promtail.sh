@@ -34,7 +34,7 @@ scrape_configs:
         response_body:
   - json:
       expressions:
-              method:
+        method:
         json_rpc_id: id
       source: request_body
   - json:
