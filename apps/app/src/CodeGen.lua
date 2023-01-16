@@ -10,21 +10,10 @@ local type = type
 local unpack = unpack or require'table'.unpack
 local char = require 'string'.char
 local tconcat = require 'table'.concat
-local lpeg = require 'lpeg'
+local _G = _G
 
-local _ENV = nil
+_ENV = nil
 local m = {}
-
-local function gsub (s, patt, repl)
-    local p = lpeg.Cs((patt / repl + 1)^0)
-    return p:match(s)
-end
-
-local function split (s, sep, func)
-    local elem = lpeg.C((1 - sep)^0) / func
-    local p = elem * (sep * elem)^0
-    p:match(s)
-end
 
 local function render (val, sep, formatter)
     formatter = formatter or tostring
@@ -55,42 +44,12 @@ local special = {
     ["'"]  = "'",
 }
 
-local digit = lpeg.R'09'
-local escape_digit = lpeg.P[[\]]*lpeg.C(digit * digit^-2)
-local escape_special = lpeg.P[[\]]*lpeg.C(lpeg.S[[abfnrtv\"']])
-
 local function unescape(str)
-    str = gsub(str, escape_digit, function (s)
-                                      return char(tonumber(s) % 256)
-                                  end)
-    return gsub(str, escape_special, special)
+    str = str:gsub([[\(%d%d?%d?)]], function (s)
+                                        return char(tonumber(s) % 256)
+                                    end)
+    return str:gsub([[\([abfnrtv\"'])]], special)
 end
-
-local dot = lpeg.P'.'
-local space = lpeg.S" \t"
-local newline = lpeg.P"\n"
-local newline_anywhere = lpeg.P{ newline + 1 * lpeg.V(1) }
-local only_space = space^0 * -1
-local newline_end = newline * -1
-local indent_needed = newline * -newline
-
-local vname_capture = lpeg.P'${' * lpeg.C(lpeg.R('AZ', 'az', '__') * lpeg.R('09', 'AZ', 'az', '__', '..')^0) * lpeg.Cp()
-local separator_simple_quote_capture = lpeg.P"'" * lpeg.C((lpeg.P(1) - "'")^0) * lpeg.P"'"
-local separator_double_quote_capture = lpeg.P'"' * lpeg.C((lpeg.P(1) - '"')^0) * lpeg.P'"'
-local separator_capture = lpeg.P';' * space^1 * lpeg.P'separator' * space^0 * lpeg.P'=' * space^0 *
-    (separator_simple_quote_capture + separator_double_quote_capture) * space^0 * lpeg.Cp()
-local identifier_capture = lpeg.C(lpeg.R('AZ', 'az', '__') * lpeg.R('09', 'AZ', 'az', '__')^0)
-local format_capture = lpeg.P';' * space^1 * lpeg.P'format' * space^0 * lpeg.P'=' * space^0 *
-    identifier_capture * space^0 * lpeg.Cp()
-local data_end = lpeg.P'}'
-local include_end = lpeg.P'()}'
-local if_capture = lpeg.P'?' * identifier_capture * lpeg.P'()}'
-local if_else_capture = lpeg.P'?' * identifier_capture * lpeg.P'()!' * identifier_capture * lpeg.P'()}'
-local map_capture = lpeg.P'/' * identifier_capture * lpeg.P'()' * lpeg.Cp()
-local map_end = lpeg.P'}'
-
-local subst = lpeg.P'$' * lpeg.P{ '{' * ((1 - lpeg.S'{}') + lpeg.V(1))^0 * '}' }
-local indent_capture = lpeg.C(space^0) * subst * -1
 
 local new
 local function eval (self, name)
@@ -108,16 +67,17 @@ local function eval (self, name)
         end  -- add_message
 
         local function get_value (vname)
+            local i = 1
             local t = self
-            split(vname, dot, function (w)
-                if type(t) == 'table' then
-                    t = t[w]
-                else
+            for w in vname:gmatch "(%w+)%." do
+                i = i + w:len() + 1
+                t = t[w]
+                if type(t) ~= 'table' then
                     add_message(vname, " is invalid")
-                    t = nil
+                    return nil
                 end
-            end)
-            return t
+            end
+            return t[vname:sub(i)]
         end  -- get_value
 
         local function interpolate_line (line)
@@ -137,17 +97,20 @@ local function eval (self, name)
                     return result
                 end  -- apply
 
-                local capt1, pos = vname_capture:match(capt, 1)
+                local capt1, pos = capt:match("^%${([%a_][%w%._]*)()", 1)
                 if not capt1 then
                     add_message(capt, " does not match")
                     return capt
                 end
-                local sep, pos_sep = separator_capture:match(capt, pos)
+                local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
+                if not sep then
+                      sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                end
                 if sep then
                     sep = unescape(sep)
                 end
-                local fmt, pos_fmt = format_capture:match(capt, pos_sep or pos)
-                if data_end:match(capt, pos_fmt or pos_sep or pos) then
+                local fmt, pos_fmt = capt:match("^;%s+format%s*=%s*([%a_][%w_]*)%s*()", pos_sep or pos)
+                if capt:match("^}", pos_fmt or pos_sep or pos) then
                     if fmt then
                         local formatter = self[fmt]
                         if type(formatter) ~= 'function' then
@@ -159,85 +122,87 @@ local function eval (self, name)
                         return render(get_value(capt1), sep)
                     end
                 end
-                if include_end:match(capt, pos) then
+                if capt:match("^%(%)}", pos) then
                     return apply(self, capt1)
                 end
-                do
-                    local capt2 = if_capture:match(capt, pos)
-                    if capt2 then
-                        if get_value(capt1) then
-                            return apply(self, capt2)
-                        else
+                local capt2 = capt:match("^?([%a_][%w_]*)%(%)}", pos)
+                if capt2 then
+                    if get_value(capt1) then
+                        return apply(self, capt2)
+                    else
+                        return ''
+                    end
+                end
+                local capt2, capt3 = capt:match("^?([%a_][%w_]*)%(%)!([%a_][%w_]*)%(%)}", pos)
+                if capt2 and capt3 then
+                    if get_value(capt1) then
+                        return apply(self, capt2)
+                    else
+                        return apply(self, capt3)
+                    end
+                end
+                local capt2, pos = capt:match("^/([%a_][%w_]*)%(%)()", pos)
+                if capt2 then
+                    local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
+                    if not sep then
+                          sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                    end
+                    if sep then
+                        sep = unescape(sep)
+                    end
+                    if capt:match("^}", pos_sep or pos) then
+                        local array = get_value(capt1)
+                        if array == nil then
                             return ''
                         end
-                    end
-                end
-                do
-                    local capt2, capt3 = if_else_capture:match(capt, pos)
-                    if capt2 and capt3 then
-                        if get_value(capt1) then
-                            return apply(self, capt2)
-                        else
-                            return apply(self, capt3)
+                        if type(array) ~= 'table' then
+                            add_message(capt1, " is not a table")
+                            return capt
                         end
-                    end
-                end
-                do
-                    local capt2, pos = map_capture:match(capt, pos)
-                    if capt2 then
-                        local sep, pos_sep = separator_capture:match(capt, pos)
-                        if sep then
-                            sep = unescape(sep)
+                        local results = {}
+                        for i = 1, #array do
+                            local item = array[i]
+                            if type(item) ~= 'table' then
+                                item = { it = item }
+                            end
+                            local result = apply(new(item, self), capt2)
+                            results[#results+1] = result
+                            if result == capt then
+                                break
+                            end
                         end
-                        if map_end:match(capt, pos_sep or pos) then
-                            local array = get_value(capt1)
-                            if array == nil then
-                                return ''
-                            end
-                            if type(array) ~= 'table' then
-                                add_message(capt1, " is not a table")
-                                return capt
-                            end
-                            local results = {}
-                            for i = 1, #array do
-                                local item = array[i]
-                                if type(item) ~= 'table' then
-                                    item = { it = item }
-                                end
-                                local result = apply(new(item, self), capt2)
-                                results[#results+1] = result
-                                if result == capt then
-                                    break
-                                end
-                            end
-                            return tconcat(results, sep)
-                        end
+                        return tconcat(results, sep)
                     end
                 end
                 add_message(capt, " does not match")
                 return capt
             end  -- get_repl
 
-            local indent = indent_capture:match(line)
-            local result = gsub(line, subst, get_repl)
-            if indent then
-                result = gsub(result, newline_end, '')
-                if indent ~= '' then
-                    result = gsub(result, indent_needed, "\n" .. indent)
-                end
+            local indent = line:match "^(%s*)%$%b{}$"
+            local result = line:gsub("(%$%b{})", get_repl)
+            if indent == '' then
+                result = result:gsub("\n$", '')
+            elseif indent then
+                result = result:gsub("\n", "\n" .. indent)
+                result = result:gsub("^" .. indent .. "\n", "\n")
+                repeat
+                    local nb
+                    result, nb = result:gsub("\n" .. indent .. "\n", "\n\n")
+                until nb == 0
+                result = result:gsub("\n" .. indent .. "$", '')
             end
             return result
         end -- interpolate_line
 
-        if newline_anywhere:match(template) then
+        if template:find "\n" then
             local results = {}
-            split(template, newline, function (line)
+            for line in template:gmatch "([^\n]*)\n?" do
                 local result = interpolate_line(line)
-                if result == line or not only_space:match(result) then
+                if result == line or not result:match'^%s*$' then
                     results[#results+1] = result
                 end
                 lineno = lineno + 1
-            end)
+            end
             return tconcat(results, "\n")
         else
             return interpolate_line(template)
@@ -274,13 +239,13 @@ end
 m.new = new
 
 setmetatable(m, {
-    __call = function (_, ...) return new(...) end
+    __call = function (func, ...) return new(...) end
 })
 
 m._NAME = ...
-m._VERSION = "0.3.2"
+m._VERSION = "0.3.1"
 m._DESCRIPTION = "lua-CodeGen : a template engine"
-m._COPYRIGHT = "Copyright (c) 2010-2018 Francois Perrad"
+m._COPYRIGHT = "Copyright (c) 2010-2014 Francois Perrad"
 return m
 --
 -- This library is licensed under the terms of the MIT/X11 license,

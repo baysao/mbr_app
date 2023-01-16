@@ -111,7 +111,7 @@ options => {
     edns_client_subnet => true
     zones_default_ttl => 3600
     listen => [0.0.0.0]
-    dns_port = 53
+    dns_port = 5353
 }
 
 service_types => {
