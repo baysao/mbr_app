@@ -93,7 +93,7 @@ function Action:createAction(args)
     local _user_id = session:get("id")
     local _now = os.time()
     uuid.seed(_now)
-    args.created_at = _now    
+    args.created_at = _now
     args.id = uuid()
     math.randomseed(_now)
     args.api_key = uuid(math.random() + os.time())
@@ -115,9 +115,9 @@ function Action:updateAction(args)
     local _user_id = session:get("id")
 
     if args.user_id ~= _user_id then
-       return {result = false}
+        return {result = false}
     end
-    
+
     -- cc.printerror(inspect(args))
     local _ret, _err = self._crud:update(args)
     if _ret then
@@ -140,6 +140,9 @@ _opensession = function(instance, args)
     if not session:start(sid) then
         --cc.throw("session is expired, or invalid session id")
         return nil, 401
+    end
+    if session then
+        session:setKeepAlive()
     end
 
     return session

@@ -98,11 +98,11 @@ function UserAction:signoutAction(args)
     -- online:remove(session:get("username"))
     -- delete session
     if not session then
-       return {result = false}
+        return {result = false}
     else
-       session:destroy()
+        session:destroy()
     end
-    
+
     return {result = true}
 end
 -- function UserAction:countAction(args)
@@ -173,6 +173,9 @@ _opensession = function(instance, args)
         return nil
     end
 
+    if session then
+        session:setKeepAlive()
+    end
     return session
 end
 
