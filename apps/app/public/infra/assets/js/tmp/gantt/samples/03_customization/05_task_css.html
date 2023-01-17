@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Setting task css class name</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+		<script type="text/javascript" src="../common/data.js"></script>
+		<style>
+			.mygantt .webix_gantt_progress {
+				background: rgba(0, 0, 0, 0.15);
+			}
+			.mygantt_task_color_tile {
+				padding: 3px !important;
+			}
+			.mygantt_task_color {
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 5px;
+				width: 50px;
+				height: 20px;
+				border-radius: 2px;
+			}
+			.mygantt_task_tile_inner {
+				width: 100%;
+				height: 100%;
+				border-radius: 2px;
+			}
+			.mytask0 {
+				background: #eb2f89 !important;
+			}
+			.mytask1 {
+				background: #ffeb6f !important;
+				color: #475466;
+			}
+			.mytask2 {
+				background: #a9a8a8 !important;
+			}
+			.mytask3 {
+				background: #d1df77 !important;
+				color: #475466;
+			}
+			.mytask4 {
+				background: #e7a90b !important;
+			}
+			.mytask5 {
+				background: #0bbed7 !important;
+			}
+			.mytask6 {
+				background: #038cd9 !important;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				class CustomForm extends gantt.views["task/form"] {
+					config() {
+						const ui = super.config();
+						const form = ui.body.rows[1];
+						// options for "css" richselect
+						const paletteOptions = [{ $empty: true, value: "" }];
+						for (let i = 0; i < 7; i++) {
+							const id = "mytask" + i;
+							paletteOptions.push({ id, value: id });
+						}
+						// "css" richselect definition ("Style")
+						const color = {
+							view: "richselect",
+							label: "Style",
+							name: "css",
+							suggest: {
+								view: "datasuggest",
+								padding: 0,
+								template: "<div class='mygantt_task_color #value#'></div>",
+								fitMaster: true,
+								height: 110,
+								body: {
+									xCount: 4,
+									autoheight: false,
+									type: {
+										css: "mygantt_task_color_tile",
+										type: "tiles",
+										width: "auto",
+										template:
+											"<div class='mygantt_task_tile_inner #value#'></div>",
+									},
+									data: paletteOptions,
+								},
+							},
+						};
+						// insert "css" richselect below "type"
+						const index = form.elements.findIndex(obj => obj.name == "type");
+						form.elements.splice(index + 1, 0, color);
+						return ui;
+					}
+				}
+
+				// Custom Backend service for "color" property demo
+				class MyBackend extends gantt.services.Backend {
+					tasks() {
+						// css property applies classname for a task node
+						data_color[3].css = "mytask6";
+						data_color[4].css = "mytask3";
+						return Promise.resolve(data_color);
+					}
+					links() {
+						return Promise.resolve(links_color);
+					}
+					addTask(obj) {
+						return Promise.resolve({ id: "" + obj.id });
+					}
+					removeTask() {
+						return Promise.resolve();
+					}
+					updateTask() {
+						return Promise.resolve();
+					}
+					reorderTask() {
+						return Promise.resolve();
+					}
+					addLink(obj) {
+						return Promise.resolve({ id: "" + obj.id });
+					}
+					updateLink() {
+						return Promise.resolve();
+					}
+					removeLink() {
+						return Promise.resolve();
+					}
+				}
+
+				webix.ui({
+					view: "gantt",
+					css: "mygantt",
+					url: "https://docs.webix.com/gantt-backend/",
+					// override vies and Backend services
+					override: new Map([
+						[gantt.views["task/form"], CustomForm],
+						// for demo only
+						[gantt.services.Backend, MyBackend],
+					]),
+				});
+			});
+		</script>
+	</body>
+</html>

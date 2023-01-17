@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title>Pie Chart: Color palette based on one color</title>
+    <script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+    <script src="../../common/chartdata.js?v=10.0.1"></script>
+<body>
+<div id="chartDiv" style="width:400px;height:300px;margin:20px"></div>
+<script>
+    // get an array of colors that are lighter than the base color
+    function getColorPalette(baseColor, count){
+        const colors = [baseColor];
+        if(count>1){
+            const c = webix.color;
+            const rgb = c.toRgb(baseColor);
+            const hsv = c.rgbToHsv(rgb[0], rgb[1], rgb[2]);
+            const f = hsv[1] * 0.8 / (count - 1);
+            for(let i = 1; i < count; i++){
+                const rgb = "rgb(" + c.hsvToRgb(hsv[0], hsv[1] - f * i, hsv[2]) +")";
+                colors.push("#" + c.rgbToHex(rgb));
+            }
+        }
+        return colors;
+    }
+
+    const palette = getColorPalette("#3ea4f5", month_dataset.length);
+
+    webix.ui({
+        view: "chart",
+        type: "donut",
+        container: "chartDiv",
+        value: "#sales#",
+        color: (item, i) => palette[i],
+        pieInnerText: (item, totalValue)=>{
+            return item.month +"<br/>"+ Math.round(item.sales/totalValue*100)+"%";
+        },
+        data: month_dataset
+    });
+</script>
+</body>
+</html>

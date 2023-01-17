@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Desktop: A new bar button</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/desktop.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/desktop.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+		<script type="text/javascript" src="../common/apps.js"></script>
+		<style>
+			.webix_dsk_main {
+				background-image: url("../common/imgs/bg.jpg");
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function start(user) {
+				webix.ready(function() {
+					if (webix.env.touch) webix.ui.fullScreen();
+					else if (webix.env.scrollSize) webix.CustomScroll.init();
+
+					class MyToolbar extends desktop.views["toolbar"] {
+						config() {
+							const ui = super.config();
+							const myButton = {
+								view: "button",
+								autowidth: true,
+								css: "webix_primary",
+								label: "My button",
+								click: () => webix.message("My button clicked"),
+							};
+							// adding the button in "cols" collection as a layout part to apply paddings
+							ui.cols.push({
+								padding: { right: 10 },
+								rows: [{}, myButton, {}],
+							});
+							return ui;
+						}
+					}
+
+					app = new desktop.App({
+						systemParams: user,
+						apps: myApps,
+						override: new Map([[desktop.views["toolbar"], MyToolbar]]),
+					});
+					app.render(document.body);
+				});
+			}
+
+			login("someurl").then(start);
+		</script>
+	</body>
+</html>

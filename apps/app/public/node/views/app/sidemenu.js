@@ -24,7 +24,7 @@ define(["model/side_menu"], function (model_side_menu) {
         label: "Create Node",
           css: "webix_primary",
 	  click: function(){
-	      scope.show("/app/node.create/$zone")
+	      scope.show("/app/node/$create/$zone")
 	  }
       },
       _menu,

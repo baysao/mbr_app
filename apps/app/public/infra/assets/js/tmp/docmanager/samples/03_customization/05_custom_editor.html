@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Document Manager: Customizing code editor</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/docmanager.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/docmanager.css"
+		/>
+
+		<!-- Ace Text Editor integration with Webix -->
+		<script
+			type="text/javascript"
+			src="//cdn.webix.com/components/edge/ace/ace.js"
+		></script>
+
+		<style>
+			.my_dark_space,
+			.my_dracula_editor {
+				background-color: #282b2e;
+			}
+
+			.my_dracula_editor {
+				border-color: transparent;
+			}
+
+			.webix_dark .webix_view.webix_control.webix_el_tabbar,
+			.webix_dark .webix_item_tab.webix_fmanager_editor_tab {
+				background-color: #657584;
+				color: #ffffff;
+			}
+
+			.webix_dark .webix_fmanager_editor_tab.webix_item_tab.webix_selected {
+				background-color: #475466;
+				color: #ffffff;
+			}
+
+			.webix_dark .webix_fmanager_editor_tab.webix_item_tab:hover {
+				background-color: #282a36;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				class Editor extends docManager.views.editor {
+					config() {
+						const ui = super.config();
+
+						ui.css = (ui.css || "") + "my_dark_space";
+						ui.rows[0].css = (ui.rows[0].css || "") + " webix_dark";
+
+						let editor = {
+							localId: "editor",
+							view: "ace-editor",
+							theme: "dracula",
+							css: "my_dracula_editor",
+						};
+						ui.rows[1].cols[0] = editor;
+
+						const bottomBar = {
+							view: "toolbar",
+							margin: 8,
+							padding: { left: 8 },
+							css: "webix_dark",
+							cols: [
+								{
+									localId: "linesCount",
+									view: "label",
+									width: webix.env.touch ? 0 : 200,
+								},
+								{},
+								{
+									localId: "tabSize",
+									view: "combo",
+									label: "Tab size",
+									labelWidth: 63,
+									width: 130,
+									options: [{ id: 2, value: "2" }, { id: 4, value: "4" }],
+									value: 4,
+									on: {
+										onChange: v => {
+											if (this.AceEditor) this.AceEditor.session.setTabSize(v);
+										},
+									},
+								},
+								{
+									localId: "wrapper",
+									view: "checkbox",
+									label: "Wrap",
+									labelWidth: 43,
+									width: 75,
+									on: {
+										onChange: v => {
+											if (this.AceEditor)
+												this.AceEditor.session.setUseWrapMode(v);
+										},
+									},
+								},
+							],
+						};
+
+						ui.rows.push(bottomBar);
+
+						return ui;
+					}
+
+					/**
+					 * Adds a handler for changes in the editor (checks for changes comparing to the original text and updates the 'light bulb')
+					 * @param {Object} editor - ace.Editor instance
+					 */
+					HandleChanges(editorObj) {
+						const editor = this.$$("editor");
+						const lines = this.$$("linesCount");
+
+						this.AceEditor = editorObj;
+						editorObj.on("change", () => {
+							this.TextChanged(this.GetActiveFile());
+
+							// use ace api to count lines
+							this.SetNumofLines(editorObj, lines);
+						});
+					}
+
+					/**
+					 * Saves a file contents to the buffer
+					 * @param {Object} file - the file data object
+					 * @param {string} text - the contents of the file
+					 */
+					AddDoc(file, text) {
+						this._oldValue[file.id] = text;
+						// using ace api
+						this._buffers[file.id] = new ace.EditSession(text);
+						this._buffers[file.id].setMode(this.GetFileType(file));
+					}
+
+					/**
+					 * Opens a file in the editor, the previous file stays in the buffer (in multi mode)
+					 * @param {string} name - the file ID (the full path to the file, here serves as the key)
+					 */
+					OpenDoc(name) {
+						this.$$("editor")
+							.getEditor(true)
+							.then(editor => {
+								editor.setSession(this._buffers[name]);
+								editor.focus();
+
+								// DM-specific: updating history-versions button and setting the main bar label
+								const file = this.GetFileData(name);
+								this.SetVersionsButton(file);
+								this.SetMainLabel(null, this.GetFileLabel(file));
+
+								this.SetNumofLines(editor, this.$$("linesCount"));
+								this.ResetControls(editor);
+							});
+					}
+
+					/**
+					 * Updates the label that shows the number of files in the current file
+					 * @param {Object} editor - Ace Editor instance
+					 * @param {Object} counter - this.$$("linesCount") - label that shows the number of lines
+					 */
+					SetNumofLines(editor, counter) {
+						counter.setValue(`Lines: ${editor.session.getLength()}`);
+					}
+
+					/**
+					 * Updates values of tab size select list and line wrap checkbox
+					 * @param {Object} editor - Ace Editor instance
+					 */
+					ResetControls(editor) {
+						this.$$("tabSize").setValue(editor.session.getTabSize());
+						this.$$("wrapper").setValue(editor.session.getUseWrapMode());
+					}
+				}
+
+				class History extends docManager.views["editor/history"] {
+					config() {
+						const p = super.config();
+
+						// the config is asynchronous
+						p.then(ui => {
+							ui.css = (ui.css || "") + "my_dark_space";
+
+							const listBar = ui.rows ? ui.rows[1].rows[0] : ui.cols[1].rows[0];
+							listBar.css = (listBar.css || "") + " webix_dark";
+							return ui;
+						});
+
+						return p;
+					}
+				}
+
+				const app = new docManager.App({
+					url: "https://docs.webix.com/docmanager-backend/",
+					override: new Map([
+						[docManager.views.editor, Editor],
+						[docManager.views["editor/history"], History],
+					]),
+				});
+
+				app.render(document.body);
+			});
+		</script>
+	</body>
+</html>

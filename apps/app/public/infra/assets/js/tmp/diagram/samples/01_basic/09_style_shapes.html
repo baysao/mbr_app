@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Shape Styling</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					type: "form",
+					rows: [
+						{
+							view: "button",
+							value: "Change 'action' shape'",
+							inputWidth: 200,
+							click: function() {
+								$$("diagram1").setShape("action", {
+									backgroundColor: "#D1C4E9",
+									lineColor: "#D1C4E9",
+								});
+								$$("diagram1").refresh();
+							},
+						},
+						{
+							view: "diagram",
+							id: "diagram1",
+							autoplace: false,
+							item: {
+								width: 100,
+								height: 50,
+								template: function(obj) {
+									return obj.value || "";
+								},
+							},
+							select: false,
+							shapes: [
+								// style presets for existing shapes
+								{
+									id: "circle",
+									fontColor: "#ffffff",
+									lineColor: "#65C0B7",
+									backgroundColor: "#65C0B7",
+								},
+								{
+									id: "action",
+									template: "rrect",
+									backgroundColor: "#b5d461",
+									lineColor: "#b5d461",
+								},
+								{
+									id: "decision",
+									backgroundColor: "#fff17c",
+									lineColor: "#ffb955",
+									lineStyle: "dotted",
+								},
+								{
+									id: "join",
+									template: "rrect",
+									height: 80,
+									width: 10,
+									backgroundColor: "#ffb955",
+									lineColor: "#ffb955",
+								},
+								{
+									id: "dot",
+									fontColor: "white",
+									lineColor: "#65C0B7",
+									backgroundColor: "#ffffff",
+									altBackgroundColor: "#65C0B7",
+								},
+							],
+							data: data_shapes,
+							links: links_shapes,
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

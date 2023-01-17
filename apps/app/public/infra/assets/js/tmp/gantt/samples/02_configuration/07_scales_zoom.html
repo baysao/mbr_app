@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Zooming</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+
+		<script type="text/javascript" src="../common/data.js"></script>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				function getScales(minScale) {
+					const scales = [];
+					switch (minScale) {
+						case "year":
+							scales.push(yearScale);
+							break;
+						case "quarter":
+							scales.push(yearScale, quarterScale);
+							break;
+						case "month":
+							scales.push(yearScale, quarterScale, monthScale);
+							break;
+						case "week":
+							scales.push(quarterScale, monthScale, weekScale);
+							break;
+						case "day":
+							scales.push(yearScale, monthScale, dayScale);
+							break;
+						case "hour":
+							scales.push(monthScale, dayScale, hourScale);
+							break;
+					}
+					return scales;
+				}
+
+				let originalStartDate = null;
+				let originalEndDate = null;
+				function resetScales(v, o) {
+					const current = gantt1.getService("local").getScales();
+					if (!(originalEndDate || originalStartDate)) {
+						originalStartDate = webix.Date.add(current.start, 1, o, true);
+						originalEndDate = webix.Date.add(current.end, -1, o, true);
+					}
+
+					const cellWidth = cellWidths[v];
+					const scales = getScales(v);
+
+					const start = webix.Date.add(originalStartDate, -1, v, true);
+					const end = webix.Date.add(originalEndDate, 1, v, true);
+
+					gantt1
+						.getService("local")
+						.setScales(
+							start,
+							end,
+							!(v == "day"),
+							cellWidth,
+							current.cellHeight,
+							scales
+						);
+				}
+
+				//client-side data for example purposes only
+				class MyBackend extends gantt.services.Backend {
+					tasks() {
+						return webix.promise.resolve(tasks);
+					}
+					links() {
+						return webix.promise.resolve(links);
+					}
+				}
+
+				const zoom = {
+					view: "richselect",
+					label: "Zoom:",
+					value: "month",
+					width: 300,
+					options: ["hour", "day", "week", "month", "quarter", "year"],
+					on: {
+						onChange: resetScales,
+					},
+				};
+
+				webix.ui({
+					rows: [
+						{
+							view: "toolbar",
+							id: "toolbar",
+							css: "webix_dark",
+							paddingX: 10,
+							elements: [zoom, {}],
+						},
+						{
+							view: "gantt",
+							id: "gantt1",
+							url: "https://docs.webix.com/gantt-backend/",
+							override: new Map([[gantt.services.Backend, MyBackend]]),
+							scales: [yearScale, quarterScale, monthScale],
+							scaleCellWidth: 400,
+						},
+					],
+				});
+
+				const gantt1 = $$("gantt1");
+				const tb = $$("toolbar");
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,18 @@
+<data>
+	<item source="start" target="search" />
+	<item source="search" target="decision" />
+	<item source="decision" target="yes" />
+	<item source="decision" target="no"  />
+	<item source="yes" target="viewItem" />
+	<item source="no" target="search" />
+	<item source="viewItem" target="add" />
+	<item source="add" target="join1" />
+	<item source="join1" target="viewCart" from="top" to="left" line="740,105 740,80 780,80 780,55 860,55" />
+	<item source="join1" target="editCart" from="top" to="left" line="740,105 740,130 780,130 780,155 860,155" />
+	<item source="viewCart" target="join2" from="right" to="top" line="860,55 940,55 940,80 990,80 990,105" />
+	<item source="editCart" target="join2" from="right" to="top" line="860,155 940,155 940,130 990,130 990,105" />
+	<item source="join2" target="viewCart2" line="990,105 1010,105 1010,325 890,325" />
+	<item source="viewCart2" target="payment" />
+	<item source="payment" target="order" />
+	<item source="order" target="end" />
+</data>

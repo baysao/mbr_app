@@ -8,9 +8,9 @@ local _config = {
     },
     templates = {},
     apps = {
-       game = "apps/game",
-        -- app = "apps/app",
-        -- sso = "apps/sso"
+        app = "apps/app",
+        sso = "apps/sso",
+        game = "apps/game"
     },
     supervisors = {},
     supervisor = [[

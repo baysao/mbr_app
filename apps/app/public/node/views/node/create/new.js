@@ -1,8 +1,9 @@
-define(["app", "model/node", "text!model/geo/continents.json"], function (
-  $app,
-  $model_node,
-  _continents
-) {
+define([
+  "app",
+  "model/node",
+  "model/infra",
+  "text!model/geo/continents.json",
+], function ($app, $model_node, $model_infra, _continents) {
   var scope;
   var continents = JSON.parse(_continents);
   var _node_quota = {
@@ -101,6 +102,13 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
     },
   };
   var _elements = [
+    {
+      view: "select",
+      id: "infrastructure",
+      label: "Infrastructure",
+      name: "infra",
+      options: [],
+    },
     { view: "text", label: "Name", name: "name" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
     _host_info,
@@ -177,6 +185,20 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
       scope = _scope;
       var _params = $app.params();
       console.log(_params);
+
+      $model_infra.public({}, function (_res) {
+        console.log(_res);
+        if (_res && _res.result) {
+          var _options = _res.data.map(function (_it) {
+            return { id: _it.id, value: _it.name };
+          });
+          console.log(_options);
+          _options.unshift({ id: "not_defined", value: "Not defined" });
+          var _ui = $$("infrastructure");
+          _ui.define("options", _options);
+          _ui.refresh();
+        }
+      });
 
       $$("geo_continent").define("options", continents);
       $$("geo_continent").refresh();

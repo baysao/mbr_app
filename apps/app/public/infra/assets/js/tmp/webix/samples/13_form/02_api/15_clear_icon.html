@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css?v=10.0.1" type="text/css"   charset="utf-8">
+		<script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../common/testdata.js?v=10.0.1"></script>
+		<title>Inputs: "clear" icon</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			var options = {
+				data: small_film_set,
+				body: {
+					template: "#title#"
+				}
+			};
+
+			webix.ui({
+				padding: 20,
+				width: 500,
+				view: "form",
+				elementsConfig:{
+					labelWidth: 114,
+				},
+				elements:[
+					{ view:"label", label:"Default"},
+					{ view:"text", value:"Natalie", label:"Text", clear:true, icon:"wxi-user"},
+					{ view:"colorpicker", label:"Colorpicker", clear:true},
+					{ view:"multiselect", value:3, label:"Multiselect", options:webix.copy(options), clear:true},
+					{ height:30},
+					{ view:"label", label:"Mode \"hover\""},
+					{ view:"search", label:"Search", clear:"hover"},
+					{ view:"richselect", label:"Richselect", options:webix.copy(options), clear:"hover"},
+					{ view:"daterangepicker", value:new Date(), label:"Daterangepicker", clear:"hover"},
+					{ height:30},
+					{ view:"label", label:"Mode \"replace\""},
+					{ view:"combo", value:4, label:"Combo", options:webix.copy(options), clear:"replace"},
+					{ view:"datepicker", editable:true, label:"Datepicker", clear:"replace"},
+				]
+			});
+		</script>
+	</body>
+</html>

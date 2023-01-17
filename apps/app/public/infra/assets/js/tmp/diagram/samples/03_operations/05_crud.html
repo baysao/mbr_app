@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: CRUD</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				let seed = 1;
+
+				webix.ui({
+					rows: [
+						{
+							margin: 20,
+							cols: [
+								{
+									view: "button",
+									value: "Add next",
+									width: 150,
+									click: function() {
+										const sel = diagram.getSelectedId();
+										if (!sel) webix.message("Select any item");
+										else {
+											const id = seed.toString();
+											diagram.add({ id: id });
+											diagram.getLinks().add({ source: sel, target: id });
+											diagram.unselectAll();
+											seed++;
+										}
+									},
+								},
+								{
+									view: "button",
+									value: "Update selected",
+									width: 150,
+									click: function() {
+										const sel = diagram.getSelectedId();
+										if (!sel) webix.message("Select any item");
+										else {
+											diagram.updateItem(sel, { value: "Updated" });
+											diagram.unselectAll();
+										}
+									},
+								},
+								{
+									view: "button",
+									value: "Remove selected",
+									width: 150,
+									click: function() {
+										const sel = diagram.getSelectedId();
+										if (!sel) webix.message("Select any item");
+										else {
+											diagram.remove(sel);
+											diagram.unselectAll();
+										}
+									},
+								},
+							],
+						},
+						{
+							view: "diagram",
+							id: "diagram1",
+							select: true,
+							data: base_data,
+							links: base_links,
+						},
+					],
+				});
+
+				const diagram = $$("diagram1");
+			});
+		</script>
+	</body>
+</html>

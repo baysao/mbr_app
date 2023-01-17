@@ -201,9 +201,9 @@ _opensession = function(instance, args)
         return nil, 401
     end
 
-    if session then
-       session:setKeepAlive()
-    end
+    -- if session then
+    --    session:setKeepAlive()
+    -- end
     return session
 end
 

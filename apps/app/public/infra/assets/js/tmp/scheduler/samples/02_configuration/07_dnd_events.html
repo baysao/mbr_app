@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Drag-n-drop handlers</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Scheduler -->
+		<script type="text/javascript" src="../../codebase/scheduler.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/scheduler.css"
+		/>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "scheduler",
+					date: new Date(2020, 9, 1, 0, 0, 0),
+					url: "https://docs.webix.com/calendar-backend/",
+					on: {
+						// returning false from these events will prevent Drag or Drop
+						onBeforeEventDrag(context, e) {
+							webix.message(
+								`onBeforeEventDrag for <br/>${context.event.text ||
+									"(No title)"}`
+							);
+
+							const mode = this.getState().mode;
+							if (mode === "week") {
+								webix.message("Custom DnD restriction in Week mode", "error");
+								return false;
+							}
+						},
+						onBeforeEventDrop(context, e) {
+							webix.message(
+								`onBeforeEventDrop for <br/>${context.event.text ||
+									"(No title)"}`
+							);
+						},
+					},
+				});
+			});
+		</script>
+	</body>
+</html>
