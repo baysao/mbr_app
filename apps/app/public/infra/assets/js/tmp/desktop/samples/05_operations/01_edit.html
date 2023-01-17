@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Desktop: Change app</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/desktop.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/desktop.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+		<script type="text/javascript" src="../common/apps.js"></script>
+		<style>
+			/*Desktop*/
+			.webix_dsk_main {
+				background-image: url("../common/imgs/bg.jpg");
+			}
+
+			/* Datatable*/
+
+			/* remove btn*/
+			.remove_btn {
+				color: #888;
+			}
+			.remove_btn:hover {
+				color: #1ca1c1;
+				font-weight: 500;
+				text-decoration: underline;
+			}
+			/* icon style */
+			.my_icon {
+				width: 25px;
+				height: 25px;
+			}
+			.webix_cell .webix_dsk_app_icon_box {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function start(user) {
+				// checksuggest editor
+				webix.editors["myeditor"] = webix.extend(
+					{
+						popupType: "mypopup",
+					},
+					webix.editors["multiselect"]
+				);
+
+				webix.editors.$popup["mypopup"] = {
+					view: "checksuggest",
+					width: 200,
+					button: true,
+				};
+
+				webix.ready(function() {
+					if (webix.env.touch) webix.ui.fullScreen();
+					else if (webix.env.scrollSize) webix.CustomScroll.init();
+
+					webix.ui({
+						cols: [
+							{
+								view: "desktop",
+								id: "dsk",
+								systemParams: user,
+								apps: myApps,
+							},
+							{
+								padding: 12,
+								margin: 5,
+								rows: [
+									{
+										view: "toolbar",
+										borderless: true,
+										cols: [{ view: "label", label: "Edit apps" }],
+									},
+									{
+										view: "datatable",
+										id: "appTable",
+										rowHeight: 40,
+										borderless: true,
+										autowidth: true,
+										columns: [
+											{
+												id: "image",
+												template: obj => helpers.iconTemplate(obj, "my_icon"),
+												header: "",
+												width: 50,
+											},
+											{
+												id: "name",
+												editor: "text",
+												header: "App name",
+												width: 120,
+											},
+											{
+												id: "pin",
+												editor: "myeditor",
+												optionslist: true,
+												header: "Pin to",
+												width: 120,
+												options: ["bar", "desktop"],
+											},
+											{
+												id: "remove",
+												width: 80,
+												template: "<span class='remove_btn'>remove</span>",
+												header: "Remove",
+											},
+										],
+										editable: true,
+										onClick: {
+											remove_btn: (e, id) => {
+												webix
+													.confirm("Are you sure to remove this app?")
+													.then(function() {
+														appData.remove(id);
+													});
+											},
+										},
+									},
+								],
+							},
+						],
+					});
+					const helpers = $$("dsk").$app.getService("helpers");
+
+					const appData = $$("dsk")
+						.$app.getService("local")
+						.apps();
+					$$("appTable").sync(appData);
+				});
+			}
+
+			login("someurl").then(start);
+		</script>
+	</body>
+</html>

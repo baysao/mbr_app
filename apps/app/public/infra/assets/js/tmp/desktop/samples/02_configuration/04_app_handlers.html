@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Desktop: App handlers</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/desktop.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/desktop.css" />
+
+		<!-- Helpers, necessary for demo only -->
+		<script type="text/javascript" src="../common/login.js"></script>
+		<script type="text/javascript" src="../common/apps.js"></script>
+		<style>
+			.webix_dsk_main {
+				background-image: url("../common/imgs/bg.jpg");
+			}
+			.mybox {
+				padding: 20px;
+				box-sizing: border-box;
+			}
+			.mybox > div {
+				background: #eee;
+				width: 100%;
+				height: 100%;
+				box-sizing: content-box;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function start(user) {
+				webix.ready(function() {
+					if (webix.env.touch) webix.ui.fullScreen();
+					else if (webix.env.scrollSize) webix.CustomScroll.init();
+					const form = {
+						template:
+							"<p>Desktop calls app handlers on its window init and destroy. Window resize, activation and deactivation can be also handled</p>",
+						height: 50,
+					};
+
+					const desktop = {
+						view: "desktop",
+						id: "dsk1",
+						systemParams: user,
+						apps: [
+							{
+								name: "MyApp",
+								pin: "desktop",
+								launch: params => {
+									webix.message("System params: " + JSON.stringify(params));
+									return {
+										// called on window creation
+										init: (container, appDataObj) => {
+											// container - window body container
+											// appDataObj - an object to transfer data to other event handlers
+											webix.message("window init");
+											container.innerHTML =
+												"<div style='width:100%;height:100%;' class='mybox'><div></div></div>";
+											appDataObj.MyProperty = "My data";
+										},
+										// called on window destroy
+										destroy: appDataObj => {
+											webix.message("window destroy");
+										},
+										// sets "resize", "activate" and "deactivate" event handlers
+										on: (action, params, appDataObj) => {
+											if (action == "resize")
+												webix.message(
+													"window resize" + ": " + JSON.stringify(params)
+												);
+											else webix.message("window " + action);
+										},
+									};
+								},
+							},
+						],
+					};
+
+					webix.ui({
+						rows: [form, desktop],
+					});
+				});
+			}
+
+			login("someurl").then(start);
+		</script>
+	</body>
+</html>

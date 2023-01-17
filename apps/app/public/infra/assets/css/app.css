@@ -1,0 +1,135 @@
+/* auth wrapper */
+
+.webix_view.webix_layout_line {
+  width: fit-content !important;
+}
+.px-2 {
+  margin: 2vw;
+}
+
+/* register, login */
+#icon {
+  width: 1.5vw;
+  height: 1.5vw;
+}
+
+.webix_view.icon,
+.no-border > *,
+.webix_el_text {
+  border: none;
+  margin: 0;
+  height: fit-content !important;
+}
+#register-header {
+  text-align: center;
+}
+.no-bg,
+.no-bg * {
+  background: none;
+}
+.login-bg {
+  padding: 2vw !important;
+}
+#login-bg {
+  background-image: url("../images/login/LoginCardBackground.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  mix-blend-mode: normal;
+  height: 90vh !important;
+  margin-right: 5vw;
+  border-radius: 12px;
+}
+.popup {
+  position: absolute;
+  bottom: 12%;
+  right: 5%;
+  width: 350px !important;
+  height: 250px !important;
+  border-radius: 8px;
+}
+.popup-area {
+  position: absolute;
+  right: 5%;
+  bottom: 4%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popup-area button,
+.popup-area,
+.popup-area button image {
+  background: transparent;
+}
+.popup-area button img,
+.popup-button {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+/* reset password */
+#reset-hint,
+.reset-hint div,
+.reset-hint input {
+  overflow: auto;
+  text-align: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+#lock-icon {
+  height: 10vh;
+  aspect-ratio: 1 /1;
+}
+.webix_view.icon > div {
+  text-align: center;
+}
+
+.title .webix_template {
+  padding: 10px 12px;
+  line-height: 29px;
+}
+.title .header {
+  float: left;
+  font-size: 18px;
+}
+.title .details {
+  float: left;
+  font-size: 13px;
+  font-style: italic;
+
+  padding-left: 10px;
+}
+
+.plan {
+  background-color: lightgray;
+}
+
+.sdk_code input {
+  background: rgb(40, 42, 54);
+  color: rgb(248, 248, 242);
+}
+.flex_tmp {
+    display: flex;
+    justify-content: space-between;
+}
+.flex_tmp1 {
+    display: flex;
+    gap: 1em;
+}
+.flex_tmp .apr .zone_apr_val {
+    font-size: 2em;
+}
+.flex_tmp .apr .zone_name {
+    font-size: 2em;
+}
+.flex_tmp .apr {
+  display: grid;
+}
+
+.flex_tmp .select {
+    height: 2em;
+}

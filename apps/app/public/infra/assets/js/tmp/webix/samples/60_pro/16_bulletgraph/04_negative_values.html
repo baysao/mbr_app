@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+	<title>Bullet Graph - Negative Values</title>
+	<script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+	<style type="text/css">
+		.webix_bullet_graph_svg {
+			margin: 10px;
+		}
+	</style>
+</head>
+	<body>
+		<script>
+			const config = {
+				view: "bullet",
+				minRange: -100,
+				color: value => value < 0 ? "#d62828" : "#226f54",
+				value: 45,
+				labelWidth: 70,
+				bands:[
+					{ value:100, color:"#7EA984"},
+					{ value:50, color:"#87c38f"},
+					{ value:0, color:"#E9C46A"},
+					{ value:-50, color:"#F4A261"}
+				],
+				label:"Balance",
+				scale:{
+					step:10,
+					template:"#value#$"
+				}
+			};
+
+			webix.ui({
+				cols: [
+					webix.copy(config),
+					webix.extend(config, {layout:"y", width:150, labelHeight:20})
+				]
+			});
+
+			setInterval(function(){
+				var value = Math.floor(Math.random()*100);
+				value *= Math.random() < 0.5 ? -1 : 1;
+				$$("$bullet1").setValue(value);
+				$$("$bullet2").setValue(value);
+			}, 3000)
+		</script>
+	</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Custom Fields for UML Diagram</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/js/umlclass.js"></script>
+		<style>
+			.umlclass {
+				border-radius: 10px;
+
+				padding: 0;
+				align-items: flex-start;
+				justify-content: flex-start;
+			}
+			.webix_diagram_item_uml .webix_diagram_text_inner {
+				width: 100%;
+			}
+			.webix_diagram_item_uml .umlclass ul {
+				border-top: 1px solid #ccd7e6;
+				list-style: none;
+				margin: 0;
+				padding: 10px 0px;
+				width: 100%;
+			}
+			.webix_diagram_item_uml .umlclass .title {
+				padding: 10px 0px;
+				font-weight: 500;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.extend(diagram.locales.en, {
+					Title: "Title",
+					Properties: "Properties",
+					Methods: "Methods",
+					UML: "UML",
+					"UML element": "UML element",
+					"Class elements": "Class elements",
+				});
+
+				class Styles extends diagram.services.Styles {
+					getBlockValues(item) {
+						const result = super.getBlockValues(item);
+
+						// add custom values to the form
+						if (item && item.type === "uml") {
+							const extra = this.getCustomProps(item);
+							webix.extend(result, extra);
+						}
+
+						return result;
+					}
+
+					getCustomProps(item) {
+						return {
+							props: (item.props || []).join("\n"),
+							methods: (item.methods || []).join("\n"),
+						};
+					}
+				}
+
+				class CustomForm extends diagram.views.form {
+					GetBlockConfig() {
+						const elements = super.GetBlockConfig();
+						const content = this.GetCustomContentSection();
+						// add custom elements to the form
+						elements.splice(2, 0, content);
+
+						return elements;
+					}
+
+					SetBlockValues(item) {
+						super.SetBlockValues(item);
+						// show additional elements for certain shape type
+						if (item.type == "uml") {
+							this.Form.showBatch("uml", true);
+						}
+					}
+
+					UpdateValue(name) {
+						// `props` and `methods` are stored as array of values, so need pre-processing
+						if (name == "props" || name == "methods") {
+							const elements = this.Form.elements;
+							const strValue = elements[name].getValue();
+							// collect only non-empty values
+							const value = strValue
+								? strValue.split("\n").filter(s => !!s)
+								: [];
+							const obj = { [name]: value };
+							this.app.callEvent("form:update", [obj, null]);
+						} else {
+							super.UpdateValue(name);
+						}
+					}
+
+					GetCustomContentSection() {
+						const _ = this._;
+
+						return {
+							view: "fieldset",
+							label: _("Class elements"),
+							batch: "uml",
+							hidden: true,
+							body: {
+								rows: [
+									this.GetSectionLabel("Properties"),
+									{
+										view: "textarea",
+										name: "props",
+										height: 80,
+									},
+									this.GetSectionLabel("Methods"),
+									{
+										view: "textarea",
+										name: "methods",
+										height: 80,
+									},
+								],
+							},
+						};
+					}
+
+					GetSectionLabel(text) {
+						const _ = this._;
+						return {
+							label: _(text),
+							view: "label",
+							css: "webix_de_sublabel",
+						};
+					}
+				}
+
+				function customShapeTemplate(obj) {
+					if (obj.type === "uml") {
+						const title = "<div class='title'>" + (obj.value || "") + "</div>";
+						let props = "",
+							methods = "";
+						if (obj.props)
+							props =
+								"<ul class='props'>" +
+								obj.props.map(p => "<li>+ " + p + "</li>").join("") +
+								"</ul>";
+						if (obj.methods)
+							methods =
+								"<ul class='methods'>" +
+								obj.methods.map(m => "<li>+ " + m + "()</li>").join("") +
+								"</ul>";
+						return `<div class="umlclass">${title + props + methods}</div>`;
+					} else {
+						return webix.ui.diagram.prototype.type.template.call(this, obj);
+					}
+				}
+
+				webix.ui({
+					view: "diagram-editor",
+					paddingX: 100,
+					autoplace: false,
+					linkItem: {
+						arrow: "triangle",
+					},
+					data: data,
+					links: links,
+					shapes: [
+						{
+							id: "uml",
+							name: "UML element",
+							template: `<div class="umlclass webix_diagram_shape_default"></div>`,
+							group: "UML",
+							backgroundColor: "#dcefec",
+							fontSize: 13,
+							textAlign: "left",
+						},
+					],
+					type: {
+						width: 155,
+						template: obj => customShapeTemplate(obj),
+					},
+					override: new Map([
+						[diagram.views.form, CustomForm],
+						[diagram.services.Styles, Styles],
+					]),
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram Editor: Custom Search Control for Shapes</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+
+		<style>
+			.search-container {
+				background-color: #ffffff;
+			}
+			.dataview-item {
+				height: 100%;
+				width: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.dataview-item > span {
+				position: absolute;
+			}
+			.dataview-item > span,
+			.webix_de_item_text {
+				color: #7c838c;
+				font-size: 12px;
+				line-height: 14px;
+				padding: 0 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				class CustomShapes extends diagram.views["shapes"] {
+					config() {
+						const ui = super.config();
+						const search = {
+							view: "search",
+							placeholder: "Search shape by name",
+							clear: "replace",
+							on: {
+								onTimedKeyPress() {
+									const text = this.getValue();
+									this.$scope.SearchShape(text);
+								},
+								onChange(text) {
+									if (!text) this.$scope.SearchShape();
+								},
+							},
+						};
+
+						return {
+							rows: [
+								{
+									type: "wide",
+									css: "search-container",
+									padding: 5,
+									rows: [search],
+								},
+								ui,
+							],
+						};
+					}
+
+					GetDataviewConfig(data, group) {
+						const dataview = super.GetDataviewConfig(data, group);
+						delete dataview.tooltip;
+						return dataview;
+					}
+
+					TemplateSvg(obj) {
+						const dnd = !!webix.DragControl.getContext();
+						const svg = super.TemplateSvg(obj);
+						const name = obj.name ? this._(obj.name) : "";
+
+						if (obj.id == "text" || dnd) return svg;
+
+						return `<div class="dataview-item">${svg}<span>${name}</span></div>`;
+					}
+
+					SearchShape(text) {
+						text = (text || "").toLowerCase();
+						const dataViews = this.getRoot().queryView("dataview", "all");
+
+						dataViews.forEach(view => {
+							view.filter(shape => {
+								const name = (shape.name || shape.id).toLowerCase();
+								return name.indexOf(text) !== -1;
+							});
+
+							const panel = view.getParentView();
+							view.count() ? panel.expand() : panel.collapse();
+						});
+					}
+				}
+
+				webix.ui({
+					view: "diagram-editor",
+					data: base_data,
+					links: base_links,
+					override: new Map([[diagram.views["shapes"], CustomShapes]]),
+				});
+			});
+		</script>
+	</body>
+</html>

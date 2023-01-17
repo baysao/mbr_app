@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Baseline</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+		<!-- data -->
+		<script type="text/javascript" src="../common/data.js"></script>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				const bar = {
+					view: "toolbar",
+					elements: [
+						{
+							view: "checkbox",
+							value: 1,
+							labelWidth: 0,
+							labelRight: "Baseline",
+							on: {
+								onChange: v => {
+									$$("gantt").getState().baseline = !!v;
+								},
+							},
+						},
+						{},
+						{
+							view: "button",
+							css: "webix_primary",
+							value: "Create a snapshot",
+							autowidth: true,
+							click: () => createSnapshot(),
+						},
+					],
+				};
+
+				class MyBackend extends gantt.services.Backend {
+					// For demo only: custom backend methods to use tasks_baseline data array
+					tasks() {
+						// "tasks_baseline" data array contains planned_start, planned_end, planned_duration properties
+						return Promise.resolve(tasks_baseline);
+					}
+					links() {
+						return Promise.resolve(links_baseline);
+					}
+					addTask(obj) {
+						webix.message("Task adding");
+						return Promise.resolve({ id: webix.uid() });
+					}
+					removeTask(id) {
+						return Promise.resolve({});
+					}
+					updateTask(id, obj, split) {
+						return Promise.resolve({});
+					}
+					reorderTask(id, obj) {
+						return Promise.resolve({ id });
+					}
+
+					addLink(obj) {
+						return Promise.resolve({ id: obj.id });
+					}
+
+					updateLink(id, obj) {
+						return Promise.resolve({});
+					}
+
+					removeLink(id) {
+						return Promise.resolve({});
+					}
+				}
+
+				const ganttChart = {
+					view: "gantt",
+					id: "gantt",
+					//url: "https://docs.webix.com/gantt-backend/:3000/",
+					baseline: true,
+					split: true,
+					excludeHolidays: true,
+					override: new Map([[gantt.services.Backend, MyBackend]]),
+				};
+
+				webix.ui({
+					rows: [bar, ganttChart],
+				});
+
+				// Set baseline as a current gantt state
+				let baselineState;
+				function createSnapshot() {
+					const localTasks = $$("gantt")
+						.$app.getService("local")
+						.tasks();
+					const data = localTasks.serialize();
+					// set baseline properties to all tasks
+					baselineState = [];
+					setBaseline(data);
+					// update local data
+					localTasks.clearAll();
+					localTasks.parse(data);
+				}
+				function setBaseline(branch) {
+					branch.forEach(t => {
+						if (t.type != "milestone") {
+							const b = { id: t.id };
+							b.planned_start = t.planned_start = t.start_date;
+							b.planned_end = t.planned_end = t.end_date;
+							b.planned_duration = t.planned_duration = t.duration;
+							if (t.data) setBaseline(t.data);
+							// baselineState can used for server data update
+							baselineState.push(b);
+						}
+					});
+				}
+			});
+		</script>
+	</body>
+</html>

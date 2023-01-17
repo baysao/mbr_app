@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Gantt: Setting task color depending on subtype</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/gantt.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/gantt.css" />
+		<script type="text/javascript" src="../common/data.js"></script>
+		<style>
+			.mygantt .webix_gantt_progress {
+				background: rgba(0, 0, 0, 0.15);
+			}
+			.mygantt_subtype {
+				width: 16px;
+				height: 16px;
+				border-radius: 2px;
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 5px;
+			}
+			.meeting {
+				background: #e7a90b !important;
+			}
+			.service {
+				background: #9bb402 !important;
+			}
+			.workshop {
+				background: #0bbed7 !important;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				class CustomForm extends gantt.views["task/form"] {
+					config() {
+						const ui = super.config();
+						const form = ui.body.rows[1];
+						// add "subtype" richselect next bellow "type"
+						const subtypes = ["regular", "meeting", "service", "workshop"];
+
+						const select = {
+							view: "richselect",
+							label: "Subtype",
+							name: "subtype",
+							options: subtypes.map(stype => this.MySubtypeOption(stype)),
+						};
+						const index = form.elements.findIndex(obj => obj.name == "type");
+						form.elements.splice(index + 1, 0, select);
+						return ui;
+					}
+					init() {
+						super.init();
+						const subtype = this.Form.elements.subtype;
+						this.on(
+							this.Form.elements.type,
+							"onChange",
+							(newValue, oldValue) => {
+								if (newValue == "task") subtype.show();
+								else {
+									subtype.hide();
+									subtype.setValue(null);
+								}
+							}
+						);
+					}
+					// a custom method
+					MySubtypeOption(id) {
+						const value = `<span class='mygantt_subtype ${id}'></span> ${id}`;
+						if (id == "regular") return { $empty: true, value };
+						return { id, value };
+					}
+				}
+				class CustomInfo extends gantt.views["task/info"] {
+					BaseTemplate(obj) {
+						let html = super.BaseTemplate(obj);
+						if (obj.subtype)
+							html += `<span class="webix_strong">Subtype</span>: ${obj.subtype}<br>`;
+						return html;
+					}
+				}
+
+				class CustomBars extends gantt.views["chart/bars"] {
+					// applying "subtype" property
+					BarCSS(task, last) {
+						// default classname
+						let css = super.BarCSS(task, last);
+						// add a subtype classname
+						if (task.subtype && task.type == "task") css += " " + task.subtype;
+						return css;
+					}
+				}
+
+				// Custom Backend service for "color" property demo
+				class MyBackend extends gantt.services.Backend {
+					tasks() {
+						return Promise.resolve(data_color);
+					}
+					links() {
+						return Promise.resolve(links_color);
+					}
+					addTask(obj) {
+						return Promise.resolve({ id: "" + obj.id });
+					}
+					removeTask() {
+						return Promise.resolve();
+					}
+					updateTask() {
+						return Promise.resolve();
+					}
+					reorderTask() {
+						return Promise.resolve();
+					}
+					addLink(obj) {
+						return Promise.resolve({ id: "" + obj.id });
+					}
+					updateLink() {
+						return Promise.resolve();
+					}
+					removeLink() {
+						return Promise.resolve();
+					}
+				}
+
+				webix.ui({
+					view: "gantt",
+					css: "mygantt",
+					url: "https://docs.webix.com/gantt-backend/",
+					// override vies and Backend services
+					override: new Map([
+						[gantt.views["task/form"], CustomForm],
+						[gantt.views["task/info"], CustomInfo],
+						[gantt.views["chart/bars"], CustomBars],
+						// for demo only
+						[gantt.services.Backend, MyBackend],
+					]),
+				});
+			});
+		</script>
+	</body>
+</html>

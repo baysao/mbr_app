@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Custom Shapes</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/svgs.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					type: "form",
+					rows: [
+						{
+							view: "button",
+							value: "Add shapes for 'internet' and router",
+							inputWidth: 400,
+							click: function() {
+								$$("diagram1").addShape("internet", {
+									template: svgs["internet"],
+									lineColor: "#98E4ED",
+									backgroundColor: "#ffffff",
+									altBackgroundColor: "#98E4ED",
+									textVAlign: "bottom",
+								});
+
+								$$("diagram1").addShape("router", {
+									template: svgs["router"],
+									lineColor: "#9475CC",
+									backgroundColor: "#ffffff",
+									altBackgroundColor: "#9475CC",
+									textVAlign: "bottom",
+								});
+
+								$$("diagram1").updateItem("1", { type: "internet" });
+								$$("diagram1").updateItem("2", { type: "router" });
+							},
+						},
+						{
+							view: "diagram",
+							id: "diagram1",
+							autoplace: false,
+							linkItem: {
+								mode: "direct",
+							},
+							item: {
+								width: 75,
+								height: 75,
+								template: function(obj) {
+									return obj.type != "text" ? "" : obj.value || "";
+								},
+							},
+							select: false,
+							shapes: [
+								// new shapes inlude string "svg" and style presets
+								{
+									id: "laptop",
+									template: svgs["laptop"],
+									vAlign: "bottom",
+									backgroundColor: "#ffffff",
+								},
+								{
+									id: "phone",
+									template: svgs["phone"],
+									backgroundColor: "#fdfef8",
+								},
+								{
+									id: "pc",
+									template: svgs["pc"],
+									backgroundColor: "#ffffff",
+								},
+								{
+									id: "printer",
+									template: svgs["printer"],
+									backgroundColor: "#ffffff",
+								},
+							],
+							data: [
+								{ id: "1", value: "Internet", type: "text", x: 200, y: 0 },
+								{ id: "2", value: "Router", type: "text", x: 200, y: 200 },
+								{ id: "3", type: "laptop", x: 50, y: 100 },
+								{
+									id: "4",
+									type: "phone",
+									x: 20,
+									y: 300,
+									backgroundColor: "#f8fdfe",
+								},
+								{ id: "5", type: "phone", x: 100, y: 350 },
+								{ id: "6", type: "pc", x: 350, y: 100 },
+								{ id: "7", type: "printer", x: 350, y: 300 },
+							],
+							links: [
+								{ source: "1", target: "2" },
+								{ source: "2", target: "3" },
+								{ source: "2", target: "4" },
+								{ source: "2", target: "5" },
+								{ source: "2", target: "6" },
+								{ source: "2", target: "7" },
+							],
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

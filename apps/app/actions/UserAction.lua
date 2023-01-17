@@ -173,9 +173,9 @@ _opensession = function(instance, args)
         return nil
     end
 
-    if session then
-        session:setKeepAlive()
-    end
+    -- if session then
+    --     session:setKeepAlive()
+    -- end
     return session
 end
 

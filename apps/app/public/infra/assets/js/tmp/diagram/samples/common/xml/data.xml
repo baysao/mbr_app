@@ -1,0 +1,19 @@
+
+<data>
+	<item id="start" value="start" type="circle" x="0" y="80" />
+	<item id="search" value="seach item" type="action" x="120" y="80" />
+	<item id="decision" value="" type="decision" x="255" y="80" width="50" />
+	<item id="yes" value="found" type="text" x="340" y="80" width="60" />
+	<item id="no" value="not found" type="text" x="180" y="160" />
+	<item id="viewItem" value="view item" type="action" x="430" y="80"/>
+	<item id="add" value="add to cart" type="action" x="580" y="80" backgroundColor="#FFF5A7" lineColor="#FFD08D" />
+	<item id="add" value="add to cart" type="action2" x="580" y="80" />
+	<item id="join1" value="" type="join" x="740" y="65" />
+	<item id="viewCart" value="view cart" type="action" x="810" y="20" />
+	<item id="editCart" value="edit cart" type="action" x="810" y="140" />
+	<item id="join2" value="" type="join" x="980" y="65" />
+	<item id="viewCart2" value="view cart" type="action" x="840" y="300" />
+	<item id="payment" value="payment" type="action" x="670" y="300" />
+	<item id="order" value="order" type="action" x="480" y="300" />
+	<item id="end" value="end" type="dot" x="480" y="400" height="60" />
+</data>
