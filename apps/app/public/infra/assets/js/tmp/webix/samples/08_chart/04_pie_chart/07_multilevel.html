@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pie Chart: Multi-level</title>
+    <script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+    <script src="../../common/chartdata.js?v=10.0.1"></script>
+    <style>
+        .group{
+            text-align: center;
+            display: inline-block;
+        }
+        .webix_canvas_text {
+           font-size: 11px !important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="charts" style="width:1000px;height:380px;margin:20px"></div>
+<script>
+    const palette = ["#aadb70", "#66cada","#82c8f8"];
+
+    webix.ui({
+        container: "charts",
+        cols:[
+            // grouped data
+            {
+                view: "chart",
+                type:"donut3D",
+                value:"#sales#",
+                multilevel: true,
+                borderWidth:0,
+                scheme:{
+                    $group:{by: "country", map:{sales:["sales","sum"]}}
+                },
+                pieInnerText: (item, totalValue, levelIndex)=>{
+                    return !levelIndex?Math.round(item.sales/totalValue*100)+"%":"";
+                },
+                label: "#month#",
+                tooltip:{
+                    template: "#sales#"
+                },
+                // 0-level sectors get colors from the "palette" array
+                // and child sectors get auto-calculated ( lighter ) colors
+                color: (item, index, levelIndex) => levelIndex ? null : palette[index],
+                labelOffset: 30,
+                legend:{
+                    layout: "x",
+                    padding: 20,
+                    align:"center",
+                    valign:"bottom",
+                    template:"#country#"
+                },
+                data: group_data
+            },
+            // tree dataset
+            {
+                view: "chart",
+                type:"donut",
+                value:"#sales#",
+                multilevel: true,
+                innerRadius: 25,
+                borderWidth: 1,
+                pieInnerText: (item, totalValue, levelIndex)=>{
+                    if(!levelIndex)
+                        return `<span class="group">${item.group}<br/>${Math.round(item.$value / totalValue * 100)}%<span>`;
+                    else if(item.country)
+                        return item.country;
+                    return "Q."+ item.quarter;
+                },
+                color: (item, index, levelIndex) => levelIndex ? null : palette[index],
+                tooltip:{
+                    template: "#$value#"
+                },
+                data: tree_data
+            }
+        ]
+
+    });
+</script>
+</body>
+</html>

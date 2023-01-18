@@ -40,7 +40,7 @@ update)
 	git -C mbr_app pull
 	;;
 run)
-	docker run --rm -d --privileged -v $DIR/mbr_gbc:/tmp/gbc -v $DIR/mbr_app:/tmp/app --name mbr_app -p 80:80 -p 443:443 baysao/openresty:alpine /tmp/gbc/prepare_alpine.sh /tmp/app
+	docker run --rm -d --privileged -v $DIR/mbr_gbc:/tmp/gbc -v $DIR/mbr_app:/tmp/app --name mbr_app --network host baysao/openresty:alpine bash /tmp/gbc/prepare_alpine.sh /tmp/app
 	docker ps
 	;;
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Serialization with All Settings</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "form",
+					scroll: true,
+					rows: [
+						{
+							view: "diagram",
+							id: "diagram1",
+							autoplace: false,
+							height: 500,
+
+							item: {
+								width: 100,
+								height: 50,
+							},
+							select: false,
+							// custom serialization scheme
+							scheme: {
+								$serialize: function(itemData) {
+									var skipProps = ["id", "name", "svg", "template"];
+									var shape = $$("diagram1").getShape(itemData.type);
+									if (shape)
+										for (let p in shape)
+											if (skipProps.indexOf(p) == -1 && !itemData[p])
+												itemData[p] = shape[p];
+									return itemData;
+								},
+							},
+							shapes: [
+								// style presets for existing shapes
+								{
+									id: "circle",
+									fontColor: "#ffffff",
+									lineColor: "#65C0B7",
+									backgroundColor: "#65C0B7",
+								},
+								{
+									id: "action",
+									template: "rrect",
+									backgroundColor: "#b5d461",
+									lineColor: "#b5d461",
+								},
+								{
+									id: "decision",
+									backgroundColor: "#fff17c",
+									lineColor: "#ffb955",
+								},
+								{
+									id: "join",
+									template: "rrect",
+									height: 80,
+									width: 10,
+									backgroundColor: "#ffb955",
+									lineColor: "#ffb955",
+								},
+								{
+									id: "dot",
+									fontColor: "white",
+									lineColor: "#65C0B7",
+									backgroundColor: "#ffffff",
+									altBackgroundColor: "#65C0B7",
+								},
+							],
+							data: data_shapes,
+							links: links_shapes,
+						},
+						{
+							margin: 20,
+							cols: [
+								{
+									margin: 10,
+									rows: [
+										{
+											view: "button",
+											value: "Serialize data with shape styles",
+											inputWidth: 300,
+											click: function() {
+												const text = JSON.stringify(
+													$$("diagram1").serialize(),
+													null,
+													4
+												);
+												$$("txtData").setValue(text);
+											},
+										},
+										{
+											view: "textarea",
+											id: "txtData",
+											height: 200,
+										},
+									],
+								},
+								{
+									margin: 10,
+									rows: [
+										{
+											view: "button",
+											value: "Serialize links",
+											inputWidth: 150,
+											click: function() {
+												// links DataCollection
+												const links = $$("diagram1").getLinks();
+												const text = JSON.stringify(links.serialize(), null, 4);
+												$$("txtLinks").setValue(text);
+											},
+										},
+
+										{
+											view: "textarea",
+											id: "txtLinks",
+											height: 200,
+										},
+									],
+								},
+							],
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Flat Skin</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/skins/flat.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/skins/flat.css"
+		/>
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					animate: false,
+					cells: [
+						{
+							id: "view",
+							rows: [
+								{
+									view: "toolbar",
+									padding: webix.skin.$active.layoutPadding.space,
+									elements: [
+										{},
+										{
+											view: "button",
+											value: "Edit",
+											autowidth: true,
+											css: "webix_primary",
+											click: function() {
+												const diagram = $$("diagram");
+												// blocks, links, shapes, defaults for blocks and links
+												const full_data = diagram.serialize(true);
+
+												$$("editor").show();
+												$$("editor").setValues(full_data);
+											},
+										},
+									],
+								},
+								{
+									view: "diagram",
+									root: "root",
+									id: "diagram",
+									item: {
+										width: 120,
+										height: 50,
+										marginY: -20,
+									},
+									select: true,
+									data: base_data,
+									links: base_links,
+								},
+							],
+						},
+						{
+							view: "diagram-editor",
+							id: "editor",
+							save: () => {
+								const diagram = $$("diagram");
+
+								// clear data
+								diagram.clearAll();
+								diagram.getLinks().clearAll();
+
+								// remove autoplacement to see real block coordinates
+								diagram.config.autoplace = false;
+
+								// blocks, links, shapes, defaults for blocks and links
+								const full_data = $$("editor").getValues();
+								diagram.parse(full_data);
+
+								$$("view").show();
+							},
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pie Chart: Series</title>
+    <script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+    <link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+    <script src="../../common/chartdata.js?v=10.0.1"></script>
+</head>
+<body>
+
+<div id="chartBox" style="width:500px;height:400px;margin:20px"></div>
+<script>
+    const palette = [ "#ffc927", "#9acb61", "#21a497", "#21c5da","#3ea4f5","#5868bf"];
+    webix.ui({
+        container: "chartBox",
+        type: "clean",
+        borderless: true,
+        rows:[
+            {
+                view: "label", label: "Comparison of sales in Germany and the Czech Republic"
+            },
+            {
+                view: "chart",
+                type:"donut",
+                color: (item, i) => palette[i],
+                series:[
+                    {
+                        value:"#sales#",
+                        pieInnerText: "#sales#",
+                        tooltip:{
+                            template:"#country#, #sales#"
+                        }
+                    },
+                    {
+                        value:"#sales2#",
+                        pieInnerText: "#sales2#",
+                        tooltip:{
+                            template:"#country2#, #sales2#"
+                        }
+                    },
+                ],
+                legend:{
+                    template: "#month#",
+                    valign:"middle",
+                    align: "right",
+                },
+                data: series_data
+            }
+        ]
+    });
+</script>
+</body>
+</html>

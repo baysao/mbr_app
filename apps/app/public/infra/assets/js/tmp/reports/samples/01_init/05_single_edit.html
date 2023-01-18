@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Reports: Single edit</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/reports.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/reports.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					rows: [
+						{
+							view: "toolbar",
+							visibleBatch: "show",
+							//css: "webix_shadow_small",
+							padding: { left: 10, top: 8, bottom: 8 },
+							cols: [
+								{
+									batch: "show",
+									view: "button",
+									width: 120,
+									value: "Edit",
+									css: "webix_primary",
+									click: function() {
+										// show edit form
+										$$("rpt").getState().mode = "edit";
+										// change toolbar buttons
+										this.getParentView().showBatch("edit");
+									},
+								},
+								{
+									batch: "edit",
+									view: "button",
+									width: 120,
+									value: "Cancel",
+									click: function() {
+										const rpt = $$("rpt");
+										// get state
+										const state = rpt.getState();
+										const local = rpt.getService("local");
+										// reset module properties
+										local.getModule(state.moduleId).then(mod => {
+											state.module = JSON.parse(mod.text);
+											state.saved = true;
+											state.mode = "show";
+										});
+										this.getParentView().showBatch("show");
+									},
+								},
+								{
+									batch: "edit",
+									view: "button",
+									width: 120,
+									value: "Save",
+									css: "webix_primary",
+									click: function() {
+										const rpt = $$("rpt");
+										// get state
+										const state = rpt.getState();
+										// get current module properties
+										const mod = state.module;
+
+										const operations = rpt.getService("operations");
+										// get module properties to save
+										const data = operations.getModuleSaveData(mod);
+										// save module properties
+										operations.updateModule(state.moduleId, {
+											name: mod.name,
+											text: JSON.stringify(data),
+										});
+										// hide edit form
+										state.mode = "show";
+
+										this.getParentView().showBatch("show");
+									},
+								},
+							],
+						},
+						{
+							type: "space",
+							cols: [
+								{
+									view: "reports",
+									id: "rpt",
+									borderless: true,
+									url: "https://docs.webix.com/reports-backend/",
+									// selected module id
+									moduleId: 33,
+									// set "show" mode to display single module
+									mode: "show",
+									// hide a top toolbar of "Reports"
+									toolbar: false,
+								},
+							],
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>

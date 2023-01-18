@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../../../codebase/webix.css?v=10.0.1" type="text/css" charset="utf-8">
+		<script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript" charset="utf-8"></script>
+		<style>
+			#areaA{
+			margin: 30px;
+			}
+		</style>
+	<title>Source of form changes</title>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8">
+			var options = [
+				{ id:1, value:"Banana"  },
+				{ id:2, value:"Papaya"  },
+				{ id:3, value:"Apple" }
+			];
+
+			var form1 = {
+				view:"form", id:"main",
+				rows:[
+					{ view:"text", value:'12345678', name:"a", label:"Text"},
+					{ view:"richselect", value:1, name:"b", options, label:"Richselect"},
+					{ view:"combo", value:2, name:"c", options, label:"Combo"},
+					{ view:"slider", value:32, name:"d", label:"Slider", title:webix.template("#value#")},
+					{ view:"colorboard", name:"e"}
+				],
+				elementsConfig:{
+					on:{
+						onChange:function(value, old, config){
+							webix.message(`${this.name}<br>Value: "${value}"<br>Changed by: ${(config?config:"API")}`);
+						}
+					}
+				},
+			};
+
+			webix.ui({ 
+				width:400,
+				padding:20,
+				rows:[
+					form1,
+					{ cols:[
+						{ view:"button", value:"Set Values", click:function(){
+							form.setValues({
+								a:"Some", b:3, c:1, d:95, e:"#FF57F9"
+							});
+							/*
+								form.elements.a.setValue("Other", "Can be a string");
+								form.elements.b.setValue(3, ["A","r","r","a","y"]);
+								form.elements.d.setValue(13, {Or:"object"});
+							*/
+						}},
+						{ view:"button", value:"Clear", click:function(){
+							form.clear();
+						}},
+					]}
+				]
+			});
+
+			var form = $$("main");
+
+		</script>
+	</body>
+</html>

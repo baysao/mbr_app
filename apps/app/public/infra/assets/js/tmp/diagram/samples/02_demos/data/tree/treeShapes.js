@@ -1,0 +1,48 @@
+const customShapes = [
+	{
+		id: "mystart",
+		template: "start",
+		lineColor: "#bfc5e6",
+		backgroundColor: "#bfc5e6",
+		fontSize: 13,
+		group: "tree",
+	},
+	{
+		id: "group",
+		template: "default",
+		lineColor: "#deb7e5",
+		backgroundColor: "#deb7e5",
+		fontSize: 13,
+		group: "tree",
+	},
+	{
+		id: "subgroup",
+		template: "default",
+		lineColor: "#b5dcfb",
+		backgroundColor: "#b5dcfb",
+		fontSize: 13,
+		group: "tree",
+	},
+	{
+		id: "result",
+		template: "default",
+		lineColor: "#facddc",
+		backgroundColor: "#facddc",
+		fontSize: 13,
+		group: "tree",
+	},
+	{
+		id: "profit",
+		template: "text",
+		fontWeight: 500,
+		fontSize: 14,
+		group: "tree",
+	},
+	{
+		id: "expected",
+		template: "text",
+		fontSize: 13,
+		textAlign: "left",
+		group: "tree",
+	},
+];

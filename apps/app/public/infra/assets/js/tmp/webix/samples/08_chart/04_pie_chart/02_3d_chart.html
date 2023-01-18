@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+	<title>3D Pie Chart</title>
+	<script src="../../../codebase/webix.js?v=10.0.1" type="text/javascript"></script>
+	<link rel="STYLESHEET" type="text/css" href="../../../codebase/webix.css?v=10.0.1">
+	<script src="../../common/chartdata.js?v=10.0.1"></script>
+
+<body>
+	<div id="charts" style="width:800px;height:330px;margin:20px"></div>
+	<script>
+		webix.ui({
+			container: "charts",
+			cols:[
+				{
+					view: "chart",
+					type:"pie3D",
+					value:"#sales#",
+					color: "#color#",
+					pieInnerText: (item, totalValue)=>{
+						return Math.round(item.sales/totalValue*100)+"%, "+item.month;
+					},
+					borderWidth: 0,
+					tooltip:{
+						template: "#sales#"
+					},
+					data: month_dataset
+				},
+				{
+					view: "chart",
+					type:"donut3D",
+					value:"#sales#",
+					color: "#color#",
+					innerRadius: 50,
+					pieInnerText: (item, totalValue)=>{
+						return Math.round(item.sales/totalValue*100)+"%, "+item.month;
+					},
+					tooltip:{
+						template: "#sales#"
+					},
+					borderWidth: 0,
+					data: month_dataset
+				}
+			]
+
+		});
+	</script>
+</body>
+</html>

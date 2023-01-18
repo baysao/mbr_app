@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Reports: Init as View</title>
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+		<!-- App -->
+		<script type="text/javascript" src="../../codebase/reports.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/reports.css" />
+	</head>
+	<body>
+		<script>
+			webix.ready(function() {
+				if (webix.env.mobile) webix.ui.fullScreen();
+				webix.CustomScroll.init();
+
+				webix.ui({
+					view: "reports",
+					url: "https://docs.webix.com/reports-backend/",
+				});
+			});
+		</script>
+	</body>
+</html>

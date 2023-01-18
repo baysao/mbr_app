@@ -9,7 +9,8 @@ local _config = {
     templates = {},
     apps = {
         app = "apps/app",
-        sso = "apps/sso"
+        -- sso = "apps/sso",
+        game = "apps/game"
     },
     supervisors = {},
     supervisor = [[

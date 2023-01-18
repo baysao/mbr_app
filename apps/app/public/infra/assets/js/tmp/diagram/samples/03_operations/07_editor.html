@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diagram: Editing</title>
+		<meta
+			name="viewport"
+			content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no"
+		/>
+
+		<!-- Webix Library -->
+		<script type="text/javascript" src="../../codebase/webix/webix.js"></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../../codebase/webix/webix.css"
+		/>
+
+		<!-- Diagram -->
+		<script type="text/javascript" src="../../codebase/diagram.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../codebase/diagram.css" />
+
+		<script src="../common/data.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			webix.ready(function() {
+				webix.CustomScroll.init();
+
+				webix.ui({
+					type: "wide",
+					padding: 12,
+					cols: [
+						{
+							id: "diagram",
+							view: "diagram",
+							on: {
+								onItemClick: function(id) {
+									const editor = $$("editor");
+									const item = this.getItem(id);
+									webix.extend(item, {
+										width: this.type.width,
+										height: this.type.height,
+									});
+									editor.setValues(this.getItem(id));
+								},
+							},
+							select: true,
+							autoplace: false,
+							data: base_data,
+							links: base_links,
+						},
+						{
+							view: "form",
+							id: "editor",
+							width: 300,
+							borderless: true,
+							elements: [
+								{
+									cols: [
+										{ view: "label", label: "[X, Y]", width: 60 },
+										{ view: "text", type: "number", name: "x" },
+										{ view: "text", type: "number", name: "y" },
+									],
+								},
+								{
+									cols: [
+										{ view: "label", label: "[W, H]", width: 60 },
+										{ view: "text", type: "number", name: "width" },
+										{ view: "text", type: "number", name: "height" },
+									],
+								},
+								{ view: "text", label: "Value", labelWidth: 60, name: "value" },
+							],
+							on: {
+								onChange: function() {
+									const v = this.getValues();
+									if (v && v.id) {
+										v.x *= 1;
+										v.y *= 1;
+										v.width *= 1;
+										v.height * 1;
+										$$("diagram").updateItem(v.id, v);
+									}
+								},
+							},
+						},
+					],
+				});
+			});
+		</script>
+	</body>
+</html>
