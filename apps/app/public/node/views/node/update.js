@@ -1,8 +1,9 @@
-define(["app", "model/node", "text!model/geo/continents.json"], function (
-  $app,
-  $model_node,
-  _continents
-) {
+define([
+  "app",
+  "model/node",
+  "model/infra",
+  "text!model/geo/continents.json",
+], function ($app, $model_node, $model_infra, _continents) {
   var scope;
   var continents = JSON.parse(_continents);
   var _node_quota = {
@@ -101,6 +102,13 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
     },
   };
   var _elements = [
+    {
+      view: "select",
+      id: "infrastructure",
+      label: "Infrastructure",
+      name: "infra",
+      options: [],
+    },
     { view: "text", label: "Name", name: "name" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
     _host_info,
@@ -179,6 +187,11 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
     ],
   };
 
+  function _infrastructure_update() {
+    var _ui = $$("infrastructure");
+    _ui.define("options", _options);
+    _ui.refresh();
+  }
   return {
     $ui: _layout,
     $onurlchange: function (_params) {
@@ -186,15 +199,47 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
       $model_node.get(_params, function (_res) {
         console.log(_res);
         if (_res && _res.result) {
-	    var _data = _res.data;
-	    $$("node_form").setValues(_data);
+          var _data = _res.data;
+          $$("node_form").setValues(_data);
         }
       });
     },
     $oninit: function (_view, _scope) {
       scope = _scope;
+      var id;
       var _params = $app.params();
       console.log(_params);
+      // if (_params && _params["node.update"] && _params["node.update"].id) {
+      //     id = _params["node.update"].id;
+      // 	  console.log("id:" + id);
+      // }
+
+      var _options = [{ id: "not_defined", value: "Not defined" }];
+      $model_infra.public({}, function (_res) {
+        console.log(_res);
+        var _data = _res.data;
+        if (_res && _res.result && _data && _data.length > 0) {
+          _data.map(function (_it) {
+            _options.push({ id: _it.id, value: _it.name + " (Public)" });
+          });
+        }
+
+        console.log(_options);
+        $model_infra.list({}, function (_res1) {
+          console.log(_res1);
+          var _data1 = _res1.data;
+          if (_res && _res.result && _data1 && _data1.length > 0) {
+            _data1.map(function (_it) {
+              if (_it.type == "private")
+                _options.push({ id: _it.id, value: _it.name + " (Private)" });
+            });
+          }
+          console.log(_options);
+          var _ui = $$("infrastructure");
+          _ui.define("options", _options);
+          _ui.refresh();
+        });
+      });
 
       $$("geo_continent").define("options", continents);
       $$("geo_continent").refresh();
@@ -206,7 +251,7 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
           .get("/node/model/geo/continents/" + _cont + ".json")
           .then(function (_res) {
             var _countries = _res.json();
-            console.log(_countries);
+            // console.log(_countries);
             $$("geo_country").define("options", _countries);
             $$("geo_country").refresh();
             if (_params && _params["$new"]) {

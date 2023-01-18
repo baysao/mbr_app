@@ -38,6 +38,19 @@ define(["model/config"], function ($config) {
         } else _cb(_res);
       });
   };
+      var _getnodes = function (_payload, _cb) {
+    webix
+      .ajax()
+      .post($config.api_prefix + "?action=infra.getnodes", _payload)
+      .then(function (_ret) {
+        //          _ret && _cb(_ret.json());
+        var _res = _ret.json();
+        if (!_res.result && _res.error_code == 400) {
+          location.hash =
+            "#!/auth/login:redir=" + encodeURIComponent(location.hash);
+        } else _cb(_res);
+      });
+  };
   var _delete = function (_payload, _cb) {
     webix
       .ajax()
@@ -69,6 +82,7 @@ define(["model/config"], function ($config) {
     update: _update,
     list: _list,
     get: _get,
+    getnodes: _getnodes,
     delete: _delete,
   };
 });

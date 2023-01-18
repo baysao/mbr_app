@@ -108,6 +108,7 @@ function Action:createAction(args)
 end
 function Action:updateAction(args)
     args.action = nil
+    local _now = os.time()
     local session, _err = _opensession(self:getInstance(), args)
     if not session then
         return {result = false, error_code = _err}
@@ -115,11 +116,26 @@ function Action:updateAction(args)
     local _user_id = session:get("id")
 
     if args.user_id ~= _user_id then
-       return {result = false}
+        return {result = false}
     end
-    
+
+    local _mapping = {
+        set = {
+            [args.infra .. ":node"] = {
+                [args.id] = _now
+            }
+        },
+        hmset = {
+            [args.infra .. ":node:" .. args.id] = args
+        },
+        mapping = {
+            public = {
+                [args.id] = args.user_id
+            }
+        }
+    }
     -- cc.printerror(inspect(args))
-    local _ret, _err = self._crud:update(args)
+    local _ret, _err = self._crud:update(args, _mapping)
     if _ret then
         return {result = true}
     end

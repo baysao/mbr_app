@@ -1,7 +1,7 @@
 define(["app", "model/infra"], function ($app, $model_infra) {
-  var scope;
+  var scope, id;
   var _type = "infra";
-    var _elements = [
+  var _elements = [
     { view: "text", label: "Name", name: "name" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
     {
@@ -16,7 +16,7 @@ define(["app", "model/infra"], function ($app, $model_infra) {
     },
   ];
 
-    var _form = {
+  var _form = {
     view: "form",
     id: _type + "_form",
     scroll: "y",
@@ -70,14 +70,21 @@ define(["app", "model/infra"], function ($app, $model_infra) {
   return {
     $ui: _layout,
     $oninit: function (_view, _scope) {
-	scope = _scope;
+      scope = _scope;
       var _params = $app.params();
       if (_params && _params["$detail"] && _params["$detail"].id) {
-        $model_infra.get({ id: _params["$detail"].id }, function (_res) {
+        id = _params["$detail"].id;
+        $model_infra.get({ id: id }, function (_res) {
           console.log(_res);
           if (_res && _res.result) {
-	      $$(_type + "_form").setValues(_res.data);
+            $$(_type + "_form").setValues(_res.data);
           }
+        });
+        $model_infra.getnodes({ id: id }, function (_res) {
+          console.log(_res);
+          // if (_res && _res.result) {
+          //   $$(_type + "_form").setValues(_res.data);
+          // }
         });
       }
 

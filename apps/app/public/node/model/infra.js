@@ -65,10 +65,10 @@ define(["model/config"], function ($config) {
         //        _ret && _cb(_ret.json());
       });
   };
-  var _list = function (_cb) {
+  var _list = function (_payload, _cb) {
     webix
       .ajax()
-      .get($config.api_prefix + "?action=infra.list")
+      .post($config.api_prefix + "?action=infra.list", _payload)
       .then(function (_ret) {
         var _res = _ret.json();
         if (!_res.result && _res.error_code == 400) {

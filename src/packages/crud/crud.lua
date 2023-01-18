@@ -82,6 +82,23 @@ function Crud:update(args, opt)
                 end
             end
         end
+	  if opt and opt.hmset then
+            for _k, _v in pairs(opt.hmset) do
+                local _v1 = _ssdb:hash_to_array(_v)
+                local _ret1 = _ssdb:multi_hset(_k, table.unpack(_v1))
+                if not _ret1 then
+                    return nil
+                end
+            end
+        end
+        if opt and opt.set then
+            for _k, _v in pairs(opt.set) do
+                for _k1, _v1 in pairs(_v) do
+                    _ssdb:zset(_k, _k1, _v1)
+                end
+            end
+        end
+
         _ret = _ssdb:zset(_key_list, args.id, _now)
     end
     return _ret == _ssdb.null and nil or args
@@ -89,15 +106,15 @@ end
 
 function Crud:list(args)
     local _ssdb = self._instance:getSsdb()
-    local _key_list = args.user_id .. ":" .. self._model_type
+    local _key_list = args._key_list or args.user_id .. ":" .. self._model_type
 
     local _limit = args.limit or 100
     local _list = _ssdb:zkeys(_key_list, "", "", "", _limit)
     local _limit = args.limit or 100
     local _result = {}
     for _, _id in ipairs(_list) do
-        local _key = _key_list .. ":" .. _id
-        local _ret = _ssdb:hscan(_key, "", "", _limit)
+        local _key_detail = args._key_detail or _key_list .. ":" .. _id
+        local _ret = _ssdb:hscan(_key_detail, "", "", _limit)
         if _ret and type(_ret) == "table" and _ret[1] ~= "ok" then
             cc.printerror(inspect(_ret))
             local _detail = _ssdb:array_to_hash(_ret)
