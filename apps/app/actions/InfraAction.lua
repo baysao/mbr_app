@@ -6,14 +6,17 @@ local inspect = require "inspect"
 local Crud = cc.import("#crud")
 local Session = cc.import("#session")
 --local snappy = require "resty.snappy"
+local util = require "mbrutil"
 local uuid = require "jit-uuid"
 local geo = require "resty.maxminddb"
 
-local _opensession, _job_gateway_update, _lookup_geo
+local _opensession, _job_update, _lookup_geo
 
 function Action:init()
     ngx.log(ngx.ERR, "app init")
-    self._crud = Crud:new(self:getInstance(), mytype)
+    local _instance = self:getInstance()
+    self._crud = Crud:new(_instance, mytype)
+    self._crud_nodes = Crud:new(_instance, "node")
 end
 
 function Action:pingAction(args)
@@ -66,15 +69,15 @@ function Action:publicAction(args)
     local _ssdb = self._instance:getSsdb()
     local _limit = 100
     local _data = _ssdb:hscan("mapping:" .. mytype .. ":" .. "public", "", "", _limit)
-    
+
     local _ret = _ssdb:array_to_hash(_data)
     local _list = {}
     cc.printerror(inspect(_ret))
-    for u_id,u_user_id in pairs(_ret) do
-       local _item = self._crud:getall({id = u_id, user_id = u_user_id})
-       if(_item) then
-	  _list[#_list + 1] = _item
-       end
+    for u_id, u_user_id in pairs(_ret) do
+        local _item = self._crud:getall({id = u_id, user_id = u_user_id})
+        if (_item) then
+            _list[#_list + 1] = _item
+        end
     end
     -- local _ret, _err = self._crud:list(args)
     cc.printerror(inspect(_list))
@@ -84,7 +87,6 @@ function Action:publicAction(args)
 
     return {result = false}
 end
-
 
 function Action:listAction(args)
     args.action = nil
@@ -132,16 +134,52 @@ function Action:deleteAction(args)
     return {result = false}
 end
 
+function Action:getnodesAction(args)
+    args.action = nil
+
+    local _instance = self:getInstance()
+    local session, _err = _opensession(_instance, args)
+    if not session then
+        return {result = false, error_code = _err}
+    end
+
+    local _ret, _err =
+        self._crud_nodes:list(
+        {
+            user_id = args.id
+        }
+    )
+    cc.printerror(inspect(_ret))
+
+    if _ret then
+        return {result = true, data = _ret}
+    end
+
+    return {result = false}
+end
+
 function Action:getAction(args)
     args.action = nil
 
-    local session, _err = _opensession(self:getInstance(), args)
+    local _instance = self:getInstance()
+    local session, _err = _opensession(_instance, args)
     if not session then
         return {result = false, error_code = _err}
     end
     local _user_id = session:get("id")
     args.user_id = _user_id
     local _ret, _err = self._crud:getall(args)
+    cc.printerror(inspect(_ret))
+    local _ret_nodes, _err =
+        self._crud_nodes:list(
+        {
+            user_id = args.id
+        }
+    )
+    cc.printerror(inspect(_ret_nodes))
+    if _ret_nodes then
+    end
+
     if _ret then
         return {result = true, data = _ret}
     end
@@ -232,19 +270,20 @@ function Action:updateAction(args)
 
     local _ret, _err = self._crud:update(args, _mapping)
     if _ret then
-        --    _job_gateway_update(instance, {id = args.id, user_id = _user_id})
+        _job_update(instance, {id = args.id, user_id = _user_id})
         return {result = true}
     end
 
     return {result = false}
 end
 --private
-_job_gateway_update = function(instance, args)
+_job_update = function(instance, args)
     -- send message to job
     local jobs = instance:getJobs()
+    args.site_root = ngx.var.site_root
     -- cc.printerror(inspect(jobs))
     local job = {
-        action = "/jobs/gateway.generateconf",
+        action = "/jobs/infra.dnszone",
         delay = 0,
         data = args
     }

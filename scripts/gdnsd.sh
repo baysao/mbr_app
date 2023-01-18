@@ -10,28 +10,28 @@ for _d in monitors.d failover.d weighted.d multivalue.d datacenter.d geolocation
 		touch $__dir/_default
 	fi
 done
-DOMAIN=massbitroute.com
-_f=zones/$DOMAIN
-if [ ! -f "$_f" ];then
-   cat >$_f<<EOF
-\$TTL 300
-\$ORIGIN ${DOMAIN}.
+# DOMAIN=massbitroute.com
+# _f=zones/$DOMAIN
+# if [ ! -f "$_f" ];then
+#    cat >$_f<<EOF
+# \$TTL 300
+# \$ORIGIN ${DOMAIN}.
 
 
-@               SOA ns1.${DOMAIN}. hostmaster.${DOMAIN}.(
-                2021101405  ; serial
-                300            ; refresh
-                30M             ; retry
-                1D              ; expire
-                300             ; ncache
-)
+# @               SOA ns1.${DOMAIN}. hostmaster.${DOMAIN}.(
+#                 2021101405  ; serial
+#                 300            ; refresh
+#                 30M             ; retry
+#                 1D              ; expire
+#                 300             ; ncache
+# )
 
-; Name servers
+# ; Name servers
 
-@               NS      ns1.${DOMAIN}.
-@               NS      ns2.${DOMAIN}.
-EOF
-fi
+# @               NS      ns1.${DOMAIN}.
+# @               NS      ns2.${DOMAIN}.
+# EOF
+# fi
    
 _f=conf.d/datacenter.d/_generic
 if [ ! -f "$_f" ]; then

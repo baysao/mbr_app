@@ -4,6 +4,7 @@ define(["app", "model/infra"], function ($app, $model_infra) {
   var _elements = [
     { view: "text", label: "Name", name: "name" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
+    { view: "text", label: "Domain", name: "domain" },
     {
       view: "select",
       name: "type",
@@ -76,7 +77,7 @@ define(["app", "model/infra"], function ($app, $model_infra) {
         $model_infra.get({ id: _params["$update"].id }, function (_res) {
           console.log(_res);
           if (_res && _res.result) {
-	      $$(_type + "_form").setValues(_res.data);
+            $$(_type + "_form").setValues(_res.data);
           }
         });
       }
