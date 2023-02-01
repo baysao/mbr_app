@@ -130,7 +130,7 @@ function Crud:list(args)
             _result[#_result + 1] = _detail
         end
     end
-    setmetatable(_result, json.empty_array)
+    setmetatable(_result, json.empty_array_mt)
     return _result
 end
 
