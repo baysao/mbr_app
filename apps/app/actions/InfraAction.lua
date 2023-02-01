@@ -4,7 +4,7 @@ local Action = cc.class(mytype, gbc.ActionBase)
 -- local env = require "env"
 local inspect = require "inspect"
 local Crud = cc.import("#crud")
-local json = cc.import("#json")
+-- local json = cc.import("#json")
 local Session = cc.import("#session")
 --local snappy = require "resty.snappy"
 local util = require "mbrutil"
@@ -101,9 +101,7 @@ function Action:listAction(args)
     -- args.id = uuid()
     args.user_id = _user_id
     local _ret, _err = self._crud:list(args)
-    -- cc.printerror(inspect(_ret))
     if _ret then
---        setmetatable(_ret, json.empty_array_mt)
         return {result = true, data = _ret}
     end
 
