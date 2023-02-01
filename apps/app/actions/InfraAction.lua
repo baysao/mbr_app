@@ -103,6 +103,7 @@ function Action:listAction(args)
     local _ret, _err = self._crud:list(args)
     -- cc.printerror(inspect(_ret))
     if _ret then
+        setmetatable(_ret, json.array_mt)
         local _out = {result = true, data = _ret}
         setmetatable(_out, json.array_mt)
         return _out
