@@ -30,7 +30,7 @@ define([], function () {
   </div>
 
   <div class="select webix_primary">
-  <a href="/gateway/#!/app/node.create/$zone:z=` +
+  <a href="/gateway/#!/app/gateway.create/$zone:z=` +
             _data.id +
             `" view_id="zone_` +
             _data.id +
@@ -78,7 +78,7 @@ define([], function () {
   </div>
 
   <div class="select webix_primary">
-  <a href="/gateway/#!/app/node.create/$new:z=` + _zone_name + ":c=" + 
+  <a href="/gateway/#!/app/gateway.create/$new:z=` + _zone_name + ":c=" + 
             _data.id +
             `" view_id="zone_` +
             _data.id +

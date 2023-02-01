@@ -1,5 +1,6 @@
-define(["model/node"], function ($app) {
-  var scope;
+define(["model/infra"], function ($model_infra) {
+    var scope;
+    var _type = "infra";
   var _paging = {
     view: "toolbar",
     css: "highlighted_header header6",
@@ -10,7 +11,7 @@ define(["model/node"], function ($app) {
     cols: [
       {
         view: "pager",
-        id: "app_paging",
+        id: _type + "_paging",
         template: "{common.pages()}",
         autosize: true,
         height: 35,
@@ -22,7 +23,7 @@ define(["model/node"], function ($app) {
   var _app_table = {
     view: "datatable",
     minHeight: 100,
-    id: "app_table",
+    id: _type + "_table",
 
     scroll: true,
     columns: [
@@ -68,14 +69,14 @@ define(["model/node"], function ($app) {
       //     "<span style='cursor:pointer;' class='webix_icon mdi mdi-key'></span> View Key",
       // },
     ],
-    pager: "app_paging",
+    pager: _type + "_paging",
 
     onClick: {
       "mdi-page-next": function (e, id, node) {
-        location.hash = "#!/app/node.detail:id=" + id;
+        location.hash = "#!/app/" + _type + ".detail:id=" + id;
       },
       "mdi-pencil": function (e, id, node) {
-        location.hash = "#!/app/node.update:id=" + id;
+        location.hash = "#!/app/" + _type + ".update:id=" + id;
       },
       // "mdi-key": function (e, id, node) {
       //   var _detail = this.getItem(id);
@@ -121,11 +122,11 @@ define(["model/node"], function ($app) {
     $ui: _layout,
     $oninit: function (_view, _scope) {
       scope = _scope;
-      $app.list(function (_res) {
+      $model_infra.list(function (_res) {
         console.log(_res);
         if (_res.result) {
           var _data = _res.data;
-          $$("app_table").parse(
+          $$(_type + "_table").parse(
             _data.map(function (_it) {
               _it.response_median = 1;
               _it.request_24h = 1;

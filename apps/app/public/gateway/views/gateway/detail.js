@@ -1,4 +1,6 @@
-define(["app", "model/node"], function ($app, $model_node) {
+define(["app", "model/gateway"], function ($app, $model_gateway) {
+  var scope;
+  var _type = "gateway";
   var _app_stat = {
     //    width: 100,
     rows: [
@@ -32,10 +34,10 @@ define(["app", "model/node"], function ($app, $model_node) {
   };
   var _title = {
     height: 49,
-    id: "title",
+    id: _type + "_title",
     css: "title",
     template:
-      "<div class='header'>Node #name#</div><div class='details'>( All info about your node )</div>",
+      "<div class='header'>Gateway #name#</div><div class='details'>( All info about your gateway )</div>",
     data: {
       name: "Detail",
     },
@@ -47,7 +49,7 @@ define(["app", "model/node"], function ($app, $model_node) {
           _title,
           {
             view: "button",
-            id: "node_delete",
+            id: _type + "_delete",
             label: "Delete",
             css: "webix_danger",
             autowidth: true,
@@ -65,20 +67,33 @@ define(["app", "model/node"], function ($app, $model_node) {
       scope = _scope;
       var _params = $app.params();
       console.log(_params);
-      var _id = _params && _params["node.detail"] && _params["node.detail"].id;
+      var _id =
+        _params && _params[_type + ".detail"] && _params[_type + ".detail"].id;
       if (_id) {
-        $$("node_delete").attachEvent("onItemClick", function () {
-          $model_node.delete({ id: _id }, function (_res) {
-            console.log(_res);
-            if (_res && _res.result) {
-            }
-          });
+        $$(_type + "_delete").attachEvent("onItemClick", function () {
+          webix
+            .confirm({
+              title: "Delete node",
+              text: "Are you sure delete gateway ?",
+              type: "confirm-error",
+            })
+            .then(function (result) {
+              $model_gateway.delete({ id: _id }, function (_res) {
+                console.log(_res);
+                if (_res && _res.result) {
+                  location.hash = "#!/app/$home";
+                }
+              });
+            })
+            .fail(function () {
+              webix.message("Cancel");
+            });
         });
-        $model_node.get({ id: _id }, function (_res) {
+        $model_gateway.get({ id: _id }, function (_res) {
           console.log(_res);
           if (_res && _res.result) {
             var _data = _res.data;
-            $$("title").parse(_data);
+            $$(_type + "_title").parse(_data);
           }
         });
       }

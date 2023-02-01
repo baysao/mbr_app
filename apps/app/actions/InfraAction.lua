@@ -10,13 +10,14 @@ local util = require "mbrutil"
 local uuid = require "jit-uuid"
 local geo = require "resty.maxminddb"
 
-local _opensession, _job_update, _lookup_geo
+local _opensession, _lookup_geo, _send_job
 
 function Action:init()
     ngx.log(ngx.ERR, "app init")
     local _instance = self:getInstance()
     self._crud = Crud:new(_instance, mytype)
-    self._crud_nodes = Crud:new(_instance, "node")
+    self._crud_node = Crud:new(_instance, "node")
+    self._crud_gateway = Crud:new(_instance, "gateway")
 end
 
 function Action:pingAction(args)
@@ -134,6 +135,29 @@ function Action:deleteAction(args)
     return {result = false}
 end
 
+function Action:getgatewaysAction(args)
+    args.action = nil
+
+    local _instance = self:getInstance()
+    local session, _err = _opensession(_instance, args)
+    if not session then
+        return {result = false, error_code = _err}
+    end
+
+    local _ret, _err =
+        self._crud_gateway:list(
+        {
+            user_id = args.id
+        }
+    )
+    cc.printerror(inspect(_ret))
+
+    if _ret then
+        return {result = true, data = _ret}
+    end
+
+    return {result = false}
+end
 function Action:getnodesAction(args)
     args.action = nil
 
@@ -144,7 +168,7 @@ function Action:getnodesAction(args)
     end
 
     local _ret, _err =
-        self._crud_nodes:list(
+        self._crud_node:list(
         {
             user_id = args.id
         }
@@ -170,15 +194,15 @@ function Action:getAction(args)
     args.user_id = _user_id
     local _ret, _err = self._crud:getall(args)
     cc.printerror(inspect(_ret))
-    local _ret_nodes, _err =
-        self._crud_nodes:list(
-        {
-            user_id = args.id
-        }
-    )
-    cc.printerror(inspect(_ret_nodes))
-    if _ret_nodes then
-    end
+    -- local _ret_nodes, _err =
+    --     self._crud_node:list(
+    --     {
+    --         user_id = args.id
+    --     }
+    -- )
+    -- cc.printerror(inspect(_ret_nodes))
+    -- if _ret_nodes then
+    -- end
 
     if _ret then
         return {result = true, data = _ret}
@@ -269,27 +293,33 @@ function Action:updateAction(args)
     end
 
     local _ret, _err = self._crud:update(args, _mapping)
-    if _ret then
-        _job_update(instance, {id = args.id, user_id = _user_id})
-        return {result = true}
+    if not _ret then
+        return {result = false}
+    end
+
+    local _opt = {id = args.id, user_id = _user_id, site_root = ngx.var.site_root}
+
+    local _job = {
+        action = "/jobs/infra.dnszone",
+        delay = 1,
+        data = _opt
+    }
+
+    cc.printerror(inspect(_job))
+    local _ret = _send_job(instance, _job)
+    if not _ret then
+        return {result = false}
     end
 
     return {result = false}
 end
 --private
-_job_update = function(instance, args)
+_send_job = function(_instance, _job)
     -- send message to job
-    local jobs = instance:getJobs()
-    args.site_root = ngx.var.site_root
-    -- cc.printerror(inspect(jobs))
-    local job = {
-        action = "/jobs/infra.dnszone",
-        delay = 0,
-        data = args
-    }
-    -- cc.printerror(inspect(job))
+    local jobs = _instance:getJobs()
+    local job = _job
+    ngx.log(ngx.ERR, inspect(job))
     return jobs:add(job)
-    -- cc.printerror(inspect({ok, err}))
 end
 
 _opensession = function(instance, args)

@@ -17,16 +17,16 @@ define([], function () {
         },
       ],
     },
-    {
-      id: "node",
-      value: "Node",
-      icon: "mdi mdi-crowd",
-    },
-    {
-      id: "gateway",
-      value: "Gateway",
-      icon: "mdi mdi-source-branch",
-    },
+    // {
+    //   id: "node",
+    //   value: "Node",
+    //   icon: "mdi mdi-crowd",
+    // },
+    // {
+    //   id: "gateway",
+    //   value: "Gateway",
+    //   icon: "mdi mdi-source-branch",
+    // },
   ];
   return _data;
 });

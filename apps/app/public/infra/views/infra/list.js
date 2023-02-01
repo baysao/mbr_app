@@ -24,7 +24,7 @@ define(["model/infra"], function ($model_infra) {
       console.log(_res);
       if (_res.result) {
         var _data = _res.data;
-          $$(_type + "_table").parse(_data, "json", true);
+        $$(_type + "_table").parse(_data, "json", true);
       }
     });
   }
@@ -70,12 +70,23 @@ define(["model/infra"], function ($model_infra) {
       "mdi-delete": function (e, id, node) {
         var _item = this.getItem(id);
         console.log(_item);
-        $model_infra.delete(_item, function (_res) {
-          console.log(_res);
-          if (_res.result) {
-            _update_list();
-          }
-        });
+        webix
+          .confirm({
+            title: "Infrastructure Delete",
+            text: "You you sure delete " + _item.name,
+            type: "confirm-error",
+          })
+          .then(function (result) {
+            $model_infra.delete(_item, function (_res) {
+              console.log(_res);
+              if (_res.result) {
+                _update_list();
+              }
+            });
+          })
+          .fail(function () {
+            webix.message("Cannot delete " + _item.name);
+          });
       },
     },
   };

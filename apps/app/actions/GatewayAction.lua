@@ -7,35 +7,12 @@ local Crud = cc.import("#crud")
 local Session = cc.import("#session")
 --local snappy = require "resty.snappy"
 local uuid = require "jit-uuid"
-local geo = require "resty.maxminddb"
 
-local _opensession, _job_gateway_update, _lookup_geo
+local _opensession, _send_job
 
 function Action:init()
     ngx.log(ngx.ERR, "app init")
     self._crud = Crud:new(self:getInstance(), mytype)
-end
-
-function Action:pingAction(args)
-    -- local cjson = require "cjson"
-    -- local geo = require "resty.maxminddb"
-    -- cc.printerror(ngx.var.site_root .. "/geoip/GeoIP2-City.mmdb")
-    -- if not geo.initted() then
-    --     geo.init(ngx.var.site_root .. "/geoip/GeoIP2-City.mmdb")
-    -- end
-    local _ip = "8.8.8.8" or ngx.var.arg_ip or ngx.var.remote_addr
-    local _geo = _lookup_geo(_ip)
-    return _geo
-    -- local res, err = geo.lookup(_ip) --support ipv6 e.g. 2001:4860:0:1001::3004:ef68
-
-    -- if not res then
-    --     ngx.log(ngx.ERR, "failed to lookup by ip ,reason:", err)
-    -- end
-    -- return res
-    -- ngx.say("full :", cjson.encode(res))
-    -- if ngx.var.arg_node then
-    --     ngx.say("node name:", ngx.var.arg_node, " ,value:", cjson.encode(res[ngx.var.arg_node] or {}))
-    -- end
 end
 
 function Action:configAction(args)
@@ -81,7 +58,7 @@ function Action:deleteAction(args)
     end
     local _user_id = session:get("id")
     args.user_id = _user_id
-    -- cc.printerror(inspect(args))
+    cc.printerror(inspect(args))
     local _ret, _err = self._crud:delete(args)
     if _ret then
         return {result = true}
@@ -109,8 +86,7 @@ end
 
 function Action:createAction(args)
     args.action = nil
-    local instance = self:getInstance()
-    local session, _err = _opensession(instance, args)
+    local session, _err = _opensession(self:getInstance(), args)
     if not session then
         return {result = false, error_code = _err}
     end
@@ -122,31 +98,19 @@ function Action:createAction(args)
     -- math.randomseed(_now)
     -- args.api_key = uuid(math.random() + os.time())
     args.user_id = _user_id
-    if args.ip then
-        local _geo = _lookup_geo(args.ip)
-        if _geo then
-            args.geo = _geo
-        end
-    end
     cc.printerror(inspect(args))
     local _ret, _err = self._crud:update(args)
     if _ret then
-        _job_gateway_update(instance, {id = args.id, user_id = _user_id})
         return {result = true}
     end
-
-    -- if not ok then
-    --     return {err = err}
-    -- else
-    --     return {ok = "ok"}
-    -- end
 
     return {result = false}
 end
 function Action:updateAction(args)
     args.action = nil
-    local instance = self:getInstance()
-    local session, _err = _opensession(instance, args)
+    local _now = os.time()
+    local _instance = self:getInstance()
+    local session, _err = _opensession(_instance, args)
     if not session then
         return {result = false, error_code = _err}
     end
@@ -155,37 +119,50 @@ function Action:updateAction(args)
     if args.user_id ~= _user_id then
         return {result = false}
     end
-    --  cc.printerror(inspect(args))
-    if args.ip then
-        local _geo = _lookup_geo(args.ip)
-        -- cc.printerror(inspect(_geo))
-        if _geo then
-            args.geo = _geo
-        end
-    end
-    cc.printerror(inspect(args))
+
+    local _mapping = {
+        set = {
+            [args.infra .. ":" .. mytype] = {
+                [args.id] = _now
+            }
+        },
+        hmset = {
+            [args.infra .. ":" .. mytype .. ":" .. args.id] = args
+        },
+        mapping = {
+            public = {
+                [args.id] = args.user_id
+            }
+        }
+    }
     -- cc.printerror(inspect(args))
-    local _ret, _err = self._crud:update(args)
-    if _ret then
-       _job_gateway_update(instance, {id = args.id, user_id = _user_id})
-        return {result = true}
+    local _ret, _err = self._crud:update(args, _mapping)
+    if not _ret then
+        return {result = false}
     end
 
-    return {result = false}
+    local _job = {
+        action = "/jobs/gateway.ping",
+        delay = 1,
+        data = {
+            test = "ok"
+        }
+    }
+    local _ret = _send_job(_instance, _job)
+    if not _ret then
+        return {result = false}
+    end
+
+    return {result = true}
 end
 --private
-_job_gateway_update = function(instance, args)
+
+_send_job = function(_instance, _job)
     -- send message to job
-    local jobs = instance:getJobs()
-    -- cc.printerror(inspect(jobs))
-    local job = {
-        action = "/jobs/gateway.generateconf",
-        delay = 0,
-        data = args
-    }
-    -- cc.printerror(inspect(job))
+    local jobs = _instance:getJobs()
+    local job = _job
+    ngx.log(ngx.ERR, inspect(job))
     return jobs:add(job)
-    -- cc.printerror(inspect({ok, err}))
 end
 
 _opensession = function(instance, args)
@@ -201,17 +178,10 @@ _opensession = function(instance, args)
         return nil, 401
     end
 
-    -- if session then
-    --    session:setKeepAlive()
+    --  if session then
+    --     session:setKeepAlive()
     -- end
     return session
-end
-
-_lookup_geo = function(_ip)
-    if not geo.initted() then
-        geo.init(ngx.var.site_root .. "/geoip/GeoIP2-City.mmdb")
-    end
-    return geo.lookup(_ip)
 end
 
 return Action

@@ -5,6 +5,7 @@ define([
   "text!model/geo/continents.json",
 ], function ($app, $model_node, $model_infra, _continents) {
   var scope;
+  var _type = "node";
   var continents = JSON.parse(_continents);
   var _node_quota = {
     view: "fieldset",
@@ -104,7 +105,7 @@ define([
   var _elements = [
     {
       view: "select",
-      id: "infrastructure",
+      id: _type + "_infrastructure",
       label: "Infrastructure",
       name: "infra",
       options: [],
@@ -119,7 +120,7 @@ define([
 
   var _form = {
     view: "form",
-    id: "node_form",
+    id: _type + "_form",
     scroll: "y",
     elements: _elements,
     elementsConfig: {
@@ -169,7 +170,7 @@ define([
           {
             view: "button",
             autowidth: true,
-            id: "node_submit",
+            id: _type + "_submit",
             label: "Save",
             css: "webix_primary",
           },
@@ -194,7 +195,7 @@ define([
           });
           console.log(_options);
           _options.unshift({ id: "not_defined", value: "Not defined" });
-          var _ui = $$("infrastructure");
+          var _ui = $$(_type + "_infrastructure");
           _ui.define("options", _options);
           _ui.refresh();
         }
@@ -228,8 +229,8 @@ define([
           $$("geo_continent").setValue(_param.z);
         }
       }
-      $$("node_submit").attachEvent("onItemClick", function () {
-        var _values = $$("node_form").getValues();
+      $$(_type + "_submit").attachEvent("onItemClick", function () {
+        var _values = $$(_type + "_form").getValues();
         console.log(_values);
         $model_node.create(_values, function (_res) {
           console.log(_res);
