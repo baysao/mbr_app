@@ -1,7 +1,7 @@
 local inspect = require "inspect"
 local util = require "mbrutil"
 local gbc = cc.import("#gbc")
-local mytype = "gateway"
+local mytype = "app"
 local JobsAction = cc.class(mytype .. "JobsAction", gbc.ActionBase)
 
 JobsAction.ACCEPTED_REQUEST_TYPE = "worker"
