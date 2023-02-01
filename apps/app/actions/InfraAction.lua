@@ -105,7 +105,7 @@ function Action:listAction(args)
     if _ret then
        setmetatable(_ret, json.empty_array_mt)
         local _out = {result = true, data = _ret}
-        setmetatable(_out, json.emty_array_mt)
+        -- setmetatable(_out, json.emty_array_mt)
         return _out
     end
 
