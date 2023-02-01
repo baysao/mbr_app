@@ -119,7 +119,7 @@ function Crud:list(args)
     local _list = _ssdb:zkeys(_key_list, "", "", "", _limit)
     local _limit = args.limit or 100
     local _result = {}
-    setmetatable(_result, json.array_mt)
+    setmetatable(_result, json.empty_array_mt)
     for _, _id in ipairs(_list) do
         local _key_detail = args._key_detail or _key_list .. ":" .. _id
         local _ret = _ssdb:hscan(_key_detail, "", "", _limit)
