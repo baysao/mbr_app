@@ -19,7 +19,14 @@ function Crud:getall(args, opt)
     local _limit = 100
     local _data = _ssdb:hscan(_key, "", "", _limit)
     local _ret = _ssdb:array_to_hash(_data)
-    return _ret == _ssdb.null and nil or _ret
+
+    if _ret == _ssdb.null then
+        return nil
+    end
+
+    setmetatable(_ret, json.array_mt)
+
+    return _ret
 end
 
 function Crud:get(args, opt)
@@ -82,7 +89,7 @@ function Crud:update(args, opt)
                 end
             end
         end
-	  if opt and opt.hmset then
+        if opt and opt.hmset then
             for _k, _v in pairs(opt.hmset) do
                 local _v1 = _ssdb:hash_to_array(_v)
                 local _ret1 = _ssdb:multi_hset(_k, table.unpack(_v1))
@@ -112,6 +119,7 @@ function Crud:list(args)
     local _list = _ssdb:zkeys(_key_list, "", "", "", _limit)
     local _limit = args.limit or 100
     local _result = {}
+    setmetatable(_result, json.array_mt)
     for _, _id in ipairs(_list) do
         local _key_detail = args._key_detail or _key_list .. ":" .. _id
         local _ret = _ssdb:hscan(_key_detail, "", "", _limit)
