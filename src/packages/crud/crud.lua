@@ -24,7 +24,7 @@ function Crud:getall(args, opt)
         return nil
     end
 
-    setmetatable(_ret, json.array_mt)
+    setmetatable(_ret, json.empty_array_mt)
 
     return _ret
 end
