@@ -1,5 +1,5 @@
 define([
-  "text!/api/node/v1?action=node.config",
+  "text!/api/gateway/v1?action=gateway.config",
   app_view + "/app/toolbar",
   app_view + "/app/sidemenu",
 ], function ($_config, toolbar, sidemenu) {

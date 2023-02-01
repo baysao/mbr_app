@@ -1,5 +1,5 @@
 define([], function () {
-  var _api_prefix = "/api/node/v1";
+  var _api_prefix = "/api/infra/v1";
   return {
     api_prefix: _api_prefix,
   };

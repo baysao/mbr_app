@@ -1,6 +1,6 @@
-define(["model/app", "model/infra"], function ($model_app, $model_infra) {
-  var scope;
+define(["app", "model/app", "model/infra"], function ($app, $model_app, $model_infra) {
   var _type = "api";
+  var scope;
   var _elements = [
     { view: "text", label: "Name", name: "name" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
@@ -50,7 +50,7 @@ define(["model/app", "model/infra"], function ($model_app, $model_infra) {
         id: "title",
         css: "title",
         template:
-          "<div class='header'>Create App</div><div class='details'>( Define your new app )</div>",
+          "<div class='header'>Update App</div><div class='details'>( Define your new app )</div>",
       },
       _form,
       {
@@ -70,8 +70,29 @@ define(["model/app", "model/infra"], function ($model_app, $model_infra) {
 
   return {
     $ui: _layout,
+    $onurlchange: function (_params) {
+      console.log(_params);
+      $model_app.get(_params, function (_res) {
+        console.log(_res);
+        if (_res && _res.result) {
+          var _data = _res.data;
+          $$(_type + "_form").setValues(_data);
+        }
+      });
+    },
     $oninit: function (_view, _scope) {
       scope = _scope;
+      var _params = $app.params();
+      console.log(_params);
+      if (_params && _params["api.update"]) {
+        $model_app.get(_params["api.update"], function (_res) {
+          console.log(_res);
+          if (_res && _res.result) {
+            var _data = _res.data;
+            $$(_type + "_form").setValues(_data);
+          }
+        });
+      }
       $model_infra.public({}, function (_res) {
         console.log(_res);
         if (_res && _res.result) {
@@ -85,11 +106,10 @@ define(["model/app", "model/infra"], function ($model_app, $model_infra) {
           _ui.refresh();
         }
       });
-
       $$(_type + "_submit").attachEvent("onItemClick", function () {
         var _values = $$(_type + "_form").getValues();
         console.log(_values);
-        $model_app.create(_values, function (_res) {
+        $model_app.update(_values, function (_res) {
           console.log(_res);
           if (_res && _res.result) {
             webix.message("Submit successful!");

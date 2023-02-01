@@ -21,10 +21,10 @@ define(["model/side_menu"], function (model_side_menu) {
         view: "button",
         type: "icon",
         icon: "mdi mdi-plus-circle",
-        label: "Create Node",
+        label: "Create Gateway",
           css: "webix_primary",
 	  click: function(){
-	      scope.show("/app/node.create/$zone")
+	      scope.show("/app/gateway.create/$zone")
 	  }
       },
       _menu,

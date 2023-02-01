@@ -80,12 +80,22 @@ define(["app", "model/infra"], function ($app, $model_infra) {
             $$(_type + "_form").setValues(_res.data);
           }
         });
-        $model_infra.getnodes({ id: id }, function (_res) {
-          console.log(_res);
-          // if (_res && _res.result) {
-          //   $$(_type + "_form").setValues(_res.data);
-          // }
-        });
+        // setTimeout(function () {
+        //   $model_infra.getnodes({ id: id }, function (_res) {
+        //     console.log(_res);
+        //     // if (_res && _res.result) {
+        //     //   $$(_type + "_form").setValues(_res.data);
+        //     // }
+        //   });
+        // }, 1000);
+        // setTimeout(function () {
+        //   $model_infra.getgateways({ id: id }, function (_res) {
+        //     console.log(_res);
+        //     // if (_res && _res.result) {
+        //     //   $$(_type + "_form").setValues(_res.data);
+        //     // }
+        //   });
+        // }, 2000);
       }
 
       $$(_type + "_submit").attachEvent("onItemClick", function () {

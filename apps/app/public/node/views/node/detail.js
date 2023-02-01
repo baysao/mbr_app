@@ -68,11 +68,23 @@ define(["app", "model/node"], function ($app, $model_node) {
       var _id = _params && _params["node.detail"] && _params["node.detail"].id;
       if (_id) {
         $$("node_delete").attachEvent("onItemClick", function () {
-          $model_node.delete({ id: _id }, function (_res) {
-            console.log(_res);
-            if (_res && _res.result) {
-            }
-          });
+          webix
+            .confirm({
+              title: "Delete node",
+              text: "Are you sure delete node ?",
+              type: "confirm-error",
+            })
+            .then(function (result) {
+              $model_node.delete({ id: _id }, function (_res) {
+                console.log(_res);
+                if (_res && _res.result) {
+                  location.hash = "#!/app/$home";
+                }
+              });
+            })
+            .fail(function () {
+              webix.message("Cancel");
+            });
         });
         $model_node.get({ id: _id }, function (_res) {
           console.log(_res);

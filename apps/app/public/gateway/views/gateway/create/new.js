@@ -1,9 +1,11 @@
-define(["app", "model/node", "text!model/geo/continents.json"], function (
-  $app,
-  $model_node,
-  _continents
-) {
+define([
+  "app",
+  "model/gateway",
+  "model/infra",
+  "text!model/geo/continents.json",
+], function ($app, $model_gateway, $model_infra, _continents) {
   var scope;
+  var _type = "gateway";
   var continents = JSON.parse(_continents);
   var _node_quota = {
     view: "fieldset",
@@ -24,30 +26,7 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
       ],
     },
   };
-  var _node_source = {
-    view: "fieldset",
-    label: "Node Connection",
-    body: {
-      rows: [
-        {
-          view: "text",
-          label: "Address (IP or Domain)",
-          name: "source_address",
-        },
-        { view: "text", label: "Path", name: "source_path" },
-        {
-          view: "checkbox",
-          name: "source_ssl",
-          label: "SSL Secure Connection",
-        },
-        {
-          view: "checkbox",
-          name: "source_websocket",
-          label: "Websocket support",
-        },
-      ],
-    },
-  };
+
   var _geo_location = {
     view: "fieldset",
     label: "GEO location",
@@ -101,17 +80,23 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
     },
   };
   var _elements = [
+    {
+      view: "select",
+      id: "infrastructure",
+      label: "Infrastructure",
+      name: "infra",
+      options: [],
+    },
     { view: "text", label: "Name", name: "name" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
     _host_info,
     _geo_location,
-    // _node_source,
-    // _node_quota,
+    _node_quota,
   ];
 
   var _form = {
     view: "form",
-    id: "node_form",
+    id: _type + "_form",
     scroll: "y",
     elements: _elements,
     elementsConfig: {
@@ -161,7 +146,7 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
           {
             view: "button",
             autowidth: true,
-            id: "node_submit",
+            id: _type + "_submit",
             label: "Save",
             css: "webix_primary",
           },
@@ -177,6 +162,20 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
       scope = _scope;
       var _params = $app.params();
       console.log(_params);
+
+      $model_infra.public({}, function (_res) {
+        console.log(_res);
+        if (_res && _res.result) {
+          var _options = _res.data.map(function (_it) {
+            return { id: _it.id, value: _it.name };
+          });
+          console.log(_options);
+          _options.unshift({ id: "not_defined", value: "Not defined" });
+          var _ui = $$("infrastructure");
+          _ui.define("options", _options);
+          _ui.refresh();
+        }
+      });
 
       $$("geo_continent").define("options", continents);
       $$("geo_continent").refresh();
@@ -206,10 +205,10 @@ define(["app", "model/node", "text!model/geo/continents.json"], function (
           $$("geo_continent").setValue(_param.z);
         }
       }
-      $$("node_submit").attachEvent("onItemClick", function () {
-        var _values = $$("node_form").getValues();
+      $$(_type + "_submit").attachEvent("onItemClick", function () {
+        var _values = $$(_type + "_form").getValues();
         console.log(_values);
-        $model_node.create(_values, function (_res) {
+        $model_gateway.create(_values, function (_res) {
           console.log(_res);
           if (_res && _res.result) {
             webix.message("Submit successful!");

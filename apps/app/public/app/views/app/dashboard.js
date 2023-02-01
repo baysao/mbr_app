@@ -54,6 +54,13 @@ define(["model/app", app_view + "/api/key"], function ($app, app_key_ui) {
           "<span style='cursor:pointer;' class='webix_icon mdi mdi-page-next'></span> View Detail",
       },
       {
+        id: "action_update",
+        header: "&nbsp;",
+        width: 150,
+        template:
+          "<span style='cursor:pointer;' class='webix_icon mdi mdi-pencil'></span> Update",
+      },
+      {
         id: "action_key",
         header: "&nbsp;",
         width: 150,
@@ -66,6 +73,9 @@ define(["model/app", app_view + "/api/key"], function ($app, app_key_ui) {
     onClick: {
       "mdi-page-next": function (e, id, node) {
         location.hash = "#!/app/api.detail:id=" + id;
+      },
+      "mdi-pencil": function (e, id, node) {
+        location.hash = "#!/app/api.update:id=" + id;
       },
       "mdi-key": function (e, id, node) {
         var _detail = this.getItem(id);
