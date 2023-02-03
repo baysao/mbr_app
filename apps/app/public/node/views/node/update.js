@@ -5,6 +5,17 @@ define([
   "text!model/geo/continents.json",
 ], function ($app, $model_node, $model_infra, _continents) {
   var scope;
+  var _type = "node";
+  var _update_form = function () {
+    var _values = $$(_type + "_form").getValues();
+    console.log(_values);
+    $model_node.update(_values, function (_res) {
+      console.log(_res);
+      if (_res && _res.result) {
+        webix.message("Submit successful!");
+      }
+    });
+  };
   var continents = JSON.parse(_continents);
   var _node_quota = {
     view: "fieldset",
@@ -103,6 +114,21 @@ define([
   };
   var _elements = [
     {
+      cols: [
+        { view: "text", label: "ID", name: "id", readonly: true },
+        {},
+        {
+          view: "toggle",
+          onLabel: "Enable",
+          id: _type + "_status",
+          offLabel: "Disable",
+          css: "webix_primary",
+          width: 100,
+          name: "status",
+        },
+      ],
+    },
+    {
       view: "select",
       id: "infrastructure",
       label: "Infrastructure",
@@ -119,7 +145,7 @@ define([
 
   var _form = {
     view: "form",
-    id: "node_form",
+    id: _type + "_form",
     scroll: "y",
     elements: _elements,
     elementsConfig: {
@@ -177,7 +203,7 @@ define([
           {
             view: "button",
             autowidth: true,
-            id: "node_submit",
+            id: _type + "_submit",
             label: "Save",
             css: "webix_primary",
           },
@@ -200,7 +226,7 @@ define([
         console.log(_res);
         if (_res && _res.result) {
           var _data = _res.data;
-          $$("node_form").setValues(_data);
+          $$(_type + "_form").setValues(_data);
         }
       });
     },
@@ -269,16 +295,8 @@ define([
           $$("geo_continent").setValue(_param.z);
         }
       }
-      $$("node_submit").attachEvent("onItemClick", function () {
-        var _values = $$("node_form").getValues();
-        console.log(_values);
-        $model_node.update(_values, function (_res) {
-          console.log(_res);
-          if (_res && _res.result) {
-            webix.message("Submit successful!");
-          }
-        });
-      });
+      $$(_type + "_submit").attachEvent("onItemClick", _update_form);
+      $$(_type + "_status").attachEvent("onItemClick", _update_form);
     },
   };
 });

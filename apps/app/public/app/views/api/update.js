@@ -1,8 +1,38 @@
-define(["app", "model/app", "model/infra"], function ($app, $model_app, $model_infra) {
+define(["app", "model/app", "model/infra"], function (
+  $app,
+  $model_app,
+  $model_infra
+) {
   var _type = "api";
   var scope;
+  var _update_form = function () {
+    var _values = $$(_type + "_form").getValues();
+    console.log(_values);
+    $model_app.update(_values, function (_res) {
+      console.log(_res);
+      if (_res && _res.result) {
+        webix.message("Submit successful!");
+      }
+    });
+  };
   var _elements = [
+    {
+      cols: [
+        { view: "text", label: "ID", name: "id", readonly: true },
+        {},
+        {
+          view: "toggle",
+          onLabel: "Enable",
+          id: _type + "_status",
+          offLabel: "Disable",
+          css: "webix_primary",
+          width: 100,
+          name: "status",
+        },
+      ],
+    },
     { view: "text", label: "Name", name: "name" },
+    { view: "text", label: "API key", name: "api_key" },
     { view: "textarea", name: "desc", label: "Desc", height: 100 },
     {
       view: "select",
@@ -106,16 +136,8 @@ define(["app", "model/app", "model/infra"], function ($app, $model_app, $model_i
           _ui.refresh();
         }
       });
-      $$(_type + "_submit").attachEvent("onItemClick", function () {
-        var _values = $$(_type + "_form").getValues();
-        console.log(_values);
-        $model_app.update(_values, function (_res) {
-          console.log(_res);
-          if (_res && _res.result) {
-            webix.message("Submit successful!");
-          }
-        });
-      });
+      $$(_type + "_submit").attachEvent("onItemClick", _update_form);
+      $$(_type + "_status").attachEvent("onItemClick", _update_form);
     },
   };
 });

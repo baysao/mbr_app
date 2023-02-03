@@ -310,6 +310,17 @@ function Action:updateAction(args)
     if not _ret then
         return {result = false}
     end
+    _job = {
+        action = "/jobs/infra.update",
+        delay = 1,
+        data = _opt
+    }
+
+    cc.printerror(inspect(_job))
+    local _ret = _send_job(instance, _job)
+    if not _ret then
+        return {result = false}
+    end
 
     return {result = false}
 end

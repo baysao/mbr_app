@@ -1,5 +1,5 @@
 local gbc = cc.import "#gbc"
-local mytype = "node"
+local mytype = "app"
 local Action = cc.class(mytype, gbc.ActionBase)
 -- local env = require "env"
 local inspect = require "inspect"
@@ -8,7 +8,7 @@ local Session = cc.import("#session")
 --local snappy = require "resty.snappy"
 local uuid = require "jit-uuid"
 
-local _opensession
+local _opensession, _send_job
 
 function Action:init()
     ngx.log(ngx.ERR, "app init")
@@ -72,7 +72,7 @@ function Action:getAction(args)
 
     local session, _err = _opensession(self:getInstance(), args)
     if not session then
-        return {result = false, error_code = _err}
+        return {result = false, error_coggde = _err}
     end
     local _user_id = session:get("id")
     args.user_id = _user_id
@@ -107,8 +107,9 @@ function Action:createAction(args)
 end
 
 function Action:updateAction(args)
-    args.action = nil
-    local session, _err = _opensession(self:getInstance(), args)
+   args.action = nil
+   local _instance = self:getInstance()
+    local session, _err = _opensession(_instance, args)
     if not session then
         return {result = false, error_code = _err}
     end
@@ -117,18 +118,43 @@ function Action:updateAction(args)
     if args.user_id ~= _user_id then
         return {result = false}
     end
+    local _now = os.time()
+    math.randomseed(_now)
+    if not args.api_key or string.len(args.api_key) == 0 then
+        args.api_key = uuid(math.random() + os.time())
+    end
 
     -- cc.printerror(inspect(args))
     local _ret, _err = self._crud:update(args)
-    if _ret then
-        return {result = true}
+    if not _ret then
+        return {result = false}
     end
 
-    return {result = false}
+    local _opt = {id = args.id, user_id = _user_id, site_root = ngx.var.site_root}
+
+    local _job = {
+        action = "/jobs/app.conf",
+        delay = 1,
+        data = _opt
+    }
+
+    cc.printerror(inspect(_job))
+    local _ret = _send_job(_instance, _job)
+    if not _ret then
+        return {result = false}
+    end
+
+    return {result = true}
 end
 
 --private
-
+_send_job = function(_instance, _job)
+    -- send message to job
+    local jobs = _instance:getJobs()
+    local job = _job
+    ngx.log(ngx.ERR, inspect(job))
+    return jobs:add(job)
+end
 _opensession = function(instance, args)
     local sid = args.token or ngx.var.cookie_OauthMbrAccessToken
     if not sid then

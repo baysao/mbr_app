@@ -6,7 +6,14 @@ local JobsAction = cc.class(mytype .. "JobsAction", gbc.ActionBase)
 
 JobsAction.ACCEPTED_REQUEST_TYPE = "worker"
 
-
+local _infra_templates = {
+    infra = [[
+upstream infra_${id} {
+    include ${site_root}/db/gateway/conf.d/infra/*/*/*.node_upstream.conf;
+    include ${site_root}/http.d/gateway/etc/_upstream_server.conf;
+}
+]]
+}
 local _dns_templates = {
     zone = [[
 $TTL 300
@@ -39,6 +46,26 @@ function JobsAction:pingAction(job)
     print(inspect(job))
 end
 
+function JobsAction:updateAction(job)
+    print(inspect(job))
+    -- local instance = self:getInstance()
+    local job_data = job.data
+    cc.printerror(inspect(_job_data))
+    local _item, _err = self._crud:getall(job_data)
+
+    _item.site_root = job_data.site_root
+    cc.printerror(inspect(_item))
+    local _template = util.get_template(_infra_templates, _item)
+    local _str = _template("infra")
+    cc.printerror(_str)
+    local _dir = job_data.site_root .. "/db/gateway/conf.d/infra"
+    util.mkdirp(_dir)
+    util.write_file(_dir .. "/" .. _item.id .. ".infra.conf", _str)
+
+    -- local _ret = _generateconf(instance, _item)
+    return true
+end
+
 function JobsAction:dnszoneAction(job)
     print(inspect(job))
     -- local instance = self:getInstance()
@@ -46,14 +73,14 @@ function JobsAction:dnszoneAction(job)
     local _item, _err = self._crud:getall(job_data)
     cc.printerror(inspect(_item))
     if _item.domain then
-       local _template = util.get_template(_dns_templates, {DOMAIN=_item.domain})
-       local _str = _template("zone")
-       cc.printerror(_str)
-       local _zone_dir = job_data.site_root .. "/db/gdnsd/zones"
-       util.mkdirp(_zone_dir)
-       util.write_file(_zone_dir .. "/" .. _item.domain, _str)
+        local _template = util.get_template(_dns_templates, {DOMAIN = _item.domain})
+        local _str = _template("zone")
+        cc.printerror(_str)
+        local _zone_dir = job_data.site_root .. "/db/gdnsd/zones"
+        util.mkdirp(_zone_dir)
+        util.write_file(_zone_dir .. "/" .. _item.domain, _str)
     end
-     
+
     -- local _ret = _generateconf(instance, _item)
     return true
 end
