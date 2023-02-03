@@ -26,8 +26,7 @@ function Crud:getall(args, opt)
         return nil
     end
 
-    -- setmetatable(_ret, json.array_mt)
-    cc.printerror(inspect(_ret))
+
     return _ret
 end
 
@@ -122,7 +121,8 @@ function Crud:list(args)
     local _list = _ssdb:zkeys(_key_list, "", "", "", _limit)
     local _limit = args.limit or 100
     local _result = {}
-    setmetatable(_result, json.empty_array_mt)
+   
+
     for _, _id in ipairs(_list) do
         local _key_detail = args._key_detail or _key_list .. ":" .. _id
         local _ret = _ssdb:hscan(_key_detail, "", "", _limit)
@@ -133,6 +133,7 @@ function Crud:list(args)
             _result[#_result + 1] = _detail
         end
     end
+    setmetatable(_result, json.empty_array_mt)
     return _result
 end
 
