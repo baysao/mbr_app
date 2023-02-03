@@ -140,14 +140,15 @@ function Action:updateAction(args)
     if not _ret then
         return {result = false}
     end
+    local _opt = {id = args.id, user_id = _user_id, site_root = ngx.var.site_root}
 
     local _job = {
-        action = "/jobs/node.ping",
+        action = "/jobs/node.update",
         delay = 1,
-        data = {
-            test = "ok"
-        }
+        data = _opt
     }
+
+    cc.printerror(inspect(_job))
     local _ret = _send_job(instance, _job)
     if not _ret then
         return {result = false}

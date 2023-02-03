@@ -11,11 +11,13 @@ function Crud:ctor(instance, model_type)
 end
 
 function Crud:getall(args, opt)
+    cc.printerror(inspect({args, opt}))
     if Check.notEmpty(args.user_id) and Check.notEmpty(args.id) then
         return nil
     end
     local _ssdb = self._instance:getSsdb()
     local _key = args.user_id .. ":" .. self._model_type .. ":" .. args.id
+    cc.printerror("key:" .. _key)
     local _limit = 100
     local _data = _ssdb:hscan(_key, "", "", _limit)
     local _ret = _ssdb:array_to_hash(_data)
@@ -24,7 +26,6 @@ function Crud:getall(args, opt)
         return nil
     end
 
-    setmetatable(_ret, json.empty_array_mt)
 
     return _ret
 end
@@ -38,12 +39,13 @@ function Crud:get(args, opt)
     local _ssdb = self._instance:getSsdb()
     local _opt = _ssdb:hash_to_array(opt)
     local _key = args.user_id .. ":" .. self._model_type .. ":" .. args.id
+    cc.printerror("key:" .. _key)
     local _data, _err = _ssdb:multi_hget(_key, table.unpack(_opt))
     local _ret
     if _data then
         _ret = _ssdb:array_to_hash(_data)
     end
-
+    cc.printerror(inspect(_ret))
     return _ret == _ssdb.null and nil or _ret
 end
 
@@ -119,14 +121,15 @@ function Crud:list(args)
     local _list = _ssdb:zkeys(_key_list, "", "", "", _limit)
     local _limit = args.limit or 100
     local _result = {}
+   
 
     for _, _id in ipairs(_list) do
         local _key_detail = args._key_detail or _key_list .. ":" .. _id
         local _ret = _ssdb:hscan(_key_detail, "", "", _limit)
         if _ret and type(_ret) == "table" and _ret[1] ~= "ok" then
-            cc.printerror(inspect(_ret))
+            -- cc.printerror(inspect(_ret))
             local _detail = _ssdb:array_to_hash(_ret)
-            cc.printerror(inspect(_detail))
+            -- cc.printerror(inspect(_detail))
             _result[#_result + 1] = _detail
         end
     end

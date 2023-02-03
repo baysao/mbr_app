@@ -82,7 +82,7 @@ define([
   var _elements = [
     {
       view: "select",
-      id: "infrastructure",
+      id: _type + "_infrastructure",
       label: "Infrastructure",
       name: "infra",
       options: [],
@@ -171,7 +171,7 @@ define([
           });
           console.log(_options);
           _options.unshift({ id: "not_defined", value: "Not defined" });
-          var _ui = $$("infrastructure");
+          var _ui = $$(_type + "_infrastructure");
           _ui.define("options", _options);
           _ui.refresh();
         }

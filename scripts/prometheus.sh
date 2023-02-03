@@ -11,7 +11,7 @@ scrape_configs:
     # tls_config:
     #   insecure_skip_verify: true
     honor_labels: true
-    metrics_path: /__internal_status_vhost/format/prometheus
+    metrics_path: /__prometheus
     scrape_interval: 10s
     scrape_timeout: 5s
     # relabel_configs:
