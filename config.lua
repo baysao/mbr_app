@@ -10,7 +10,7 @@ local _config = {
     apps = {
         app = "apps/app",
         -- sso = "apps/sso",
-        game = "apps/game"
+        -- game = "apps/game"
     },
     supervisors = {},
     supervisor = [[
