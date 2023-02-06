@@ -15,3 +15,4 @@ _get() {
 	mkdir -p /tmp/ssl
 	certbot certonly --non-interactive --agree-tos -m $email --manual --manual-auth-hook /etc/letsencrypt/acme-dns-auth.py --manual-public-ip-logging-ok --preferred-challenges dns --debug-challenges -d \*.$domain -d $domain >/tmp/ssl/$domain
 }
+$@
