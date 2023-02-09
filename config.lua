@@ -32,6 +32,15 @@ killasgroup=true
 stopsignal=INT
 stdout_logfile=_SITE_ROOT_/logs/loki.log
 
+[program:minio]
+command=/bin/bash _SITE_ROOT_/scripts/minio.sh
+autorestart=true
+redirect_stderr=true
+stopasgroup=true
+killasgroup=true
+stopsignal=INT
+stdout_logfile=_SITE_ROOT_/logs/minio.log
+
 [program:prometheus]
 command=/bin/bash _SITE_ROOT_/scripts/prometheus.sh
 autorestart=true
@@ -40,6 +49,15 @@ stopasgroup=true
 killasgroup=true
 stopsignal=INT
 stdout_logfile=_SITE_ROOT_/logs/prometheus.log
+
+[program:grafana]
+command=/bin/bash _SITE_ROOT_/scripts/grafana.sh
+autorestart=true
+redirect_stderr=true
+stopasgroup=true
+killasgroup=true
+stopsignal=INT
+stdout_logfile=_SITE_ROOT_/logs/grafana.log
 
 [program:gdnsd]
 command=/bin/bash _SITE_ROOT_/scripts/gdnsd.sh
